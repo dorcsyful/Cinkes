@@ -23,10 +23,23 @@ namespace Cinkes {
 		void operator*=(const CVector3& a_Rhs);
 		void operator/=(const CVector3& a_Rhs);
 
+		void operator+=(CScalar a_Rhs);
+		void operator-=(CScalar a_Rhs);
+		void operator*=(CScalar a_Rhs);
+		void operator/=(CScalar a_Rhs);
+
 		CVector3 operator+(const CVector3& a_Rhs);
 		CVector3 operator-(const CVector3& a_Rhs);
 		CVector3 operator*(const CVector3& a_Rhs);
 		CVector3 operator/(const CVector3& a_Rhs);
+
+		CVector3 operator+(CScalar a_Rhs);
+		CVector3 operator-(CScalar a_Rhs);
+		CVector3 operator*(CScalar a_Rhs);
+		CVector3 operator/(CScalar a_Rhs);
+
+		CScalar& operator[](int a_Rhs);
+		CScalar operator[](int a_Rhs) const;
 
 		bool operator==(const CVector3& a_Rhs);
 		bool operator!=(const CVector3& a_Rhs);
@@ -35,12 +48,13 @@ namespace Cinkes {
 		CScalar Length();
 		void Normalize();
 
-		CScalar Dot(CVector3 a_Rhs);
-		CVector3 Cross(CVector3 a_Rhs);
-		CVector3 Lerp(CVector3 a_Other, CScalar a_T);
+		CScalar Dot(const CVector3& a_Rhs);
+		CVector3 Cross(const CVector3& a_Rhs);
+		CVector3 Lerp(const CVector3& a_Other, CScalar a_T);
 
 	private:
-		CScalar values[3];
+
+		CScalar m_Values[3];
 	};
 }
 
