@@ -21,9 +21,15 @@
     <ClInclude Include="CVector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CQuaternion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CVector3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CQuaternion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

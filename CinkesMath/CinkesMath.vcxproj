@@ -139,10 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CQuaternion.h" />
     <ClInclude Include="CScalar.h" />
     <ClInclude Include="CVector3.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CQuaternion.cpp" />
     <ClCompile Include="CVector3.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
