@@ -10,7 +10,7 @@ namespace Cinkes
 		CQuaternion();
 		CQuaternion(CScalar a_X, CScalar a_Y, CScalar a_Z, CScalar a_W);
 		CQuaternion(const CQuaternion& a_Other);
-		CQuaternion(const CVector3& a_axis, CScalar a_angle);
+		CQuaternion(CVector3 a_Axis, CScalar a_Angle);
 		CQuaternion(CScalar a_Yaw, CScalar a_Pitch, CScalar a_Roll);
 
 		CScalar getX();
@@ -18,12 +18,12 @@ namespace Cinkes
 		CScalar getZ();
 		CScalar getW();
 
-		CScalar setX();
-		CScalar setY();
-		CScalar setZ();
-		CScalar setW();
+		void setX(CScalar a_New);
+		void setY(CScalar a_New);
+		void setZ(CScalar a_New);
+		void setW(CScalar a_New);
 
-		void SetFromAngleAxis(const CVector3& a_Axis, CScalar a_Angle);
+		void SetFromAngleAxis(CVector3 a_Axis, CScalar a_Angle);
 		void SetFromEuler(CScalar a_Yaw, CScalar a_Pitch, CScalar a_Roll);
 
 		void GetEuler(CScalar& a_Yaw, CScalar& a_Pitch, CScalar& a_Roll);
@@ -39,6 +39,7 @@ namespace Cinkes
 		CQuaternion operator*(const CScalar& a_Rhs);
 		CQuaternion operator/(const CScalar& a_Rhs);
 		CQuaternion operator-();
+		CScalar& operator[](int a_Rhs);
 
 		CScalar Dot(const CQuaternion& a_Rhs);
 		CScalar Length2();
@@ -52,7 +53,8 @@ namespace Cinkes
 		CQuaternion GetInverse();
 		CQuaternion Slerp(const CQuaternion& a_Other, CScalar a_T);
 		static const CQuaternion GetIdentity();
-		
-	};
 
+	private:
+		CScalar m_Values[4];
+	};
 }

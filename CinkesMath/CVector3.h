@@ -2,6 +2,7 @@
 #include "CScalar.h"
 
 namespace Cinkes {
+	class CQuaternion;
 
 	class CVector3
 	{
@@ -51,6 +52,7 @@ namespace Cinkes {
 		CScalar Dot(const CVector3& a_Rhs);
 		CVector3 Cross(const CVector3& a_Rhs);
 		CVector3 Lerp(const CVector3& a_Other, CScalar a_T);
+		void RotateByQuat(const CQuaternion& a_Quaternion);
 
 	private:
 
