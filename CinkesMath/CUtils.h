@@ -13,6 +13,7 @@ public:
 	static CScalar Atan(CScalar a_Value) { return std::atan(a_Value); }
 	static CScalar Sqrt(CScalar a_Value) { return sqrt(a_Value); }
 	static CScalar Atan2(CScalar a_Y, CScalar a_X) { return std::atan2(a_Y, a_X); }
+	static CScalar Abs(CScalar a_Value) { return abs(a_Value); }
 #else
 	static CScalar Cos(CScalar a_Value) { return std::cosf(a_Value); }
 	static CScalar Acos(CScalar a_Value) { return std::acosf(a_Value); }
@@ -22,6 +23,8 @@ public:
 	static CScalar Atan(CScalar a_Value) { return std::atanf(a_Value); }
 	static CScalar Sqrt(CScalar a_Value) { return sqrtf(a_Value); }
 	static CScalar Atan2(CScalar a_Y, CScalar a_X) { return std::atan2f(a_Y, a_X); }
+	static CScalar Abs(CScalar a_Value) { return fabs(a_Value); }
+
 #endif
 };
 

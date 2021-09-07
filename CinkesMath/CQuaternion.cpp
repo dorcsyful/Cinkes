@@ -1,5 +1,7 @@
 #include "CQuaternion.h"
 
+#include <assert.h>
+
 #include "CUtils.h"
 
 Cinkes::CQuaternion::CQuaternion()
@@ -51,22 +53,22 @@ Cinkes::CQuaternion::CQuaternion(CScalar a_Yaw, CScalar a_Pitch, CScalar a_Roll)
 	m_Values[3] = cr * cp * sy - sr * sp * cy;
 }
 
-CScalar Cinkes::CQuaternion::getX()
+CScalar Cinkes::CQuaternion::getX() const
 {
 	return m_Values[0];
 }
 
-CScalar Cinkes::CQuaternion::getY()
+CScalar Cinkes::CQuaternion::getY() const
 {
 	return m_Values[1];
 }
 
-CScalar Cinkes::CQuaternion::getZ()
+CScalar Cinkes::CQuaternion::getZ() const
 {
 	return m_Values[2];
 }
 
-CScalar Cinkes::CQuaternion::getW()
+CScalar Cinkes::CQuaternion::getW() const
 {
 	return m_Values[3];
 }
@@ -201,6 +203,8 @@ Cinkes::CQuaternion Cinkes::CQuaternion::operator*(const CQuaternion& a_Rhs)
 	returnQuat[0] = getW() * other.getX() + getX() * other.getW() + getY() * other.getZ() - getZ() * other.getY();
 	returnQuat[1] = getW() * other.getY() - getX() * other.getY() + getY() * other.getW() + getZ() * other.getX();
 	returnQuat[2] = getW() * other.getZ() + getX() * other.getY() - getY() * other.getX() + getZ() * other.getW();
+
+	return returnQuat;
 }
 
 Cinkes::CQuaternion Cinkes::CQuaternion::operator*(const CScalar& a_Rhs)
@@ -243,40 +247,113 @@ CScalar& Cinkes::CQuaternion::operator[](int a_Rhs)
 
 CScalar Cinkes::CQuaternion::Dot(const CQuaternion& a_Rhs)
 {
+	return Length2();
 }
 
 CScalar Cinkes::CQuaternion::Length2()
 {
+	return m_Values[0] * m_Values[0] + m_Values[1] * m_Values[1] + m_Values[2] * m_Values[2] + m_Values[3] * m_Values[3];
 }
 
 CScalar Cinkes::CQuaternion::Length()
 {
+	return CUtils::Sqrt(Length2());
 }
 
 void Cinkes::CQuaternion::Normalize()
 {
+	CScalar length = Length();
+	m_Values[0] = m_Values[0] / length;
+	m_Values[1] = m_Values[1] / length;
+	m_Values[2] = m_Values[2] / length;
+	m_Values[3] = m_Values[3] / length;
 }
 
 CScalar Cinkes::CQuaternion::GetAngleBetween(const CQuaternion& a_Rhs)
 {
+	return CUtils::Acos(Dot(a_Rhs));
 }
 
 CScalar Cinkes::CQuaternion::GetAngle()
 {
+	assert(Length2() != CScalar(1));
+	return static_cast<CScalar>(2) * CUtils::Acos((*this)[3]);
 }
 
 Cinkes::CVector3 Cinkes::CQuaternion::GetAxis()
 {
+	CVector3 axis;
+	CQuaternion temp = *this;
+	CScalar divisonBy = CUtils::Sqrt(static_cast<CScalar>(1) - temp[3] * temp[3]);
+	if (temp[3] > static_cast<CScalar>(1))
+	{
+		temp.Normalize();
+	}
+	if (divisonBy < static_cast<CScalar>(0.000001)) {
+		axis.setX(this->getX());
+		axis.setY(this->getY());
+		axis.setZ(this->getZ());
+	} else
+	{
+		axis.setX(this->getX() / divisonBy);
+		axis.setY(this->getY() / divisonBy);
+		axis.setZ(this->getZ() / divisonBy);
+	}
+
+	return axis;
 }
 
 Cinkes::CQuaternion Cinkes::CQuaternion::GetInverse()
 {
+	CQuaternion quat;
+	quat.setW(this->getW());
+	quat.setZ(-this->getZ());
+	quat.setY(-this->getY());
+	quat.setZ(-this->getX());
+	return quat;
 }
 
 Cinkes::CQuaternion Cinkes::CQuaternion::Slerp(const CQuaternion& a_Other, CScalar a_T)
 {
+	CQuaternion end = a_Other;
+	CScalar cosHalfTheta = (*this)[3] * a_Other.getW() + (*this)[0] * a_Other.getX() + (*this)[1] * a_Other.getY() + (*this)[2] * a_Other.getZ();
+	if (cosHalfTheta < 0) {
+		end[3] = -end[3];
+		end[0] = -end[0];
+		end[1] = -end[1];
+		cosHalfTheta = -cosHalfTheta;
+	}
+	if(CUtils::Abs(cosHalfTheta) >= static_cast<CScalar>(1.0))
+	{
+		end.setW(this->getW());
+		end.setX(this->getX());
+		end.setY(this->getY());
+		end.setZ(this->getZ());
+
+		return end;
+	}
+	CScalar halfTheta = CUtils::Acos(cosHalfTheta);
+	CScalar sinHalfTheta = CUtils::Sin(halfTheta);
+	if (CUtils::Abs(sinHalfTheta) < static_cast<float>(0.001))
+	{
+		end[3] = ((*this)[3] * static_cast<CScalar>(0.5) + a_Other.getW() * static_cast<CScalar>(0.5));
+		end[0] = ((*this)[0] * static_cast<CScalar>(0.5) + a_Other.getX() * static_cast<CScalar>(0.5));
+		end[1] = ((*this)[1] * static_cast<CScalar>(0.5) + a_Other.getY() * static_cast<CScalar>(0.5));
+		end[2] = ((*this)[2] * static_cast<CScalar>(0.5) + a_Other.getZ() * static_cast<CScalar>(0.5));
+		return end;
+	}
+
+	CScalar ratioA = CUtils::Sin((1 - a_T) * halfTheta) / sinHalfTheta;
+	CScalar ratioB = CUtils::Sin(a_T * halfTheta) / sinHalfTheta;
+	//calculate Quaternion.
+	end[3] = ((*this)[3] * ratioA + a_Other.getW() * ratioB);
+	end[0] = ((*this)[0] * ratioA + a_Other.getX() * ratioB);
+	end[1] = ((*this)[1] * ratioA + a_Other.getY() * ratioB);
+	end[2] = ((*this)[2] * ratioA + a_Other.getZ() * ratioB);
+	return end;
 }
 
-const Cinkes::CQuaternion Cinkes::CQuaternion::GetIdentity()
+Cinkes::CQuaternion Cinkes::CQuaternion::GetIdentity()
 {
+	return CQuaternion(static_cast<CScalar>(0), static_cast<CScalar>(0), static_cast<CScalar>(0), static_cast<CScalar>(1));
 }
