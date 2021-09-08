@@ -14,6 +14,8 @@ public:
 	static CScalar Sqrt(CScalar a_Value) { return sqrt(a_Value); }
 	static CScalar Atan2(CScalar a_Y, CScalar a_X) { return std::atan2(a_Y, a_X); }
 	static CScalar Abs(CScalar a_Value) { return abs(a_Value); }
+	static CScalar Deg2Rad(CScalar a_Degrees) { return a_Degrees / 57.2957795; }
+	static CScalar Rad2Deg(CScalar a_Radians) { return a_Radians * 57.2957795; }
 #else
 	static CScalar Cos(CScalar a_Value) { return std::cosf(a_Value); }
 	static CScalar Acos(CScalar a_Value) { return std::acosf(a_Value); }
@@ -24,6 +26,8 @@ public:
 	static CScalar Sqrt(CScalar a_Value) { return sqrtf(a_Value); }
 	static CScalar Atan2(CScalar a_Y, CScalar a_X) { return std::atan2f(a_Y, a_X); }
 	static CScalar Abs(CScalar a_Value) { return fabs(a_Value); }
+	static CScalar Deg2Rad(CScalar a_Degrees) { return a_Degrees / 57.2957795f; }
+	static CScalar Rad2Deg(CScalar a_Radians) { return a_Radians * 57.2957795f; }
 
 #endif
 };

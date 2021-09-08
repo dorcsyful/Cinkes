@@ -28,6 +28,10 @@ namespace Cinkes
 
 		void GetEuler(CScalar& a_Yaw, CScalar& a_Pitch, CScalar& a_Roll);
 
+		bool operator==(const CQuaternion& a_Rhs);
+		bool operator!=(const CQuaternion& a_Rhs);
+		void operator=(const CQuaternion& a_Rhs);
+
 		void operator+=(const CQuaternion& a_Rhs);
 		void operator-=(const CQuaternion& a_Rhs);
 		void operator*=(const CQuaternion& a_Rhs);
