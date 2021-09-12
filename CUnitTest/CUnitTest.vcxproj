@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CMat3x3Test.cpp" />
     <ClCompile Include="CQuaternionTest.cpp" />
     <ClCompile Include="CVector3Test.cpp" />
     <ClCompile Include="pch.cpp">

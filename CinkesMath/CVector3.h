@@ -19,6 +19,7 @@ namespace Cinkes {
 		void setY(CScalar a_New);
 		void setZ(CScalar a_New);
 
+		CVector3& operator=(const CVector3& a_Rhs);
 		void operator+=(const CVector3& a_Rhs);
 		void operator-=(const CVector3& a_Rhs);
 		void operator*=(const CVector3& a_Rhs);
@@ -42,8 +43,8 @@ namespace Cinkes {
 		CScalar& operator[](int a_Rhs);
 		CScalar operator[](int a_Rhs) const;
 
-		bool operator==(const CVector3& a_Rhs);
-		bool operator!=(const CVector3& a_Rhs);
+		bool operator==(const CVector3& a_Rhs) const;
+		bool operator!=(const CVector3& a_Rhs) const;
 
 		CScalar Length2();
 		CScalar Length();

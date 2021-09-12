@@ -13,7 +13,6 @@ public:
 	static CScalar Atan(CScalar a_Value) { return std::atan(a_Value); }
 	static CScalar Atan2(CScalar a_First, CScalar a_Second) { std::atan2(a_First, a_Second); }
 	static CScalar Sqrt(CScalar a_Value) { return sqrt(a_Value); }
-	static CScalar Atan2(CScalar a_Y, CScalar a_X) { return std::atan2(a_Y, a_X); }
 	static CScalar Abs(CScalar a_Value) { return abs(a_Value); }
 	static CScalar Deg2Rad(CScalar a_Degrees) { return a_Degrees / 57.2957795; }
 	static CScalar Rad2Deg(CScalar a_Radians) { return a_Radians * 57.2957795; }
@@ -24,9 +23,8 @@ public:
 	static CScalar Asin(CScalar a_Value) { return std::asinf(a_Value); }
 	static CScalar Tan(CScalar a_Value) { return std::tanf(a_Value); }
 	static CScalar Atan(CScalar a_Value) { return std::atanf(a_Value); }
-	static CScalar Atan2(CScalar a_First, CScalar a_Second) { std::atan2f(a_First, a_Second); }
+	static CScalar Atan2(CScalar a_First, CScalar a_Second) { return std::atan2f(a_First, a_Second); }
 	static CScalar Sqrt(CScalar a_Value) { return sqrtf(a_Value); }
-	static CScalar Atan2(CScalar a_Y, CScalar a_X) { return std::atan2f(a_Y, a_X); }
 	static CScalar Abs(CScalar a_Value) { return fabs(a_Value); }
 	static CScalar Deg2Rad(CScalar a_Degrees) { return a_Degrees / 57.2957795f; }
 	static CScalar Rad2Deg(CScalar a_Radians) { return a_Radians * 57.2957795f; }

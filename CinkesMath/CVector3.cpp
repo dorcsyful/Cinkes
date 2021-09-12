@@ -46,6 +46,20 @@ void Cinkes::CVector3::setZ(CScalar a_New)
 	m_Values[2] = a_New;
 }
 
+CVector3& CVector3::operator=(const CVector3& a_Rhs)
+{
+	if(this == &a_Rhs)
+	{
+		return *this;
+	}
+	m_Values[0] = a_Rhs[0];
+	m_Values[1] = a_Rhs[1];
+	m_Values[2] = a_Rhs[2];
+
+	return *this;
+
+}
+
 void Cinkes::CVector3::operator+=(const CVector3& a_Rhs)
 {
 	m_Values[0] += a_Rhs.m_Values[0];
@@ -152,12 +166,12 @@ float CVector3::operator[](int a_Rhs) const
 	return m_Values[a_Rhs];
 }
 
-bool Cinkes::CVector3::operator==(const CVector3& a_Rhs)
+bool Cinkes::CVector3::operator==(const CVector3& a_Rhs) const
 {
 	return m_Values[0] == a_Rhs.m_Values[0] && m_Values[1] == a_Rhs.m_Values[1] && m_Values[2] == a_Rhs.m_Values[2];
 }
 
-bool Cinkes::CVector3::operator!=(const CVector3& a_Rhs)
+bool Cinkes::CVector3::operator!=(const CVector3& a_Rhs) const
 {
 	return m_Values[0] != a_Rhs.m_Values[0] || m_Values[1] != a_Rhs.m_Values[1] || m_Values[2] != a_Rhs.m_Values[2];
 }
