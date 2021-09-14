@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClCompile Include="CMat3x3Test.cpp" />
     <ClCompile Include="CQuaternionTest.cpp" />
+    <ClCompile Include="CTransformTest.cpp" />
     <ClCompile Include="CVector3Test.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

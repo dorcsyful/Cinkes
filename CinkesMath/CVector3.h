@@ -51,6 +51,7 @@ namespace Cinkes {
 		void Normalize();
 
 		CScalar Dot(const CVector3& a_Rhs);
+		CVector3 Dot3(const CVector3& a_V0, const CVector3& a_V1, const CVector3& a_V2);
 		CVector3 Cross(const CVector3& a_Rhs);
 		CVector3 Lerp(const CVector3& a_Other, CScalar a_T);
 		void RotateByQuat(const CQuaternion& a_Quaternion);

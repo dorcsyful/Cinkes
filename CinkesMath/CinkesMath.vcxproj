@@ -142,12 +142,14 @@
     <ClInclude Include="CMat3x3.h" />
     <ClInclude Include="CQuaternion.h" />
     <ClInclude Include="CScalar.h" />
+    <ClInclude Include="CTransform.h" />
     <ClInclude Include="CUtils.h" />
     <ClInclude Include="CVector3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CMat3x3.cpp" />
     <ClCompile Include="CQuaternion.cpp" />
+    <ClCompile Include="CTransform.cpp" />
     <ClCompile Include="CUtils.cpp" />
     <ClCompile Include="CVector3.cpp" />
   </ItemGroup>

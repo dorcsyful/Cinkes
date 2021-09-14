@@ -203,12 +203,11 @@ namespace UnitTest
 
 		TEST_METHOD(OperatorMultiplyVector)
 		{
-			CMat3x3 matrix = CMat3x3(2, 7, 3, 1, 5, 8, 0, 4, 1);
-			CVector3 vector = CVector3(3, 2, 1);
-			CVector3 result;
-			result[0] = matrix[0][0] * vector[0] + matrix[0][1] * vector[1] + matrix[0][2] * vector[2];
-			result[1] = matrix[1][0] * vector[0] + matrix[1][1] * vector[1] + matrix[1][2] * vector[2];
-			result[2] = matrix[2][0] * vector[0] + matrix[2][1] * vector[1] + matrix[2][2] * vector[2];
+			CMat3x3 matrix = CMat3x3(1, 2, 3, 0, 1, 4, 5, 6, 0);
+			CVector3 vector = CVector3(-2, -3, -4);
+			CVector3 result = matrix * vector;
+
+			Assert::IsTrue(result == CVector3(-20, -19, -28));
 		}
 
 		TEST_METHOD(OperatorMultiplyScalar)
