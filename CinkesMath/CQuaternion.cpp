@@ -1,6 +1,7 @@
 #include "CQuaternion.h"
 
 #include <cassert>
+#include <corecrt_math_defines.h>
 
 #include "CUtils.h"
 
@@ -306,7 +307,7 @@ CScalar Cinkes::CQuaternion::GetAngleBetween(const CQuaternion& a_Rhs)
 	CScalar angle = CUtils::Acos((2*(dot)) - 1);
 	if(angle > CScalar(M_PI))
 	{
-		angle = angle - M_PI * CScalar(2);
+		angle = angle - CScalar(M_PI) * CScalar(2);
 	}
 	return angle;
 }
