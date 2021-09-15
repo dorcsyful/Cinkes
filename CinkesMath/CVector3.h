@@ -2,15 +2,32 @@
 #include "CScalar.h"
 
 namespace Cinkes {
+
 	class CQuaternion;
 
+	/**
+	 * @ingroup CVector3
+	 * @brief Class for a vector with 3 elements
+	 * @{
+	 */
 	class CVector3
 	{
 	public:
+
+		/**
+		 * @ingroup Constructors
+		 * @{
+		 */
 		CVector3();
 		CVector3(CScalar a_X, CScalar a_Y, CScalar a_Z);
 		CVector3(const CVector3& a_Vector);
 
+		/** @} */
+		/**
+		 * @ingroup Other
+		 * Getters and Setters
+		 * @{
+		 */
 		CScalar getX();
 		CScalar getY();
 		CScalar getZ();
@@ -18,7 +35,12 @@ namespace Cinkes {
 		void setX(CScalar a_New);
 		void setY(CScalar a_New);
 		void setZ(CScalar a_New);
+		/** @} */
 
+		/**
+		 * @ingroup Operators
+		 * @{
+		 */
 		CVector3& operator=(const CVector3& a_Rhs);
 		void operator+=(const CVector3& a_Rhs);
 		void operator-=(const CVector3& a_Rhs);
@@ -46,6 +68,12 @@ namespace Cinkes {
 		bool operator==(const CVector3& a_Rhs) const;
 		bool operator!=(const CVector3& a_Rhs) const;
 
+		/** @}*/
+
+		/**
+		 * @ingroup Other
+		 * @{
+		 */
 		CScalar Length2();
 		CScalar Length();
 		void Normalize();
@@ -55,10 +83,11 @@ namespace Cinkes {
 		CVector3 Cross(const CVector3& a_Rhs);
 		CVector3 Lerp(const CVector3& a_Other, CScalar a_T);
 		void RotateByQuat(const CQuaternion& a_Quaternion);
-
+		/** @}*/
 	private:
 
 		CScalar m_Values[3];
 	};
+	/** @} */
 }
 
