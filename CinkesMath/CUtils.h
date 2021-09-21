@@ -2,8 +2,9 @@
 #include "CScalar.h"
 #include <cmath>
 
-//!	Utility class for easy switching between float and double precision
-
+//Group: CMath
+/*ClassDescription: Utility class for easy switching between floatand double precision
+*/
 class CUtils
 {
 public:
