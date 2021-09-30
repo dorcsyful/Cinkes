@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CinkesMath", "CinkesMath\Ci
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CUnitTest", "CUnitTest\CUnitTest.vcxproj", "{6A7EF73E-BEE1-4CE2-93A2-727B92B7DB64}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CinkesCollision", "CinkesCollision\CinkesCollision.vcxproj", "{EB1704ED-E28A-46CD-9402-F0DA1D92989D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{6A7EF73E-BEE1-4CE2-93A2-727B92B7DB64}.Release|x64.Build.0 = Release|x64
 		{6A7EF73E-BEE1-4CE2-93A2-727B92B7DB64}.Release|x86.ActiveCfg = Release|Win32
 		{6A7EF73E-BEE1-4CE2-93A2-727B92B7DB64}.Release|x86.Build.0 = Release|Win32
+		{EB1704ED-E28A-46CD-9402-F0DA1D92989D}.Debug|x64.ActiveCfg = Debug|x64
+		{EB1704ED-E28A-46CD-9402-F0DA1D92989D}.Debug|x64.Build.0 = Debug|x64
+		{EB1704ED-E28A-46CD-9402-F0DA1D92989D}.Debug|x86.ActiveCfg = Debug|Win32
+		{EB1704ED-E28A-46CD-9402-F0DA1D92989D}.Debug|x86.Build.0 = Debug|Win32
+		{EB1704ED-E28A-46CD-9402-F0DA1D92989D}.Release|x64.ActiveCfg = Release|x64
+		{EB1704ED-E28A-46CD-9402-F0DA1D92989D}.Release|x64.Build.0 = Release|x64
+		{EB1704ED-E28A-46CD-9402-F0DA1D92989D}.Release|x86.ActiveCfg = Release|Win32
+		{EB1704ED-E28A-46CD-9402-F0DA1D92989D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
