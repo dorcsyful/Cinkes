@@ -54,9 +54,6 @@
     <ClInclude Include="CCollisionAlgorithms\COctree.hpp">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="CCollisionAlgorithms\Pool.hpp">
-      <Filter>Header Files\Algorithms</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCollisionWorld.cpp">

@@ -31,15 +31,8 @@ Cinkes::CCollisionObject::CCollisionObject(CCollisionObject&& a_Rhs) noexcept
 	m_Shape = a_Rhs.m_Shape;
 }
 
+
 Cinkes::CCollisionObject& Cinkes::CCollisionObject::operator=(CCollisionObject&& a_Rhs)
-{
-	m_Transform = a_Rhs.m_Transform;
-	m_Shape = a_Rhs.m_Shape;
-
-	return *this;
-}
-
-Cinkes::CCollisionObject& Cinkes::CCollisionObject::operator=(const CCollisionObject& a_Rhs)
 {
 	if(&a_Rhs == this)
 	{

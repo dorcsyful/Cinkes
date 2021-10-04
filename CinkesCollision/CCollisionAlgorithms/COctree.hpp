@@ -1,393 +1,381 @@
-#ifndef OCTREE_H
-#define OCTREE_H
+// COTD Entry submitted by Paul Nettle [midnight@FluidStudios.com]
+// Corresponds with an Ask MidNight response (http://www.flipcode.com/askmid/)
 
-#include <iostream>
-#include <assert.h>
-#include <vector>
-#include <limits>
-#include <stdlib.h>
-#include <cmath> //for sqrt
+// -----------------------------------------------------------------------------
+// This defines a callback for traversal
+// -----------------------------------------------------------------------------
 
-#include "Pool.hpp"
-
-/*
-* This is an Octree implementation for quick point
-* insertion, retrival and nearest neighbour search.
-* There is no support for removing a Leaf or Branch;
-* but that makes the code easier and faster.
-*/
+#pragma once
+#include "../../CinkesMath/CScalar.h"
 
 
-inline bool isPow2(unsigned i) {
-	return ((i - 1) & i) == 0;
-}
-
-inline unsigned log2(unsigned n) {
-	assert(n != 0);
-	assert(isPow2(n));
-
-	unsigned log = 0;
-	while (true) {
-		n >>= 1;
-		if (n == 0) {
-			break;
-		}
-		log++;
-	}
-	return log;
-}
-
-
-//set bits in mask to 1 (not 0, no toggle) if i has bit [1,2,3] set
-#define set1_if_bit1(value, i, mask) ((i&1) ? ((value) | (mask)) : (value))
-#define set1_if_bit2(value, i, mask) ((i&2) ? ((value) | (mask)) : (value))
-#define set1_if_bit3(value, i, mask) ((i&4) ? ((value) | (mask)) : (value))
-
-
-template<typename T>
-class Octree
+namespace Cinkes
 {
-public:
-
-	class Node {};
-
-	// Branch must have at least one child.
-	struct Branch : public Node
-	{
-		Node* children[8];
-
-		Branch() : children() {
-		}
-
-		void* operator new(size_t num_bytes, Pool<Branch>* mem) {
-			assert(sizeof(Branch) == num_bytes);
-			return mem->alloc_item();
-		}
-
-		Node* operator[](unsigned i) const {
-			assert(i < 8);
-			return children[i];
-		}
-	};
-
-	struct Leaf : public Node
-	{
-		T m_value;
-
-		Leaf(T value) : m_value(value) {
-		}
-
-		void* operator new(size_t num_bytes, Pool<Leaf>* mem) {
-			assert(sizeof(Leaf) == num_bytes);
-			return mem->alloc_item();
-		}
-
-		T& value() {
-			return m_value;
-		}
-
-		void value(T& v) {
-			m_value = v;
-		}
-	};
-
-
-	typedef typename Pool<Leaf>::iterator leaves_iterator;
-	typedef typename Pool<Branch>::iterator branches_iterator;
-
-	Octree(unsigned size) :
-		m_root(0), m_depth(log2(size)),
-		leaf_count(0), branch_count(0) {
-		assert(isPow2(size));
-		assert(size > 2);
-	}
-
-	~Octree() {
-	}
-
-	/*
-	* Size of the bounding box.
-	* Always a power of two.
-	*/
-	unsigned width() const {
-		return (1 << depth());
-	}
-
-	/*
-	* Maximum depth of the tree.
-	*/
-	unsigned depth() const {
-		return m_depth;
-	}
-
-	/*
-	* Maximum number of leaves.
-	*/
-	unsigned capacity() const {
-		auto w = width();
-		return w * w * w;
-	}
-
-	/*
-	* Get value at given position if Leaf exists.
-	* Otherwise return a null pointer.
-	*/
-	Leaf* at(const unsigned x, const unsigned y, const unsigned z) const {
-		Node* n = m_root;
-		unsigned size = width();
-
-		assert(x <= size);
-		assert(y <= size);
-		assert(z <= size);
-
-		while (size != 1 && n)
-		{
-			size /= 2;
-
-			n = reinterpret_cast<Branch*>(n)->children[
-				!!(x & size) * 1 + !!(y & size) * 2 + !!(z & size) * 4
-			];
-		}
-
-		return reinterpret_cast<Leaf*>(n);
-	}
-
-	/*
-	* Insert a new Leaf and initialize it using the given value.
-	* If the Leaf exists, just return the leaf.
-	*/
-	Leaf* insert(const unsigned x, const unsigned y, const unsigned z, const T& value) {
-		assert(x < width());
-		assert(y < width());
-		assert(z < width());
-
-		Node** n = &m_root;
-		Node** parent = &m_root;
-		unsigned i = 0;
-		unsigned depth = m_depth;
-
-		while (depth) {
-			if (*n == nullptr) {
-				*n = new(&branch_pool) Branch();
-				++branch_count;
-				parent = n;
-			}
-			else {
-				--depth;
-				parent = n;
-
-				// The nth bit of x, y and z is encoded in the index.
-				// Since size is always a power of two, size has always
-				// only one bit set and it is used as bit mask to check the nth bit.
-
-				const unsigned size = (1 << depth);
-				// Same as: i = ((x & size) ? 1 : 0) + ((y & size) ? 2 : 0) + ((z & size) ? 4 : 0);
-				i = !!(x & size) * 1 + !!(y & size) * 2 + !!(z & size) * 4;
-				n = &reinterpret_cast<Branch*>(*n)->children[i];
-			}
-		}
-
-		if (*n == nullptr) {
-			assert(depth == 0);
-			*n = new(&leaf_pool) Leaf(value);
-			++leaf_count;
-		}
-
-		return reinterpret_cast<Leaf*>(*n);
-	}
-
-	//search for the nearest neighbour to coordiantes x/y/z
-	Leaf* findNearestNeighbour(unsigned x, unsigned y, unsigned z) const {
-		unsigned found_x;
-		unsigned found_y;
-		unsigned found_z;
-
-		return findNearestNeighbour(x, y, z, found_x, found_y, found_z);
-	}
-
-	Leaf* findNearestNeighbour(unsigned x, unsigned y, unsigned z, unsigned& found_x, unsigned& found_y, unsigned& found_z) const {
-		assert(x <= width());
-		assert(y <= width());
-		assert(z <= width());
-
-		if (root() == nullptr) {
-			return nullptr;
-		}
-
-		NearestNeighbourSearchFull nns(x, y, z);
-
-		nns.search(root(), 0, 0, 0, width() / 2);
-
-		found_x = nns.nn_x;
-		found_y = nns.nn_y;
-		found_z = nns.nn_z;
-
-		return nns.nn_leaf;
-	}
-
-	typedef void (*Func)(unsigned x, unsigned y, unsigned z, T& value);
-
-	void traverse(Func func) {
-		if (m_root) {
-			traverse(m_root, width(), 0, 0, 0, func);
-		}
-	}
-
-	Branch* root() const {
-		return reinterpret_cast<Branch*>(m_root);
-	}
-
-	/*
-	* Iterate leaves flollowing memory chunks.
-	* The order is not defined.
-	*/
-	leaves_iterator leaf_begin() {
-		return leaf_pool.begin();
-	}
-
-	leaves_iterator leaf_end() {
-		return leaf_pool.end();
-	}
-
-	/*
-	* Iterate over all Branch elements.
-	* Uses the allocated memory chunks.
-	*/
-	branches_iterator branch_begin() {
-		return branch_pool.begin();
-	}
-
-	branches_iterator branch_end() {
-		return branch_pool.end();
-	}
-
-	unsigned countLeaves() {
-		return leaf_count;
-	}
-
-	unsigned countBranches() {
-		return branch_count;
-	}
-
-private:
-
-	void traverse(Node* n, unsigned m, const unsigned x, const unsigned y, const unsigned z, Func func) {
-		assert(n != nullptr);
-		assert(m != 0);
-
-		if (m == 1) {
-			(*func)(x, y, z, reinterpret_cast<Leaf*>(n)->m_value);
-		}
-		else {
-			m >>= 1;
-			Node* tmp;
-			for (unsigned i = 0; i < 8; i++) {
-				tmp = reinterpret_cast<Branch*>(n)->children[i];
-				if (tmp == nullptr) {
-					continue;
-				}
-
-				traverse(tmp, m, set1_if_bit1(x, i, m), set1_if_bit2(y, i, m), set1_if_bit3(z, i, m), func);
-			}
-		}
-	}
-
-	// Nearest Neighbor Search in the Octree using bounding boxes.
-	struct NearestNeighbourSearchFull
-	{
-		// Search for nearest neighbour to this position.
-		const int pos_x;
-		const int pos_y;
-		const int pos_z;
-
-		// Search box volume.
-		int x_min, x_max;
-		int y_min, y_max;
-		int z_min, z_max;
-
-		// Nearest neighbour.
-		Leaf* nn_leaf;
-		unsigned nn_sq_distance;
-		unsigned nn_x;
-		unsigned nn_y;
-		unsigned nn_z;
-
-		NearestNeighbourSearchFull(unsigned x, unsigned y, unsigned z) :
-			pos_x(x), pos_y(y), pos_z(z),
-			x_min(0), x_max(std::numeric_limits<int>::max()),
-			y_min(0), y_max(std::numeric_limits<int>::max()),
-			z_min(0), z_max(std::numeric_limits<int>::max()),
-			nn_leaf(0), nn_sq_distance(std::numeric_limits<unsigned>::max()),
-			nn_x(0), nn_y(0), nn_z(0) {
-		}
-
-		// Check if the leaf at position x/y/z is nearer then the current leaf
-		void check_leaf(Leaf* leaf, int x, int y, int z) {
-			const long dx = pos_x - x;
-			const long dy = pos_y - y;
-			const long dz = pos_z - z;
-			const unsigned sq_distance = (dx * dx) + (dy * dy) + (dz * dz);
-
-			if (sq_distance < nn_sq_distance)
-			{
-				nn_leaf = leaf;
-				nn_sq_distance = sq_distance;
-				nn_x = x;
-				nn_y = y;
-				nn_z = z;
-
-				const int r = std::sqrt(sq_distance) + 1.0;
-
-				x_min = pos_x - r;
-				x_max = pos_x + r;
-				y_min = pos_y - r;
-				y_max = pos_y + r;
-				z_min = pos_z - r;
-				z_max = pos_z + r;
-			}
-		}
-
-		// Check if any point of the position is in the search box.
-		bool check_branch(const unsigned x, const unsigned int y, const unsigned int z, const unsigned w) const {
-			return !(x_max < x || x_min > x + w || y_max < y || y_min > y + w || z_max < z || z_min > z + w);
-		}
-
-		void search(const Branch* b, const unsigned x, const unsigned y, const unsigned z, const unsigned size) {
-			assert(b != nullptr);
-			assert(isPow2(size));
-
-			// Try the path to the destined position first
-			const unsigned start_i = !!(pos_x & size) * 1 + !!(pos_y & size) * 2 + !!(pos_z & size) * 4;
-
-			for (unsigned i = start_i; i < (start_i + 8); ++i) {
-				// Limit index to range [0-7].
-				Node* n = b->children[i & 7];
-
-				if (n == nullptr) {
-					continue;
-				}
-
-				const unsigned child_x = set1_if_bit1(x, i, size);
-				const unsigned child_y = set1_if_bit2(y, i, size);
-				const unsigned child_z = set1_if_bit3(z, i, size);
-
-				if (size == 1) {
-					check_leaf(reinterpret_cast<Leaf*>(n), child_x, child_y, child_z);
-				}
-				else if (check_branch(child_x, child_y, child_z, size)) {
-					search(reinterpret_cast<Branch*>(n), child_x, child_y, child_z, (size / 2));
-				}
-			}
-		}
-	};
-
-	Node* m_root;
-	unsigned m_depth;
-	unsigned leaf_count;
-	unsigned branch_count;
-
-	Pool<Leaf> leaf_pool;
-	Pool<Branch> branch_pool;
-};
-
-#endif
+
+#include <cstring>
+    class   COctree;
+    typedef bool            (*callback)(const COctree& a_Octree, void* a_Data);
+
+    // -----------------------------------------------------------------------------
+    // This defines a point class (it's incomplete, but the data elements are there)
+    // -----------------------------------------------------------------------------
+
+
+    class   CPoint
+    {
+    public:
+        CPoint() = default;
+        CPoint(CScalar a_X, CScalar a_Y, CScalar a_Z, const int a_Code) : m_X(a_X), m_Y(a_Y), m_Z(a_Z), m_N(static_cast<float>(1)), m_Code(a_Code) {}
+        CPoint(CScalar a_X, CScalar a_Y, CScalar a_Z) : m_X(a_X), m_Y(a_Y), m_Z(a_Z), m_N(0), m_Code(0) {}
+
+        CScalar m_X, m_Y, m_Z;        // Position
+        CScalar          m_N{};              // User's unique identifier
+        unsigned int    m_Code{};           // Used during octree generation
+
+        CPoint& operator*(CScalar a_Rhs)
+        {
+            m_X *= a_Rhs;
+            m_Y *= a_Rhs;
+            m_Z *= a_Rhs;
+
+            return *this;
+        }
+
+        CPoint& operator+(CScalar a_Rhs)
+        {
+            m_X += a_Rhs;
+            m_Y += a_Rhs;
+            m_Z += a_Rhs;
+
+            return *this;
+        }
+
+        CPoint& operator+(CPoint a_Rhs)
+        {
+            m_X += a_Rhs.m_X;
+            m_Y += a_Rhs.m_Y;
+            m_Z += a_Rhs.m_Z;
+
+            return *this;
+        }
+
+        CPoint& operator-(CPoint a_Rhs)
+        {
+            m_X -= a_Rhs.m_X;
+            m_Y -= a_Rhs.m_Y;
+            m_Z -= a_Rhs.m_Z;
+
+            return *this;
+        }
+        // Insert typical operators, such as *, +, -, etc.
+    };
+
+    // -----------------------------------------------------------------------------
+    // This defines a cubic bounding volume (center, radius)
+    // -----------------------------------------------------------------------------
+
+    struct Bounds
+    {
+        Bounds() : m_Center(CPoint(0, 0, 0)), m_Radius(0) { }
+
+        CPoint           m_Center;         // Center of a cubic bounding volume
+        CScalar          m_Radius;         // Radius of a cubic bounding volume
+    };
+
+    // -----------------------------------------------------------------------------
+    // The octree class -- almost real code!
+    // -----------------------------------------------------------------------------
+
+    class   COctree
+    {
+    public:
+        // Construction/Destruction
+
+        COctree();
+        virtual                         ~COctree();
+
+        // Accessors
+
+        inline  const   CPoint* const* Points() const { return m_Points; }
+        inline  const   unsigned int    PointCount() const { return m_PointCount; }
+
+        // Implementation
+
+        virtual  bool            Build(CPoint** points,
+            const unsigned int a_Count,
+            const unsigned int a_Threshold,
+            const unsigned int a_MaximumDepth,
+            Bounds& a_Bounds,
+            const unsigned int a_CurrentDepth = 0);
+        static  const   Bounds          CalcCubicBounds(const CPoint* const* a_Points,
+            const unsigned int a_Count);
+        virtual bool            Traverse(callback a_Proc, void* a_Data) const;
+
+    protected:
+        COctree* m_Child[8];
+        unsigned int            m_PointCount;
+        CPoint** m_Points;
+        CPoint                   m_Center;
+        CScalar                  m_Radius;
+    };
+
+    // -----------------------------------------------------------------------------
+    // Construction -- Just "nullify" the class
+    // -----------------------------------------------------------------------------
+
+    COctree::COctree()
+        : m_PointCount(0), m_Points(nullptr), m_Center(0, 0, 0., 0.), m_Radius(0.0)
+    {
+        memset(m_Child, 0, sizeof(m_Child));
+    }
+
+    // -----------------------------------------------------------------------------
+    // Destruction -- free up memory
+    // -----------------------------------------------------------------------------
+
+    COctree::~COctree()
+    {
+        delete[] m_Points;
+    }
+
+    // -----------------------------------------------------------------------------
+    // Build the octree
+    // -----------------------------------------------------------------------------
+
+    bool    COctree::Build(CPoint** points,
+        const unsigned int count,
+        const unsigned int threshold,
+        const unsigned int maximumDepth,
+        Bounds& bounds,
+        const unsigned int currentDepth)
+    {
+        // You know you're a leaf when...
+        //
+        // 1. The number of points is <= the threshold
+        // 2. We've recursed too deep into the tree
+        //    (currentDepth >= maximumDepth)
+        //
+        //    NOTE: We specifically use ">=" for the depth comparison so that we
+        //          can set the maximumDepth depth to 0 if we want a tree with
+        //          no depth.
+
+        if (count <= threshold || currentDepth >= maximumDepth)
+        {
+            // Just store the points in the node, making it a leaf
+
+            m_PointCount = count;
+            m_Points = new CPoint * [count];
+            memcpy(m_Points, points, sizeof(CPoint*) * count);
+            return true;
+        }
+
+        // We'll need this (see comment further down in this source)
+
+        unsigned int    m_ChildPointCounts[8];
+
+        // Classify each point to a child node
+
+        for (unsigned int i = 0; i < count; i++)
+        {
+            // Current point
+
+            CPoint& p = *points[i];
+
+            // Center of this node
+
+            const CPoint& c = bounds.m_Center;
+
+            // Here, we need to know which child each point belongs to. To
+            // do this, we build an index into the _child[] array using the
+            // relative position of the point to the center of the current
+            // node
+
+            p.m_Code = 0;
+            if (p.m_X > c.m_X) p.m_Code |= 1;
+            if (p.m_Y > c.m_Y) p.m_Code |= 2;
+            if (p.m_Z > c.m_Z) p.m_Code |= 4;
+
+            // We'll need to keep track of how many points get stuck in each
+            // child so we'll just keep track of it here, since we have the
+            // information handy.
+
+            m_ChildPointCounts[p.m_Code]++;
+        }
+
+        // Recursively call build() for each of the 8 children
+
+        for (int i = 0; i < 8; i++)
+        {
+            // Don't bother going any further if there aren't any points for
+            // this child
+
+            if (!m_ChildPointCounts[i]) continue;
+
+            // Allocate the child
+
+            m_Child[i] = new COctree;
+
+            // Allocate a list of points that were coded JUST for this child
+            // only
+
+            CPoint** newList = new CPoint * [m_ChildPointCounts[i]];
+
+            // Go through the input list of points and copy over the points
+            // that were coded for this child
+
+            CPoint** ptr = newList;
+
+            for (unsigned int j = 0; j < count; j++)
+            {
+                if (points[j]->m_Code == i)
+                {
+                    *ptr = points[j];
+                    ptr++;
+                }
+            }
+
+            // At this point, we have a list of points that will belong to
+            // this child node. We'll want to remove any point with a
+            // duplicate 'n' in them...
+            //
+            // [We won't need to reallocate the list, since it's temporary]
+
+            int     newCount = 0;
+            for (int j = 0; j < m_ChildPointCounts[i]; j++)
+            {
+                // Remove duplicates from newList
+                // ...
+                // Keep track of the new count in 'newCount'
+            }
+
+            // Generate a new bounding volume -- We do this with a touch of
+            // trickery...
+            //
+            // We use a table of offsets. These offsets determine where a
+            // node is, relative to it's parent. So, for example, if want to
+            // generate the bottom-left-rear (-x, -y, -z) child for a node,
+            // we use (-1, -1, -1).
+            // 
+            // However, since the radius of a child is always half of its
+            // parent's, we use a table of 0.5, rather than 1.0.
+            // 
+            // These values are stored the following table. Note that this
+            // won't compile because it assumes Points are structs, but you
+            // get the idea.
+
+            CPoint boundsOffsetTable[8] =
+            {
+                    {-0.5, -0.5, -0.5},
+                    {+0.5, -0.5, -0.5},
+                    {-0.5, +0.5, -0.5},
+                    {+0.5, +0.5, -0.5},
+                    {-0.5, -0.5, +0.5},
+                    {+0.5, -0.5, +0.5},
+                    {-0.5, +0.5, +0.5},
+                    {+0.5, +0.5, +0.5}
+            };
+
+            // Calculate our offset from the center of the parent's node to
+            // the center of the child's node
+
+            CPoint offset = boundsOffsetTable[i] * bounds.m_Radius;
+
+            // Create a new Bounds, with the center offset and half the
+            // radius
+
+
+            Bounds  newBounds = Bounds();
+            newBounds.m_Radius = bounds.m_Radius * CScalar(0.5);
+            newBounds.m_Center = bounds.m_Center + offset;
+
+            // Recurse
+
+            m_Child[i]->Build(newList, newCount, threshold, maximumDepth,
+                newBounds, currentDepth + 1);
+
+            // Clean up
+
+            delete[] newList;
+        }
+
+        return true;
+    }
+
+    // -----------------------------------------------------------------------------
+    // Determine the [cubic] bounding volume for a set of points
+    // -----------------------------------------------------------------------------
+
+    const Bounds COctree::CalcCubicBounds(const CPoint* const* a_Points,
+        const unsigned int a_Count)
+    {
+        // What we'll give to the caller
+
+        Bounds  b;
+
+        // Determine min/max of the given set of points
+
+        CPoint   min = *a_Points[0];
+        CPoint   max = *a_Points[0];
+
+        for (unsigned int i = 1; i < a_Count; i++)
+        {
+            const CPoint& p = *a_Points[i];
+            if (p.m_X < min.m_X) min.m_X = p.m_X;
+            if (p.m_Y < min.m_Y) min.m_Y = p.m_Y;
+            if (p.m_Z < min.m_Z) min.m_Z = p.m_Z;
+            if (p.m_X > max.m_X) max.m_X = p.m_X;
+            if (p.m_Y > max.m_Y) max.m_Y = p.m_Y;
+            if (p.m_Z > max.m_Z) max.m_Z = p.m_Z;
+        }
+
+        // The radius of the volume (dimensions in each direction)
+
+        CPoint   radius = max - min;
+
+        // Find the center of this space
+
+        b.m_Center = min + radius * 0.5;
+
+        // We want a CUBIC space. By this, I mean we want a bounding cube, not
+        // just a bounding box. We already have the center, we just need a
+        // radius that contains the entire volume. To do this, we find the
+        // maxumum value of the radius' X/Y/Z components and use that
+
+        b.m_Radius = radius.m_X;
+        if (b.m_Radius < radius.m_Y) b.m_Radius = radius.m_Y;
+        if (b.m_Radius < radius.m_Z) b.m_Radius = radius.m_Z;
+
+        // Done
+
+        return b;
+    }
+
+    // -----------------------------------------------------------------------------
+    // Generic tree traversal
+    // -----------------------------------------------------------------------------
+
+	bool COctree::Traverse(callback a_Proc, void* a_Data) const
+    {
+        // Call the callback for this node (if the callback returns false, then
+        // stop traversing.
+
+        if (!a_Proc(*this, a_Data)) return false;
+
+        // If I'm a node, recursively traverse my children
+
+        if (!m_PointCount)
+        {
+            for (const auto i : m_Child)
+            {
+                // We store incomplete trees (i.e. we're not guaranteed
+                // that a node has all 8 children)
+
+                if (!i) continue;
+
+                if (!i->Traverse(a_Proc, a_Data)) return false;
+            }
+        }
+
+        return true;
+    }
+}

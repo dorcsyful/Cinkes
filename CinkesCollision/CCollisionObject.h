@@ -16,8 +16,7 @@ namespace Cinkes
 		//}
 
 		//Subgroup: Operators {
-		CCollisionObject& operator=(CCollisionObject&& a_Rhs) noexcept;
-		CCollisionObject& operator=(const CCollisionObject& a_Rhs);
+		CCollisionObject& operator=(CCollisionObject&& a_Rhs);
 		//}
 
 		//Subgroup: Shapes {

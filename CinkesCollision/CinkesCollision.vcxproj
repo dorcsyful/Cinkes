@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClInclude Include="CBoxShape.h" />
     <ClInclude Include="CCollisionAlgorithms\COctree.hpp" />
-    <ClInclude Include="CCollisionAlgorithms\Pool.hpp" />
     <ClInclude Include="CCollisionObject.h" />
     <ClInclude Include="CCollisionShape.h" />
     <ClInclude Include="CCollisionWorld.h" />
