@@ -20,10 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBoxShape.h" />
+    <ClInclude Include="CCollisionAlgorithms\COctree.hpp" />
+    <ClInclude Include="CCollisionAlgorithms\Pool.hpp" />
     <ClInclude Include="CCollisionObject.h" />
     <ClInclude Include="CCollisionShape.h" />
     <ClInclude Include="CCollisionWorld.h" />
-    <ClInclude Include="CCollision_GJK.h" />
     <ClInclude Include="CCompoundShape.h" />
     <ClInclude Include="CCompoundPartialShape.h" />
     <ClInclude Include="CConcaveShape.h" />
@@ -33,7 +34,6 @@
   <ItemGroup>
     <ClCompile Include="CCollisionObject.cpp" />
     <ClCompile Include="CCollisionWorld.cpp" />
-    <ClCompile Include="CCollision_GJK.cpp" />
     <ClCompile Include="CCompoundPartialShape.cpp" />
     <ClCompile Include="CCompoundShape.cpp" />
     <ClCompile Include="CConcaveShape.cpp" />

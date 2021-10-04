@@ -19,15 +19,15 @@
     <Filter Include="Source Files\Shapes">
       <UniqueIdentifier>{5b81be93-48fb-4f40-b95f-3f2340925ed8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Algorithms">
+      <UniqueIdentifier>{f113b65c-8cce-4890-a5cf-202cf925cf71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollisionWorld.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CCollisionObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CCollision_GJK.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CBoxShape.h">
@@ -51,15 +51,18 @@
     <ClInclude Include="CSphereShape.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="CCollisionAlgorithms\COctree.hpp">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="CCollisionAlgorithms\Pool.hpp">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCollisionWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CCollisionObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CCollision_GJK.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CCompoundShape.cpp">
