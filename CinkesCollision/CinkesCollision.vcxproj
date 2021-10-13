@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBoxShape.h" />
+    <ClInclude Include="CCapsuleShape.h" />
     <ClInclude Include="CCollisionAlgorithms\COctree.hpp" />
     <ClInclude Include="CCollisionObject.h" />
     <ClInclude Include="CCollisionShape.h" />
@@ -27,16 +28,23 @@
     <ClInclude Include="CCompoundShape.h" />
     <ClInclude Include="CCompoundPartialShape.h" />
     <ClInclude Include="CConcaveShape.h" />
+    <ClInclude Include="CConeShape.h" />
     <ClInclude Include="CConvexHull.h" />
+    <ClInclude Include="CCylinder.h" />
+    <ClInclude Include="CGJKAlgorithm.h" />
     <ClInclude Include="CSphereShape.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CCapsuleShape.cpp" />
     <ClCompile Include="CCollisionObject.cpp" />
     <ClCompile Include="CCollisionWorld.cpp" />
     <ClCompile Include="CCompoundPartialShape.cpp" />
     <ClCompile Include="CCompoundShape.cpp" />
     <ClCompile Include="CConcaveShape.cpp" />
+    <ClCompile Include="CConeShape.cpp" />
     <ClCompile Include="CConvexHull.cpp" />
+    <ClCompile Include="CCylinder.cpp" />
+    <ClCompile Include="CGJKAlgorithm.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

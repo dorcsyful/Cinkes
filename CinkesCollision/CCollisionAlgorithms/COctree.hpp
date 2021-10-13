@@ -67,7 +67,6 @@ namespace Cinkes
 
             return *this;
         }
-        // Insert typical operators, such as *, +, -, etc.
     };
 
     // -----------------------------------------------------------------------------
