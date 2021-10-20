@@ -8,7 +8,7 @@ namespace Cinkes
 	class CCylinder :public CCollisionShape
 	{
 		//Subgroup: Constructors {
-		CCylinder() : m_Height(0), m_Radius(0) {}
+		CCylinder() : m_Radius(0), m_Height(0) {}
 		CCylinder(CScalar a_Radius, CScalar a_Height) : m_Radius(a_Radius), m_Height(a_Height) {}
 		~CCylinder() override = default;
 		CCylinder(const CCylinder& a_Rhs) : CCollisionShape(a_Rhs)
@@ -21,6 +21,9 @@ namespace Cinkes
 		virtual CCylinder& operator=(const CCylinder& a_Rhs) noexcept;
 		//}
 
+		//Subgroup: Other {
+		CVector3 Support(const CVector3& a_V) override;
+		//}
 	private:
 		CScalar m_Radius;
 		CScalar m_Height;

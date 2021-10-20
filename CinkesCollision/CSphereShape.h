@@ -14,8 +14,8 @@ namespace Cinkes {
 		//}
 
 		//Subgroup: Operators {
-		CSphereShape& operator=(CSphereShape&& a_Rhs) { m_Radius = a_Rhs.m_Radius; }
-		CSphereShape& operator=(const CSphereShape& a_Rhs) { m_Radius = a_Rhs.m_Radius; }
+		CSphereShape& operator=(CSphereShape&& a_Rhs) noexcept { m_Radius = a_Rhs.m_Radius; return *this; }
+		CSphereShape& operator=(const CSphereShape& a_Rhs) { m_Radius = a_Rhs.m_Radius; return *this; }
 		//}
 		//Subgroup: Other {
 		CScalar GetRadius() { return m_Radius; }

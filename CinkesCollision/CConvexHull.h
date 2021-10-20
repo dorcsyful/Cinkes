@@ -11,10 +11,10 @@ namespace Cinkes
 	{
 	public:
 		//Subgroup: Constructors {
-		CConvexHull();
-		~CConvexHull();
+		CConvexHull() = default;
+		~CConvexHull() override;
 		CConvexHull(const CConvexHull& a_Rhs);
-		CConvexHull(CConvexHull&& a_Rhs);
+		CConvexHull(CConvexHull&& a_Rhs) noexcept;
 		//}
 
 		//Subgroup: Operators {
@@ -24,9 +24,12 @@ namespace Cinkes
 
 		//Subgroup: Other {
 		void BuildHull(const std::vector<float>& a_Vertices, const std::vector<unsigned int>& a_Indices, const std::vector<int>& a_Triangles);
+		CVector3 Support(const CVector3& a_V) override;
 		//}
 	private:
-		std::vector<CVertex*> m_Vertices;
+		std::map<unsigned int, CVertex*> m_Vertices;
+		ESHAPE_TYPE m_Type = ESHAPE_TYPE::SHAPE_CONVEX_HULL;
+
 	};
 
 }
