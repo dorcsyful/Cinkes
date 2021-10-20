@@ -10,7 +10,7 @@ namespace Cinkes
     {
     public:
         //Subgroup: Constructors {
-        CConeShape() = default;
+        CConeShape() : m_Radius(0), m_Height(0), m_SinOfAngle(0) {}
         CConeShape(CScalar a_Radius) : m_Radius(a_Radius), m_Height(0), m_SinOfAngle(0) {}
         CConeShape(CScalar a_Radius, CScalar a_Height);
     	~CConeShape() override = default;
@@ -36,6 +36,10 @@ namespace Cinkes
 
         void setRadius(CScalar a_New);
         void setHeight(CScalar a_New);
+        //}
+
+        //Subgroup: Other {
+        CVector3 Support(const CVector3& a_V) override;
 
         //}
 

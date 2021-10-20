@@ -20,6 +20,7 @@ public:
 	static CScalar Abs(CScalar a_Value) { return abs(a_Value); }
 	static CScalar Deg2Rad(CScalar a_Degrees) { return a_Degrees / 57.2957795; }
 	static CScalar Rad2Deg(CScalar a_Radians) { return a_Radians * 57.2957795; }
+	static CScalar Sgn(CScalar a_Magnitude, CScalar a_Number) { return std::copysign(a_Magnitude, a_Number); }
 #else
 	static CScalar Cos(CScalar a_Value) { return std::cosf(a_Value); }
 	static CScalar Acos(CScalar a_Value) { return std::acosf(a_Value); }
@@ -32,6 +33,7 @@ public:
 	static CScalar Abs(CScalar a_Value) { return fabs(a_Value); }
 	static CScalar Deg2Rad(CScalar a_Degrees) { return a_Degrees / 57.2957795f; }
 	static CScalar Rad2Deg(CScalar a_Radians) { return a_Radians * 57.2957795f; }
+	static CScalar Sgn(CScalar a_Magnitude, CScalar a_Number) { return std::copysignf(a_Magnitude, a_Number); }
 
 #endif
 };

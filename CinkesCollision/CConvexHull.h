@@ -1,10 +1,15 @@
 #pragma once
+#include <map>
+#include <vector>
+
 #include "CCollisionShape.h"
+#include "CVertex.h"
 
 namespace Cinkes
 {
 	class CConvexHull : CCollisionShape
 	{
+	public:
 		//Subgroup: Constructors {
 		CConvexHull();
 		~CConvexHull();
@@ -18,8 +23,10 @@ namespace Cinkes
 		//}
 
 		//Subgroup: Other {
-		void BuildHull();
+		void BuildHull(const std::vector<float>& a_Vertices, const std::vector<unsigned int>& a_Indices, const std::vector<int>& a_Triangles);
 		//}
+	private:
+		std::vector<CVertex*> m_Vertices;
 	};
 
 }

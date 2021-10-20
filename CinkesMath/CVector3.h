@@ -41,8 +41,10 @@ namespace Cinkes {
 		CVector3 operator-(const CVector3& a_Rhs);
 		CVector3 operator*(const CVector3& a_Rhs);
 		CVector3 operator/(const CVector3& a_Rhs);
+		CVector3 operator+(CScalar a_Rhs) const;
 		CVector3 operator+(CScalar a_Rhs);
 		CVector3 operator-(CScalar a_Rhs);
+		CVector3 operator*(CScalar a_Rhs) const;
 		CVector3 operator*(CScalar a_Rhs);
 		CVector3 operator/(CScalar a_Rhs);
 		CScalar& operator[](int a_Rhs);

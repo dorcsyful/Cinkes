@@ -2,6 +2,7 @@
 #include "CCollisionShape.h"
 #include "../CinkesMath/CScalar.h"
 #include "../CinkesMath/CVector3.h"
+
 namespace Cinkes
 {
 
@@ -14,11 +15,11 @@ namespace Cinkes
 		CBoxShape(const CScalar a_X, const CScalar a_Y, const CScalar a_Z) { m_Dimensions = CVector3(a_X, a_Y, a_Z); };
 		~CBoxShape() override = default;
 		CBoxShape(const CBoxShape& a_Rhs) { m_Dimensions = a_Rhs.m_Dimensions; };
-		CBoxShape(CBoxShape&& a_Rhs) { m_Dimensions = a_Rhs.m_Dimensions; };
+		CBoxShape(CBoxShape&& a_Rhs) noexcept { m_Dimensions = a_Rhs.m_Dimensions; };
 		//}
 
 		//Subgroup: Operators {
-		CBoxShape& operator=(CBoxShape&& a_Rhs) { m_Dimensions = a_Rhs.m_Dimensions; return *this; };
+		CBoxShape& operator=(CBoxShape&& a_Rhs) noexcept { m_Dimensions = a_Rhs.m_Dimensions; return *this; };
 		CBoxShape& operator=(const CBoxShape& a_Rhs) { m_Dimensions = a_Rhs.m_Dimensions; return *this; };
 		//}
 
@@ -27,6 +28,8 @@ namespace Cinkes
 
 		void SetDimensions(const CVector3& a_Dimensions) { m_Dimensions = a_Dimensions; };
 		void SetDimensions(const CScalar& a_X, const CScalar& a_Y, const CScalar& a_Z) { m_Dimensions = CVector3(a_X, a_Y, a_Z); };
+
+		CVector3 Support(const CVector3& a_V) override;
 
 	private:
 		CVector3 m_Dimensions;

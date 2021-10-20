@@ -33,8 +33,10 @@
     <ClInclude Include="CCylinder.h" />
     <ClInclude Include="CGJKAlgorithm.h" />
     <ClInclude Include="CSphereShape.h" />
+    <ClInclude Include="CVertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CBoxShape.cpp" />
     <ClCompile Include="CCapsuleShape.cpp" />
     <ClCompile Include="CCollisionObject.cpp" />
     <ClCompile Include="CCollisionWorld.cpp" />
@@ -45,6 +47,7 @@
     <ClCompile Include="CConvexHull.cpp" />
     <ClCompile Include="CCylinder.cpp" />
     <ClCompile Include="CGJKAlgorithm.cpp" />
+    <ClCompile Include="CVertex.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

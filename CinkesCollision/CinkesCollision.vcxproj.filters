@@ -54,16 +54,19 @@
     <ClInclude Include="CCollisionAlgorithms\COctree.hpp">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="CGJKAlgorithm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CCapsuleShape.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="CConeShape.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="CGJKAlgorithm.h">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
     <ClInclude Include="CCylinder.h">
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CVertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -96,6 +99,12 @@
       <Filter>Source Files\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="CCylinder.cpp">
+      <Filter>Source Files\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="CBoxShape.cpp">
+      <Filter>Source Files\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="CVertex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

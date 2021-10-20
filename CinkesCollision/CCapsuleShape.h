@@ -21,7 +21,7 @@ namespace Cinkes
 		CCapsuleShape& operator=(const CCapsuleShape& a_Rhs) noexcept { m_Height = a_Rhs.m_Height; m_Radius = a_Rhs.m_Radius; return *this; }
 		//}
 
-		//Subgroup: Getters and Setters
+		//Subgroup: Getters and Setters {
 		CScalar getRadius() { return m_Radius; }
 		CScalar getHeight() { return m_Height; }
 		CScalar getRadius() const { return m_Radius; }
@@ -29,6 +29,10 @@ namespace Cinkes
 
 		void setRadius(CScalar a_New) { m_Radius = a_New; }
 		void setHeight(CScalar a_New) { m_Height = a_New; }
+		//}
+
+		//Subgroup: Other {
+		CVector3 Support(const CVector3& a_V) override;
 		//}
 
     private:

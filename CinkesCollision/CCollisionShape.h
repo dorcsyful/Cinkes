@@ -1,4 +1,5 @@
 #pragma once
+#include "../CinkesMath/CVector3.h"
 
 namespace Cinkes
 {
@@ -33,7 +34,8 @@ namespace Cinkes
 		//}
 
 		//Subgroup: Other {
-		virtual ESHAPE_TYPE GetType() const { return m_Type; };
+		virtual ESHAPE_TYPE GetType() const { return m_Type; }
+		virtual CVector3 Support(const CVector3& a_V) = 0;
 		//}
 
 	private:
