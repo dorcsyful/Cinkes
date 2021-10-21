@@ -39,6 +39,7 @@ namespace Cinkes {
 		void operator/=(CScalar a_Rhs);
 		CVector3 operator+(const CVector3& a_Rhs);
 		CVector3 operator-(const CVector3& a_Rhs);
+		CVector3 operator-(const CVector3& a_Rhs) const;
 		CVector3 operator*(const CVector3& a_Rhs);
 		CVector3 operator/(const CVector3& a_Rhs);
 		CVector3 operator+(CScalar a_Rhs) const;
@@ -74,6 +75,7 @@ namespace Cinkes {
 		/*MemberDescription: Also called scalar product. Calculates the arccosine between the two vectors
 		*/
 		CScalar Dot(const CVector3& a_Rhs);
+		CScalar Dot(const CVector3& a_Rhs) const;
 
 		/*MemberDescription:
 		 Created specifically for calculating the inverse inside the CTransform class

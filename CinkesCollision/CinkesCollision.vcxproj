@@ -32,6 +32,7 @@
     <ClInclude Include="CConvexHull.h" />
     <ClInclude Include="CCylinder.h" />
     <ClInclude Include="CGJKAlgorithm.h" />
+    <ClInclude Include="CSimplex.h" />
     <ClInclude Include="CSphereShape.h" />
     <ClInclude Include="CVertex.h" />
   </ItemGroup>
@@ -47,6 +48,7 @@
     <ClCompile Include="CConvexHull.cpp" />
     <ClCompile Include="CCylinder.cpp" />
     <ClCompile Include="CGJKAlgorithm.cpp" />
+    <ClCompile Include="CSimplex.cpp" />
     <ClCompile Include="CVertex.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

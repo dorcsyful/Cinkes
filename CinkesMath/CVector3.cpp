@@ -126,6 +126,11 @@ CVector3 Cinkes::CVector3::operator-(const CVector3& a_Rhs)
 	return CVector3(m_Values[0] - a_Rhs.m_Values[0], m_Values[1] - a_Rhs.m_Values[1], m_Values[2] - a_Rhs.m_Values[2]);
 }
 
+CVector3 Cinkes::CVector3::operator-(const CVector3& a_Rhs) const
+{
+	return CVector3(m_Values[0] - a_Rhs.m_Values[0], m_Values[1] - a_Rhs.m_Values[1], m_Values[2] - a_Rhs.m_Values[2]);
+}
+
 CVector3 Cinkes::CVector3::operator*(const CVector3& a_Rhs)
 {
 	return CVector3(m_Values[0] * a_Rhs.m_Values[0], m_Values[1] * a_Rhs.m_Values[1], m_Values[2] * a_Rhs.m_Values[2]);
@@ -210,6 +215,11 @@ void Cinkes::CVector3::Normalize()
 }
 
 CScalar Cinkes::CVector3::Dot(const CVector3 & a_Rhs)
+{
+	return m_Values[0] * a_Rhs.m_Values[0] + m_Values[1] * a_Rhs.m_Values[1] + m_Values[2] * a_Rhs.m_Values[2];
+}
+
+CScalar Cinkes::CVector3::Dot(const CVector3& a_Rhs) const
 {
 	return m_Values[0] * a_Rhs.m_Values[0] + m_Values[1] * a_Rhs.m_Values[1] + m_Values[2] * a_Rhs.m_Values[2];
 }
