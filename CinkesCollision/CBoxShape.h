@@ -30,6 +30,7 @@ namespace Cinkes
 		void SetDimensions(const CScalar& a_X, const CScalar& a_Y, const CScalar& a_Z) { m_Dimensions = CVector3(a_X, a_Y, a_Z); };
 
 		CVector3 Support(const CVector3& a_V) override;
+		void CreateAABB(CVector3& a_Min, CVector3& a_Max) { a_Min = m_Dimensions * (-1); a_Max = m_Dimensions; };
 
 	private:
 		CVector3 m_Dimensions;

@@ -1,5 +1,5 @@
 #pragma once
-
+#define KILL_DISTANCE 10000
 #define USE_MATH_DEFINES
 
 #define USE_DOUBLE false

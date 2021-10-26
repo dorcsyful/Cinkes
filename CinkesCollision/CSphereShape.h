@@ -21,7 +21,8 @@ namespace Cinkes {
 		CScalar GetRadius() { return m_Radius; }
 		void GetRadius(CScalar& a_Radius) { a_Radius = m_Radius; }
 		void SetRadius(CScalar a_Radius) { m_Radius = a_Radius; }
-		CVector3 Support(const CVector3& a_V) override { return a_V * m_Radius; };
+		CVector3 Support(const CVector3& a_V) override { return a_V * m_Radius; }
+		void CreateAABB(CVector3& a_Min, CVector3& a_Max) override;
 		//}
 
     private:

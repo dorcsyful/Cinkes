@@ -51,9 +51,6 @@
     <ClInclude Include="CSphereShape.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="CCollisionAlgorithms\COctree.hpp">
-      <Filter>Header Files\Algorithms</Filter>
-    </ClInclude>
     <ClInclude Include="CCapsuleShape.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
@@ -70,6 +67,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CSimplex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="COctree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CBVH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -111,6 +114,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CSimplex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CBVH.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CSphereShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

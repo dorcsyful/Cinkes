@@ -20,8 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBoxShape.h" />
+    <ClInclude Include="CBVH.h" />
     <ClInclude Include="CCapsuleShape.h" />
-    <ClInclude Include="CCollisionAlgorithms\COctree.hpp" />
     <ClInclude Include="CCollisionObject.h" />
     <ClInclude Include="CCollisionShape.h" />
     <ClInclude Include="CCollisionWorld.h" />
@@ -32,12 +32,14 @@
     <ClInclude Include="CConvexHull.h" />
     <ClInclude Include="CCylinder.h" />
     <ClInclude Include="CGJKAlgorithm.h" />
+    <ClInclude Include="COctree.h" />
     <ClInclude Include="CSimplex.h" />
     <ClInclude Include="CSphereShape.h" />
     <ClInclude Include="CVertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBoxShape.cpp" />
+    <ClCompile Include="CBVH.cpp" />
     <ClCompile Include="CCapsuleShape.cpp" />
     <ClCompile Include="CCollisionObject.cpp" />
     <ClCompile Include="CCollisionWorld.cpp" />
@@ -49,6 +51,7 @@
     <ClCompile Include="CCylinder.cpp" />
     <ClCompile Include="CGJKAlgorithm.cpp" />
     <ClCompile Include="CSimplex.cpp" />
+    <ClCompile Include="CSphereShape.cpp" />
     <ClCompile Include="CVertex.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -16,7 +16,7 @@ namespace Cinkes
 		//}
 
 		//Subgroup: Operators {
-		CCollisionObject& operator=(CCollisionObject&& a_Rhs);
+		CCollisionObject& operator=(CCollisionObject&& a_Rhs) noexcept;
 		//}
 
 		//Subgroup: Shapes {
@@ -27,11 +27,15 @@ namespace Cinkes
 		//Subgroup: Transform {
 		void SetTransform(const CTransform& a_Transform);
 		CTransform& GetTransform();
+		void SetMoved(bool a_Rhs) { m_Moved = a_Rhs; }
+		bool GetMoved() { return m_Moved; }
+		bool GetMoved() const { return m_Moved; }
 		//}
 
 	private:
 		CCollisionShape* m_Shape;
 		CTransform m_Transform;
+		bool m_Moved;
 	};
 
 }
