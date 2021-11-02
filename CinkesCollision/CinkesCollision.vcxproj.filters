@@ -75,6 +75,9 @@
     <ClInclude Include="CBVH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CContactInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCollisionWorld.cpp">
@@ -120,6 +123,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CSphereShape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ContactInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

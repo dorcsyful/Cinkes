@@ -32,10 +32,13 @@ namespace Cinkes
 		bool GetMoved() const { return m_Moved; }
 		//}
 
+		bool m_AABBDirty = false;
+
 	private:
 		CCollisionShape* m_Shape;
 		CTransform m_Transform;
 		bool m_Moved;
+
 	};
 
 }

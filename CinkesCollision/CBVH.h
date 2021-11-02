@@ -2,6 +2,8 @@
 #include <memory>
 #include <vector>
 
+#include "CContactInfo.h"
+
 namespace Cinkes
 {
 	class CCollisionObject;
@@ -21,10 +23,19 @@ namespace Cinkes
 		~CBVH() = default;
 
 		std::shared_ptr<CAABB> CreateAABB(const std::shared_ptr<CCollisionObject>& a_Object);
-		int LongestAxis();
+		void LongestAxis(int& a_Axis, int& a_Length, const std::vector<std::shared_ptr<CAABB>>& a_Objects);
 		void Partition(std::vector<std::shared_ptr<CAABB>>& a_Left, std::vector<std::shared_ptr<CAABB>>& a_Right);
+		void CreateBVH(std::vector<std::shared_ptr<CAABB>>& a_Objects);
+		void CalculateAxisLength();
+		void Update(const std::vector<int>& a_ToUpdate);
+
+	public:
+		std::vector<std::shared_ptr<CContactInfo>> m_Contacts;
 
 	private:
+		int m_X = 0;
+		int m_Y = 0;
+		int m_Z = 0;
 		std::vector<std::shared_ptr<CAABB>> m_AABBs;
 	};
 }

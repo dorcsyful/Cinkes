@@ -3,11 +3,7 @@
 #include "CCollisionObject.h"
 Cinkes::CCollisionWorld::~CCollisionWorld()
 {
-	for (auto& object : m_Objects)
-	{
-		delete object;
-		object = nullptr;
-	}
+
 }
 
 Cinkes::CCollisionWorld::CCollisionWorld(const CCollisionWorld& a_Rhs)
@@ -26,7 +22,7 @@ Cinkes::CCollisionWorld::CCollisionWorld(CCollisionWorld&& a_Rhs) noexcept
 	}
 }
 
-Cinkes::CCollisionWorld& Cinkes::CCollisionWorld::operator=(CCollisionWorld&& a_Rhs)
+Cinkes::CCollisionWorld& Cinkes::CCollisionWorld::operator=(CCollisionWorld&& a_Rhs) noexcept
 {
 	for (auto object : a_Rhs.m_Objects)
 	{

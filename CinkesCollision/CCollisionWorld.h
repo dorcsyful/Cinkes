@@ -4,7 +4,6 @@
 
 #include "CGJKAlgorithm.h"
 #include "../CinkesMath/CScalar.h"
-#include "CCollisionAlgorithms/COctree.hpp"
 namespace Cinkes
 {
 	class CCollisionObject;
@@ -40,8 +39,7 @@ namespace Cinkes
 	private:
 		//Subgroup: Class members
 		std::vector<CCollisionObject*> m_Objects;
-		std::unique_ptr<COctree> m_Broadphase;
-		std::unique_ptr<CGJKAlgorithm> m_Narrowphase;
+
 		//}
 	};
 

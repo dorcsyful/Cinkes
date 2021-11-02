@@ -1,9 +1,9 @@
 #pragma once
-
+#include "CSimplex.h"
+#include "../CinkesMath/CVector3.h"
+#include "CCollisionObject.h"
 namespace Cinkes
 {
-	class CSimplex;
-	class CVector3;
 	class CCollisionObject;
 
 	class CGJKAlgorithm

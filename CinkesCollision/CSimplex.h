@@ -19,7 +19,7 @@ namespace Cinkes
 			{
 				m_Points[std::distance(a_Rhs.begin(), i)] = *i;
 			}
-			m_Size = a_Rhs.size();
+			m_Size = static_cast<unsigned>(a_Rhs.size());
 			return *this;
 		}
 
