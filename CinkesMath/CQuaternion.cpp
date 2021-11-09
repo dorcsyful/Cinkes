@@ -120,9 +120,9 @@ void Cinkes::CQuaternion::GetEuler(CScalar& a_Yaw, CScalar& a_Pitch, CScalar& a_
 	// pitch (y-axis rotation)
 	CScalar sinp = 2 * (m_Values[3] * m_Values[1] - m_Values[2] * m_Values[0]);
 	if (std::abs(sinp) >= 1)
-		a_Pitch = std::copysignf(M_PI / 2.f, sinp); // use 90 degrees if out of range
+		a_Pitch = CUtils::Sgn(static_cast<float>(M_PI) / static_cast<float>(2.f), sinp); // use 90 degrees if out of range
 	else
-		a_Pitch = std::asin(sinp);
+		a_Pitch = CUtils::Asin(sinp);
 
 	// yaw (z-axis rotation)
 	CScalar siny_cosp = 2 * (m_Values[3] * m_Values[2] + m_Values[0] * m_Values[1]);

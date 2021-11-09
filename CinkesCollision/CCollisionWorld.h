@@ -24,11 +24,12 @@ namespace Cinkes
 		//Subgroup: Operators {
 		CCollisionWorld& operator=(CCollisionWorld&& a_Rhs) noexcept;
 		CCollisionWorld& operator=(const CCollisionWorld& a_Rhs);
+		bool operator==(CCollisionWorld* a_Rhs) { return true; }
 		//}
 
 		//Subgroup: Object handling {
-		bool AddObject(CCollisionObject* a_Object);
-		bool RemoveObject(CCollisionObject* a_Object);
+		bool AddObject(const std::shared_ptr<CCollisionObject>& a_Object);
+		bool RemoveObject(const std::shared_ptr<CCollisionObject>& a_Object);
 		bool RemoveObjectByIndex(int a_Index);
 		//}
 
@@ -38,7 +39,7 @@ namespace Cinkes
 
 	private:
 		//Subgroup: Class members
-		std::vector<CCollisionObject*> m_Objects;
+		std::vector<std::shared_ptr<CCollisionObject>> m_Objects;
 
 		//}
 	};

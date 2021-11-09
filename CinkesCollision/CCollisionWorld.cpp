@@ -16,10 +16,10 @@ Cinkes::CCollisionWorld::CCollisionWorld(const CCollisionWorld& a_Rhs)
 
 Cinkes::CCollisionWorld::CCollisionWorld(CCollisionWorld&& a_Rhs) noexcept
 {
-	for (auto object : a_Rhs.m_Objects)
-	{
-		m_Objects.push_back(object);
-	}
+		for (auto object : a_Rhs.m_Objects)
+		{
+			m_Objects.push_back(object);
+		}
 }
 
 Cinkes::CCollisionWorld& Cinkes::CCollisionWorld::operator=(CCollisionWorld&& a_Rhs) noexcept
@@ -40,7 +40,7 @@ Cinkes::CCollisionWorld& Cinkes::CCollisionWorld::operator=(const CCollisionWorl
 	return *this;
 }
 
-bool Cinkes::CCollisionWorld::AddObject(CCollisionObject* a_Object)
+bool Cinkes::CCollisionWorld::AddObject(const std::shared_ptr<CCollisionObject>& a_Object)
 {
 
 	auto size = m_Objects.size();
@@ -52,10 +52,9 @@ bool Cinkes::CCollisionWorld::AddObject(CCollisionObject* a_Object)
 	return false;
 }
 
-bool Cinkes::CCollisionWorld::RemoveObject(CCollisionObject* a_Object)
+bool Cinkes::CCollisionWorld::RemoveObject(const std::shared_ptr<CCollisionObject>& a_Object)
 {
 	auto removed = std::remove(m_Objects.begin(), m_Objects.end(), a_Object);
-	delete a_Object;
 
 	if (removed == m_Objects.end())
 	{

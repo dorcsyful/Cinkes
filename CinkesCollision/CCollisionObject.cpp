@@ -2,6 +2,9 @@
 // ReSharper disable once CppPrecompiledHeaderIsNotIncluded
 #include "CCollisionObject.h"
 
+#include <memory>
+#include <utility>
+
 Cinkes::CCollisionObject::CCollisionObject()
 {
 	m_Shape = nullptr;
@@ -9,10 +12,10 @@ Cinkes::CCollisionObject::CCollisionObject()
 	m_Moved = false;
 }
 
-Cinkes::CCollisionObject::CCollisionObject(const CTransform& a_Transform, CCollisionShape* a_Shape)
+Cinkes::CCollisionObject::CCollisionObject(const CTransform& a_Transform, std::shared_ptr<CCollisionShape> a_Shape)
 {
 	m_Transform = a_Transform;
-	m_Shape = a_Shape;
+	m_Shape = std::move(a_Shape);
 	m_Moved = false;
 }
 
@@ -49,7 +52,7 @@ Cinkes::CCollisionObject& Cinkes::CCollisionObject::operator=(CCollisionObject&&
 	return *this;
 }
 
-void Cinkes::CCollisionObject::SetCollisionShape(CCollisionShape* a_Shape)
+void Cinkes::CCollisionObject::SetCollisionShape(const std::shared_ptr<CCollisionShape>& a_Shape)
 {
 	if(m_Shape != nullptr)
 	{
@@ -57,7 +60,7 @@ void Cinkes::CCollisionObject::SetCollisionShape(CCollisionShape* a_Shape)
 	}
 }
 
-Cinkes::CCollisionShape* Cinkes::CCollisionObject::GetCollisionShape() const
+std::shared_ptr<Cinkes::CCollisionShape> Cinkes::CCollisionObject::GetCollisionShape() const
 {
 	return m_Shape;
 }

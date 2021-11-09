@@ -339,9 +339,9 @@ void CMat3x3::GetEuler(CScalar& a_Yaw, CScalar& a_Pitch, CScalar& a_Roll)
 	else
 	{
 
-		a_Yaw = atan2(-m_Rows[2][0], m_Rows[0][0]);
-		a_Pitch = asin(m_Rows[1][0]);
-		a_Roll = atan2(-m_Rows[1][2], m_Rows[1][1]);
+		a_Yaw = atan2(-m_Rows[1][0], m_Rows[0][0]);
+		a_Pitch = asin(m_Rows[2][2]);
+		a_Roll = atan2(-m_Rows[2][1], m_Rows[2][2]);
 	}
 
 

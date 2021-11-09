@@ -16,6 +16,22 @@ Cinkes::CVector3::CVector3(const CVector3& a_Vector) : m_Values{a_Vector.m_Value
 {
 }
 
+Cinkes::CVector3::CVector3(CVector3&& a_Vector) noexcept
+{
+	m_Values[0] = a_Vector.m_Values[0];
+	m_Values[1] = a_Vector.m_Values[1];
+	m_Values[2] = a_Vector.m_Values[2];
+
+}
+
+CVector3& Cinkes::CVector3::operator=(CVector3&& a_Rhs) noexcept
+{
+	m_Values[0] = a_Rhs[0];
+	m_Values[1] = a_Rhs[1];
+	m_Values[2] = a_Rhs[2];
+	return *this;
+}
+
 CScalar Cinkes::CVector3::getX()
 {
 	return m_Values[0];

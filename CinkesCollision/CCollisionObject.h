@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+
 #include "../CinkesMath/CTransform.h"
 namespace Cinkes
 {
@@ -9,7 +11,7 @@ namespace Cinkes
 	public:
 		//Subgroup: Constructors {
 		CCollisionObject();
-		explicit CCollisionObject(const CTransform& a_Transform, CCollisionShape* a_Shape = nullptr);
+		explicit CCollisionObject(const CTransform& a_Transform, std::shared_ptr<CCollisionShape> a_Shape = nullptr);
 		~CCollisionObject();
 		CCollisionObject(const CCollisionObject& a_Rhs);
 		CCollisionObject(CCollisionObject&& a_Rhs) noexcept; 
@@ -20,8 +22,8 @@ namespace Cinkes
 		//}
 
 		//Subgroup: Shapes {
-		void SetCollisionShape(CCollisionShape* a_Shape);
-		CCollisionShape* GetCollisionShape() const;
+		void SetCollisionShape(const std::shared_ptr<CCollisionShape>& a_Shape);
+		std::shared_ptr<CCollisionShape> GetCollisionShape() const;
 		//}
 
 		//Subgroup: Transform {
@@ -35,7 +37,7 @@ namespace Cinkes
 		bool m_AABBDirty = false;
 
 	private:
-		CCollisionShape* m_Shape;
+		std::shared_ptr<CCollisionShape> m_Shape;
 		CTransform m_Transform;
 		bool m_Moved;
 
