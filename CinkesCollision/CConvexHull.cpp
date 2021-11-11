@@ -9,7 +9,6 @@ Cinkes::CConvexHull::~CConvexHull()
 {
 	for (int i = static_cast<int>(m_Vertices.size()) - 1; i >= 0; i--)
 	{
-		delete m_Vertices[i];
 		m_Vertices[i] = nullptr;
 	}
 }
@@ -43,7 +42,7 @@ void Cinkes::CConvexHull::BuildHull(const std::vector<float>& a_Vertices, const 
 	while(counter < a_Vertices.size() - 1)
 	{
 		CVector3 temp = CVector3(a_Vertices[counter], a_Vertices[counter + 1], a_Vertices[counter + 2]);
-		m_Vertices.insert({ a_Indices[counter],new CVertex() });
+		m_Vertices.insert({ a_Indices[counter],std::make_shared<CVertex>() });
 		m_Vertices[a_Indices[counter]]->m_Position = temp;
 		m_Vertices[a_Indices[counter]]->m_Index = a_Indices[counter];
 		counter += 3;
@@ -64,7 +63,7 @@ void Cinkes::CConvexHull::BuildHull(const std::vector<float>& a_Vertices, const 
 
 Cinkes::CVector3 Cinkes::CConvexHull::Support(const CVector3& a_V)
 {
-	CVertex* base = m_Vertices[0];
+	CVertex* base = m_Vertices[0].get();
 	bool best = false;
 	while(!best)
 	{
@@ -74,7 +73,7 @@ Cinkes::CVector3 Cinkes::CConvexHull::Support(const CVector3& a_V)
 			if(m_Vertices[current]->m_Position.Dot(a_V) > base->m_Position.Dot(a_V))
 			{
 				best = false;
-				base = m_Vertices[current];
+				base = m_Vertices[current].get();
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <memory>
 #include <vector>
 
 #include "CCollisionShape.h"
@@ -27,7 +28,7 @@ namespace Cinkes
 		CVector3 Support(const CVector3& a_V) override;
 		//}
 	private:
-		std::map<unsigned int, CVertex*> m_Vertices;
+		std::map<unsigned int, std::shared_ptr<CVertex>> m_Vertices;
 		ESHAPE_TYPE m_Type = ESHAPE_TYPE::SHAPE_CONVEX_HULL;
 
 	};

@@ -36,7 +36,7 @@ void Cinkes::CBVH::CreateBVH(std::vector<std::shared_ptr<CAABB>>& a_Objects)
 {
 	int min[3] = { std::numeric_limits<int>::max(), std::numeric_limits<int>::max() ,std::numeric_limits<int>::max() };
 	int max[3] = { std::numeric_limits<int>::min(), std::numeric_limits<int>::min() ,std::numeric_limits<int>::min() };
-	int midpoints[3];
+	int midpoints[3] = { 0,0,0 };
 	std::vector<std::shared_ptr<CAABB>> left;
 	std::vector<std::shared_ptr<CAABB>> right;
 

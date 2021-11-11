@@ -18,22 +18,22 @@ namespace Cinkes
 		//Subgroup: Operators {
 		CCompoundShape& operator=(CCompoundShape&& a_Rhs) noexcept;
 		CCompoundShape& operator=(const CCompoundShape& a_Rhs);
-		CCollisionShape* operator[](int a_Rhs);
+		std::shared_ptr<CCompoundPartialShape> operator[](int a_Rhs);
 		//}
 
 		//Subgroup: Other {
-		bool AddShape(CCompoundPartialShape* a_Partial);
-		int FindShapeIndex(CCollisionShape* a_Shape);
+		bool AddShape(const std::shared_ptr<CCompoundPartialShape>& a_Partial);
+		int FindShapeIndex(const std::shared_ptr<CCollisionShape>& a_Shape);
 		bool RemoveShapeByIndex(int a_Index);
-		CCompoundPartialShape* GetShapeAtIndex(int a_Index);
-		CCompoundPartialShape* GetShapeAtPosition(CVector3 a_Position);
-		std::vector<CCollisionShape*> GetAllShapesOfType(ESHAPE_TYPE a_Type);
-		std::vector<CCollisionShape*> GetAllShapes();
+		std::shared_ptr<CCompoundPartialShape> GetShapeAtIndex(int a_Index);
+		std::shared_ptr<CCompoundPartialShape> GetShapeAtPosition(const CVector3& a_Position);
+		std::vector<std::shared_ptr<CCollisionShape>> GetAllShapesOfType(ESHAPE_TYPE a_Type);
+		std::vector<std::shared_ptr<CCollisionShape>> GetAllShapes();
 		std::vector<CVector3> GetAllPositions();
 		//}
 
     private:
-		std::vector<CCompoundPartialShape*> m_Shapes;
+		std::vector<std::shared_ptr<CCompoundPartialShape>> m_Shapes;
     };
 }
 

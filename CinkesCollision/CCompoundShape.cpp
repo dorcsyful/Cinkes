@@ -3,10 +3,7 @@
 
 Cinkes::CCompoundShape::~CCompoundShape()
 {
-	for (const auto element : m_Shapes)
-	{
-		delete element;
-	}
+
 }
 
 Cinkes::CCompoundShape::CCompoundShape(const CCompoundShape& a_Rhs)
@@ -31,21 +28,21 @@ Cinkes::CCompoundShape& Cinkes::CCompoundShape::operator=(const CCompoundShape& 
 	return  *this;
 }
 
-Cinkes::CCollisionShape* Cinkes::CCompoundShape::operator[](int a_Rhs)
+std::shared_ptr<Cinkes::CCompoundPartialShape> Cinkes::CCompoundShape::operator[](int a_Rhs)
 {
 	return m_Shapes[a_Rhs];
 }
 
-bool Cinkes::CCompoundShape::AddShape(CCompoundPartialShape* a_Partial)
+bool Cinkes::CCompoundShape::AddShape(const std::shared_ptr<CCompoundPartialShape>& a_Partial)
 {
 	m_Shapes.push_back(a_Partial);
 	return true;
 }
 
-int Cinkes::CCompoundShape::FindShapeIndex(CCollisionShape* a_Shape)
+int Cinkes::CCompoundShape::FindShapeIndex(const std::shared_ptr<CCollisionShape>& a_Shape)
 {
 	int counter = 0;
-	for (auto element : m_Shapes)
+	for (auto& element : m_Shapes)
 	{
 		if(element == a_Shape)
 		{
@@ -62,16 +59,16 @@ bool Cinkes::CCompoundShape::RemoveShapeByIndex(int a_Index)
 	return true;
 }
 
-Cinkes::CCompoundPartialShape* Cinkes::CCompoundShape::GetShapeAtIndex(int a_Index)
+std::shared_ptr<Cinkes::CCompoundPartialShape> Cinkes::CCompoundShape::GetShapeAtIndex(int a_Index)
 {
 	return m_Shapes[a_Index];
 }
 
-Cinkes::CCompoundPartialShape* Cinkes::CCompoundShape::GetShapeAtPosition(CVector3 a_Position)
+std::shared_ptr<Cinkes::CCompoundPartialShape> Cinkes::CCompoundShape::GetShapeAtPosition(const CVector3& a_Position)
 {
-	for (const auto element : m_Shapes)
+	for (const auto& element : m_Shapes)
 	{
-		if((element->GetPosition() - a_Position).Length() < CScalar(0.001))
+		if((element->GetPosition() - a_Position).Length() < static_cast<float>(0.001))
 		{
 			return element;
 		}
@@ -79,10 +76,10 @@ Cinkes::CCompoundPartialShape* Cinkes::CCompoundShape::GetShapeAtPosition(CVecto
 	return nullptr;
 }
 
-std::vector<Cinkes::CCollisionShape*> Cinkes::CCompoundShape::GetAllShapesOfType(ESHAPE_TYPE a_Type)
+std::vector<std::shared_ptr<Cinkes::CCollisionShape>> Cinkes::CCompoundShape::GetAllShapesOfType(ESHAPE_TYPE a_Type)
 {
-	std::vector<Cinkes::CCollisionShape*> shapes;
-	for (auto shape : m_Shapes)
+	std::vector<std::shared_ptr<Cinkes::CCollisionShape>> shapes;
+	for (auto& shape : m_Shapes)
 	{
 		if(shape->GetShape()->GetType() == a_Type)
 		{
@@ -92,13 +89,13 @@ std::vector<Cinkes::CCollisionShape*> Cinkes::CCompoundShape::GetAllShapesOfType
 	return shapes;
 }
 
-std::vector<Cinkes::CCollisionShape*> Cinkes::CCompoundShape::GetAllShapes()
+std::vector<std::shared_ptr<Cinkes::CCollisionShape>> Cinkes::CCompoundShape::GetAllShapes()
 {
-	std::vector<Cinkes::CCollisionShape*> shapes;
-	for (const auto shape : m_Shapes)
+	std::vector<std::shared_ptr<CCollisionShape>> shapes;
+	for (const auto& shape : m_Shapes)
 	{
 		bool isFound = false;
-		for (const auto element : m_Shapes)
+		for (const auto& element : m_Shapes)
 		{
 			if(element->GetShape() == shape->GetShape())
 			{
@@ -114,7 +111,7 @@ std::vector<Cinkes::CCollisionShape*> Cinkes::CCompoundShape::GetAllShapes()
 std::vector<Cinkes::CVector3> Cinkes::CCompoundShape::GetAllPositions()
 {
 	std::vector<Cinkes::CVector3> positions;
-	for (const auto shape : m_Shapes)
+	for (const auto& shape : m_Shapes)
 	{
 		bool isFound = false;
 		if (!isFound) { positions.push_back(shape->GetPosition()); }

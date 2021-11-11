@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+
 #include "CCollisionShape.h"
 #include "../CinkesMath/CVector3.h"
 namespace Cinkes
@@ -20,15 +22,13 @@ namespace Cinkes
 		//}
 
 		//Subgroup: Other {
-		void SetShape(CCollisionShape* a_Shape, bool a_DeleteAfterUse, const CVector3& a_Position );
-		CCollisionShape* GetShape() { return m_Shape; }
+		void SetShape(std::shared_ptr<CCollisionShape> a_Shape, bool a_DeleteAfterUse, const CVector3& a_Position );
+		std::shared_ptr<CCollisionShape> GetShape() { return m_Shape; }
 		CVector3 GetPosition() { return m_Position; }
-		bool ShouldDelete() { return m_DeleteAfterUse; }
 		//}
 
 	private:
-		CCollisionShape* m_Shape;
-		bool m_DeleteAfterUse;
+		std::shared_ptr<CCollisionShape> m_Shape;
 		CVector3 m_Position;
 		ESHAPE_TYPE m_Type = ESHAPE_TYPE::SHAPE_COMPOUND_PARTIAL;
 	};
