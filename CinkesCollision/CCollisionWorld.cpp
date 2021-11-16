@@ -1,6 +1,12 @@
 #include "pch.h"
 #include "CCollisionWorld.h"
 #include "CCollisionObject.h"
+#include "CBVH.h"
+Cinkes::CCollisionWorld::CCollisionWorld()
+{
+	m_BVH = std::make_unique<CBVH>(m_Objects);
+	m_ShouldUpdate = false;
+}
 Cinkes::CCollisionWorld::~CCollisionWorld()
 {
 
@@ -12,6 +18,7 @@ Cinkes::CCollisionWorld::CCollisionWorld(const CCollisionWorld& a_Rhs)
 	{
 		m_Objects.push_back(object);
 	}
+	m_BVH = std::make_unique<CBVH>(m_Objects);
 }
 
 Cinkes::CCollisionWorld::CCollisionWorld(CCollisionWorld&& a_Rhs) noexcept
@@ -20,6 +27,7 @@ Cinkes::CCollisionWorld::CCollisionWorld(CCollisionWorld&& a_Rhs) noexcept
 		{
 			m_Objects.push_back(object);
 		}
+		m_BVH = std::make_unique<CBVH>(m_Objects);
 }
 
 Cinkes::CCollisionWorld& Cinkes::CCollisionWorld::operator=(CCollisionWorld&& a_Rhs) noexcept
@@ -28,6 +36,7 @@ Cinkes::CCollisionWorld& Cinkes::CCollisionWorld::operator=(CCollisionWorld&& a_
 	{
 		m_Objects.push_back(object);
 	}
+	m_BVH = std::make_unique<CBVH>(m_Objects);
 	return *this;
 }
 
@@ -37,6 +46,7 @@ Cinkes::CCollisionWorld& Cinkes::CCollisionWorld::operator=(const CCollisionWorl
 	{
 		m_Objects.push_back(object);
 	}
+	m_BVH = std::make_unique<CBVH>(m_Objects);
 	return *this;
 }
 
@@ -47,8 +57,11 @@ bool Cinkes::CCollisionWorld::AddObject(const std::shared_ptr<CCollisionObject>&
 	m_Objects.push_back(a_Object);
 	if(size == m_Objects.size() - 1)
 	{
+		//TODO: find a better way to update objects inside the BVH class
+		m_BVH->m_AABBs.push_back(m_BVH->CreateAABB(a_Object));
 		return true;
 	}
+
 	return false;
 }
 
@@ -76,4 +89,5 @@ bool Cinkes::CCollisionWorld::RemoveObjectByIndex(int a_Index)
 
 void Cinkes::CCollisionWorld::RunCollision(CScalar a_T)
 {
+	m_BVH->Update();
 }

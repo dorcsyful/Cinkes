@@ -23,14 +23,14 @@ namespace Cinkes
 	public:
 		//Subgroup: Constructors {
 		CCollisionShape() = default;
-		virtual ~CCollisionShape() = 0;
-		CCollisionShape(const CCollisionShape& a_Rhs);
-		CCollisionShape(CCollisionShape&& a_Rhs);
+		virtual ~CCollisionShape() = default;
+		CCollisionShape(const CCollisionShape& a_Rhs) = default;
+		CCollisionShape(CCollisionShape&& a_Rhs) = default;
 		//}
 
 		//Subgroup: Operators {
-		virtual CCollisionShape& operator=(CCollisionShape&& a_Rhs) noexcept = 0 ;
-		virtual CCollisionShape& operator=(const CCollisionShape& a_Rhs) noexcept = 0;
+		virtual CCollisionShape& operator=(CCollisionShape&& a_Rhs) noexcept = default;
+		virtual CCollisionShape& operator=(const CCollisionShape& a_Rhs) noexcept = default;
 		//}
 
 		//Subgroup: Other {

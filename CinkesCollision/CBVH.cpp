@@ -18,22 +18,25 @@ std::shared_ptr<Cinkes::CAABB> Cinkes::CBVH::CreateAABB(const std::shared_ptr<CC
 	std::shared_ptr<CAABB> temp = std::make_shared<CAABB>();
 	CVector3 min, max;
 	a_Object->GetCollisionShape()->CreateAABB(min, max);
-
+	max += a_Object->GetTransform().getOrigin();
+	min += a_Object->GetTransform().getOrigin();
 	temp->m_Max[0] = static_cast<int>(max[0]);
 	temp->m_Max[1] = static_cast<int>(max[1]);
 	temp->m_Max[2] = static_cast<int>(max[2]);
-	temp->m_Min[0] = static_cast<int>(max[0]);
-	temp->m_Min[1] = static_cast<int>(max[1]);
-	temp->m_Min[2] = static_cast<int>(max[2]);
+	temp->m_Min[0] = static_cast<int>(min[0]);
+	temp->m_Min[1] = static_cast<int>(min[1]);
+	temp->m_Min[2] = static_cast<int>(min[2]);
 
 	temp->m_Object = a_Object;
-	temp->m_Object->m_AABBDirty = true;
+
+	temp->m_Object->m_AABBDirty = false;
 
 	return temp;
 }
 
 void Cinkes::CBVH::CreateBVH(std::vector<std::shared_ptr<CAABB>>& a_Objects)
 {
+	m_RecurseCounter += 1;
 	int min[3] = { std::numeric_limits<int>::max(), std::numeric_limits<int>::max() ,std::numeric_limits<int>::max() };
 	int max[3] = { std::numeric_limits<int>::min(), std::numeric_limits<int>::min() ,std::numeric_limits<int>::min() };
 	int midpoints[3] = { 0,0,0 };
@@ -46,8 +49,13 @@ void Cinkes::CBVH::CreateBVH(std::vector<std::shared_ptr<CAABB>>& a_Objects)
 		{
 			if (elements->m_Min[i] < min[i]) { min[i] = elements->m_Min[i]; }
 			if (elements->m_Max[i] > max[i]) { max[i] = elements->m_Max[i]; }
-			midpoints[i] = max[i] - min[i];
+			midpoints[i] = static_cast<CScalar>(max[i] + min[i]) * static_cast<CScalar>(0.5);
 		}
+	}
+
+	if(midpoints[0] == 1 || midpoints[1] == 1 || midpoints[2] == 1 || m_RecurseCounter == m_MaxRecurse)
+	{
+		return;
 	}
 
 	if(midpoints[0] > midpoints[1] && midpoints[0] > midpoints[2])
@@ -110,7 +118,7 @@ void Cinkes::CBVH::CreateBVH(std::vector<std::shared_ptr<CAABB>>& a_Objects)
 		m_Contacts.push_back(info);
 
 	}
-	if (static_cast<int>(left.size() > 2))
+	if (static_cast<int>(left.size()) > 2)
 	{
 		CreateBVH(left);
 	}
@@ -122,22 +130,31 @@ void Cinkes::CBVH::CreateBVH(std::vector<std::shared_ptr<CAABB>>& a_Objects)
 
 void Cinkes::CBVH::CalculateAxisLength()
 {
+	std::vector<int> todelete;
+	int counter = 0;
 	for (auto& element : m_AABBs)
 	{
-		if(element->m_Object->m_AABBDirty)
-		{
-			element = CreateAABB(element->m_Object);
-		}
+		if (element == nullptr) { todelete.push_back(counter); }
+		element = CreateAABB(element->m_Object);
 		m_X += element->m_Max[0] - element->m_Min[0];
 		m_Y += element->m_Max[1] - element->m_Min[1];
 		m_Z += element->m_Max[2] - element->m_Min[2];
+		
+		counter++;
+	}
+	for (unsigned int i = 0; i < todelete.size();i++)
+	{
+		if(std::remove(m_AABBs.begin(), m_AABBs.end(), m_AABBs[todelete[i]]) == m_AABBs.end())
+		{
+			static_assert(true,"Deleting existing object");
+		}
 	}
 }
 
-void Cinkes::CBVH::Update(const std::vector<int>& a_ToUpdate)
+void Cinkes::CBVH::Update()
 {
 
 	CalculateAxisLength();
 	CreateBVH(m_AABBs);
-
+	m_RecurseCounter = 0;
 }	

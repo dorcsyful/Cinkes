@@ -27,15 +27,18 @@ namespace Cinkes
 		void Partition(std::vector<std::shared_ptr<CAABB>>& a_Left, std::vector<std::shared_ptr<CAABB>>& a_Right);
 		void CreateBVH(std::vector<std::shared_ptr<CAABB>>& a_Objects);
 		void CalculateAxisLength();
-		void Update(const std::vector<int>& a_ToUpdate);
+		void Update();
 
-	public:
 		std::vector<std::shared_ptr<CContactInfo>> m_Contacts;
+		//TODO: find a way to make this private
+		std::vector<std::shared_ptr<CAABB>> m_AABBs;
 
 	private:
+		int m_RecurseCounter = 0;
+		const int m_MaxRecurse = 10;
 		int m_X = 0;
 		int m_Y = 0;
 		int m_Z = 0;
-		std::vector<std::shared_ptr<CAABB>> m_AABBs;
+
 	};
 }

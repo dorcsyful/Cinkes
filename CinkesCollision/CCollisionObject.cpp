@@ -52,9 +52,9 @@ Cinkes::CCollisionObject& Cinkes::CCollisionObject::operator=(CCollisionObject&&
 	return *this;
 }
 
-void Cinkes::CCollisionObject::SetCollisionShape(const std::shared_ptr<CCollisionShape>& a_Shape)
+void Cinkes::CCollisionObject::	SetCollisionShape(const std::shared_ptr<CCollisionShape>& a_Shape)
 {
-	if(m_Shape != nullptr)
+	if(a_Shape != nullptr)
 	{
 		m_Shape = a_Shape;
 	}

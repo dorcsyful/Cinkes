@@ -6,6 +6,7 @@
 #include "../CinkesMath/CScalar.h"
 namespace Cinkes
 {
+	class CBVH;
 	class CCollisionObject;
 	//Group: CCollision
 	/*ClassDescription: Main class of CCollision. Collects all objects and runs the collision detection
@@ -14,7 +15,7 @@ namespace Cinkes
 	{
 		public:
 		//Subgroup: Constructors {
-		CCollisionWorld() ;
+		CCollisionWorld();
 		~CCollisionWorld();
 		CCollisionWorld(const CCollisionWorld& a_Rhs);
 		CCollisionWorld(CCollisionWorld&& a_Rhs) noexcept;
@@ -36,11 +37,12 @@ namespace Cinkes
 		//Subgroup: Collision test {
 		void RunCollision(CScalar a_T);
 		//}
+		std::unique_ptr<CBVH> m_BVH;
 
 	private:
 		//Subgroup: Class members
+		bool m_ShouldUpdate;
 		std::vector<std::shared_ptr<CCollisionObject>> m_Objects;
-
 		//}
 	};
 

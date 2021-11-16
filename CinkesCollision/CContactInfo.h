@@ -8,6 +8,7 @@ namespace Cinkes
 	{
 		std::shared_ptr<CCollisionObject> m_First;
 		std::shared_ptr<CCollisionObject> m_Second;
+		std::vector<std::shared_ptr<CCollisionObject>> m_Other;
 	};
 }
 
