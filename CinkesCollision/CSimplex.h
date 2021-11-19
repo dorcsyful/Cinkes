@@ -23,9 +23,10 @@ namespace Cinkes
 			return *this;
 		}
 
-		void Push_Back(const CVector3& a_Vector3)
+		void Push_Front(const CVector3& a_Vector3)
 		{
-			m_Points.push_back(a_Vector3);
+			m_Points.insert(m_Points.begin(), a_Vector3);
+
 		}
 
 		bool Erase(const CVector3& a_Vector3)
