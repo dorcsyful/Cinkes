@@ -61,7 +61,7 @@ void Cinkes::CConvexHull::BuildHull(const std::vector<float>& a_Vertices, const 
 	}
 }
 
-Cinkes::CVector3 Cinkes::CConvexHull::Support(const CVector3& a_V)
+Cinkes::CVector3 Cinkes::CConvexHull::Support(const CVector3& a_V, const CVector3& a_Position)
 {
 	CVertex* base = m_Vertices[0].get();
 	bool best = false;

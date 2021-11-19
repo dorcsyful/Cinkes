@@ -1,13 +1,15 @@
 #include "CBoxShape.h"
 #include "../CinkesMath/CUtils.h"
 
-
-Cinkes::CVector3 Cinkes::CBoxShape::Support(const CVector3& a_V)
+Cinkes::CVector3 Cinkes::CBoxShape::Support(const CVector3& a_V, const CVector3& a_Position)
 {
-	CVector3 result;
-	result[0] = CUtils::Sgn(1, a_V[0]) * (m_Dimensions[0] / 2);
-	result[1] = CUtils::Sgn(1, a_V[1]) * (m_Dimensions[1] / 2);
-	result[2] = CUtils::Sgn(1, a_V[2]) * (m_Dimensions[2] / 2);
+	CVector3 result = a_Position;
+
+	CScalar temp1 = CUtils::Sgn(1, a_V[0]) * (m_Dimensions[0] / 2);
+	CScalar temp2 = CUtils::Sgn(1, a_V[1]) * (m_Dimensions[1] / 2);
+	CScalar temp3 = CUtils::Sgn(1, a_V[2]) * (m_Dimensions[2] / 2);
+	result += CVector3(temp1, temp2, temp3);
+
 	return result;
 }
 

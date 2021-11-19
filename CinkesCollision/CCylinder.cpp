@@ -14,7 +14,7 @@ Cinkes::CCylinder& Cinkes::CCylinder::operator=(const CCylinder& a_Rhs) noexcept
     return *this;
 }
 
-Cinkes::CVector3 Cinkes::CCylinder::Support(const CVector3& a_V)
+Cinkes::CVector3 Cinkes::CCylinder::Support(const CVector3& a_V, const CVector3& a_Position)
 {
     CVector3 segment = CVector3(m_Height * a_V[0], 0, 0);
     CVector3 disc = (CVector3(m_Radius, m_Radius, 0) / CVector3(m_Radius, m_Radius, 0).Length()) * m_Radius;

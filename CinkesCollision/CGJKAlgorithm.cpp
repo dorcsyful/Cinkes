@@ -8,8 +8,8 @@
 
 bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObject* a_Object2)
 {
-    CVector3 dir = (a_Object1->GetCollisionShape()->Support(CVector3(1, 0, 0)) + a_Object1->GetTransform().getOrigin()) -
-        (a_Object2->GetCollisionShape()->Support(CVector3(-1, 0, 0)) + a_Object2->GetTransform().getOrigin());
+    CVector3 dir = (a_Object1->GetCollisionShape()->Support(CVector3(1, 0, 0),a_Object1->GetTransform().getOrigin())) -
+        (a_Object2->GetCollisionShape()->Support(CVector3(-1, 0, 0),a_Object2->GetTransform().getOrigin()));
 
     CSimplex simplex;
     simplex.Push_Back(dir);
@@ -18,9 +18,8 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
 
     while(true)
     {
-        next.Normalize();
-        dir = a_Object1->GetCollisionShape()->Support(next) + a_Object1->GetTransform().getOrigin() -
-              a_Object2->GetCollisionShape()->Support(next * -1) + a_Object2->GetTransform().getOrigin();
+        dir = a_Object1->GetCollisionShape()->Support(next, a_Object1->GetTransform().getOrigin()) -
+              a_Object2->GetCollisionShape()->Support(next * -1, a_Object2->GetTransform().getOrigin());
         if(dir.Dot(next) <= 0)
         {
 	        return false;

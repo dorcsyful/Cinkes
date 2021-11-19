@@ -36,6 +36,7 @@ namespace Cinkes {
 		void operator-=(CScalar a_Rhs);
 		void operator*=(CScalar a_Rhs);
 		void operator/=(CScalar a_Rhs);
+		const CVector3 operator+(const CVector3& a_Vector3) const;
 		CVector3 operator+(const CVector3& a_Rhs);
 		CVector3 operator-(const CVector3& a_Rhs);
 		CVector3 operator-(const CVector3& a_Rhs) const;

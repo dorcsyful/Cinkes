@@ -54,17 +54,17 @@ void Cinkes::CConeShape::setHeight(CScalar a_New)
 	m_SinOfAngle = CUtils::Sin(m_Height / hypotenuse);
 }
 
-Cinkes::CVector3 Cinkes::CConeShape::Support(const CVector3& a_V)
+Cinkes::CVector3 Cinkes::CConeShape::Support(const CVector3& a_V, const CVector3& a_Position)
 {
 	CVector3 temp = CVector3(a_V[0], a_V[1], 0);
 	CVector3 result = (temp / temp.Length()) * m_Radius;
 	CVector3 temp2 = CVector3(0, 0, m_Height);
 	if(result.Dot(a_V) > temp2.Dot(a_V))
 	{
-		return result;
+		return a_Position + result;
 	} else
 	{
-		return temp2;
+		return a_Position + temp2;
 	}
 }
 
