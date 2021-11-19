@@ -1,5 +1,7 @@
 #pragma once
 #include <array>
+#include <vector>
+
 #include "../CinkesMath/CVector3.h"
 namespace Cinkes
 {
@@ -7,11 +9,10 @@ namespace Cinkes
 	class CSimplex
 	{
 	private:
-		std::array<Cinkes::CVector3, 4> m_Points;
-		unsigned int m_Size;
+		std::vector<Cinkes::CVector3> m_Points;
 
 	public:
-		CSimplex() : m_Points(std::array<CVector3,4>()), m_Size(0) {}
+		CSimplex() { m_Points.reserve(4); }
 
 		CSimplex& operator=(const std::initializer_list<CVector3>& a_Rhs)
 		{
@@ -19,20 +20,27 @@ namespace Cinkes
 			{
 				m_Points[std::distance(a_Rhs.begin(), i)] = *i;
 			}
-			m_Size = static_cast<unsigned>(a_Rhs.size());
+
 			return *this;
 		}
 
-		void Push_Front(const CVector3& a_Vector3)
+		void Push_Back(const CVector3& a_Vector3)
 		{
-			m_Points = { a_Vector3,m_Points[0],m_Points[1],m_Points[2] };
-			m_Size = std::min(m_Size + 1, 4u);
+			m_Points.push_back(a_Vector3);
+		}
+
+		bool Erase(const CVector3& a_Vector3)
+		{
+			if(remove(m_Points.begin(), m_Points.end(), a_Vector3) == m_Points.end())
+			{
+				return false;
+			}
+			return true;
 		}
 
 		CVector3& operator[](int a_Number) { return m_Points[a_Number]; }
-		unsigned Size() { return  m_Size; }
-		auto Begin() { return m_Points.begin(); }
-		auto End() { return m_Points.end(); }
+		unsigned Size() { return  m_Points.size(); }
+
 	};
 }
 

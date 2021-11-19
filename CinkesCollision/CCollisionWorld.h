@@ -1,11 +1,12 @@
 #pragma once
 #include <memory>
 #include <vector>
-
+#include "CBVH.h"
 #include "CGJKAlgorithm.h"
 #include "../CinkesMath/CScalar.h"
 namespace Cinkes
 {
+	struct CContactInfo;
 	class CBVH;
 	class CCollisionObject;
 	//Group: CCollision
@@ -16,7 +17,7 @@ namespace Cinkes
 		public:
 		//Subgroup: Constructors {
 		CCollisionWorld();
-		~CCollisionWorld();
+		~CCollisionWorld() = default;
 		CCollisionWorld(const CCollisionWorld& a_Rhs);
 		CCollisionWorld(CCollisionWorld&& a_Rhs) noexcept;
 
@@ -25,7 +26,6 @@ namespace Cinkes
 		//Subgroup: Operators {
 		CCollisionWorld& operator=(CCollisionWorld&& a_Rhs) noexcept;
 		CCollisionWorld& operator=(const CCollisionWorld& a_Rhs);
-		bool operator==(CCollisionWorld* a_Rhs) { return true; }
 		//}
 
 		//Subgroup: Object handling {
@@ -35,14 +35,17 @@ namespace Cinkes
 		//}
 
 		//Subgroup: Collision test {
+		std::vector<std::shared_ptr<CContactInfo>>& getContacts() { return m_BVH->m_Contacts; }
 		void RunCollision(CScalar a_T);
 		//}
-		std::unique_ptr<CBVH> m_BVH;
+
 
 	private:
 		//Subgroup: Class members
 		bool m_ShouldUpdate;
 		std::vector<std::shared_ptr<CCollisionObject>> m_Objects;
+		std::unique_ptr<CBVH> m_BVH;
+		std::unique_ptr<CGJKAlgorithm> m_GJK;
 		//}
 	};
 

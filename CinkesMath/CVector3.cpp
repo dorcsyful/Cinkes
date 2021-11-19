@@ -251,6 +251,11 @@ CVector3 CVector3::Cross(const CVector3& a_Rhs)
 	result[0] = m_Values[1] * a_Rhs[2] - m_Values[2] * a_Rhs[1];
 	result[1] = m_Values[2] * a_Rhs[0] - m_Values[0] * a_Rhs[2];
 	result[2] = m_Values[0] * a_Rhs[1] - m_Values[1] * a_Rhs[0];
+
+	if((result - CScalar(0.0001)).Length() < 0)
+	{
+		return a_Rhs;
+	}
 	return result;
 }
 

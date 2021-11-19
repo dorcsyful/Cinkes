@@ -1,5 +1,6 @@
 #include "CGJKAlgorithm.h"
 
+#include "CBoxShape.h"
 #include "CCollisionObject.h"
 #include "CCollisionShape.h"
 #include "CSimplex.h"
@@ -7,35 +8,35 @@
 
 bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObject* a_Object2)
 {
-    CVector3 dir = a_Object1->GetCollisionShape()->Support(CVector3(1, 0, 0)) - 
-					a_Object2->GetCollisionShape()->Support(CVector3(1, 0, 0));
+    CVector3 dir = (a_Object1->GetCollisionShape()->Support(CVector3(1, 0, 0)) + a_Object1->GetTransform().getOrigin()) -
+        (a_Object2->GetCollisionShape()->Support(CVector3(-1, 0, 0)) + a_Object2->GetTransform().getOrigin());
 
     CSimplex simplex;
-    simplex.Push_Front(dir);
+    simplex.Push_Back(dir);
 
     CVector3 next = dir * (-1);
 
     while(true)
     {
-        dir = a_Object1->GetCollisionShape()->Support(next) - a_Object2->GetCollisionShape()->Support(next);
+        next.Normalize();
+        dir = a_Object1->GetCollisionShape()->Support(next) + a_Object1->GetTransform().getOrigin() -
+              a_Object2->GetCollisionShape()->Support(next * -1) + a_Object2->GetTransform().getOrigin();
         if(dir.Dot(next) <= 0)
         {
 	        return false;
         }
 
-        simplex.Push_Front(dir);
+        simplex.Push_Back(dir);
 
         if(NextSimplex(simplex, next))
         {
-            return true;
+        	return true;
         }
     }
 
-
-    return false;
 }
 
-bool Cinkes::CGJKAlgorithm::NextSimplex(CSimplex a_Simplex, CVector3 a_Direction)
+bool Cinkes::CGJKAlgorithm::NextSimplex(CSimplex& a_Simplex, CVector3& a_Direction)
 {
 	switch (a_Simplex.Size())
 	{
@@ -48,37 +49,37 @@ bool Cinkes::CGJKAlgorithm::NextSimplex(CSimplex a_Simplex, CVector3 a_Direction
 
 bool Cinkes::CGJKAlgorithm::Line(CSimplex& a_Simplex, CVector3& a_Direction)
 {
-    CVector3 a = a_Simplex[0];
-    CVector3 b = a_Simplex[1];
+    CVector3 b = a_Simplex[0];
+    CVector3 a = a_Simplex[1];
     CVector3 ab = b - a;
     CVector3 ao = a * (-1);
 
-    if(ab == ao)
+	if(SameDirection(ab, ao))
     {
         a_Direction = ab.Cross(ao).Cross(ab);
-    }
-    else
+    } else
     {
-        a_Simplex = { a };
-        a_Direction = ao;
+    a_Simplex = { a };
+    a_Direction = ao;
     }
+
 
     return false;
 }
 
 bool Cinkes::CGJKAlgorithm::Triangle(CSimplex& a_Simplex, CVector3& a_Direction)
 {
-    CVector3 a = a_Simplex[0];
+    CVector3 c = a_Simplex[0];
     CVector3 b = a_Simplex[1];
-    CVector3 c = a_Simplex[2];
+    CVector3 a = a_Simplex[2];
     CVector3 ab = b - a;
     CVector3 ac = c - a;
     CVector3 ao = a * (-1);
     CVector3 abc = ab.Cross(ac);
 
-    if(abc.Cross(ac) == ao)
+    if(SameDirection(abc.Cross(ac),ao))
     {
-	    if(ac == ao)
+	    if(SameDirection(ac, ao))
 	    {
             a_Simplex = { a,c };
             a_Direction = ac.Cross(ao).Cross(ac);
@@ -90,32 +91,32 @@ bool Cinkes::CGJKAlgorithm::Triangle(CSimplex& a_Simplex, CVector3& a_Direction)
     }
     else
     {
-	    if(ab.Cross(abc) == ao)
-	    {
+        if (SameDirection(abc.Cross(ab), ao))
+        {
             return Line(a_Simplex = { a,b }, a_Direction);
-	    } else
-	    {
-		    if(abc == ao)
-		    {
+        }
+        else
+        {
+            if (SameDirection(abc, ao))
+            {
                 a_Direction = abc;
-		    }
+            }
             else
             {
-                a_Simplex = { a,b,c };
+                a_Simplex = { a,c,b };
                 a_Direction = abc * (-1);
             }
-	    }
+        }
     }
-
     return false;
 }
 
 bool Cinkes::CGJKAlgorithm::Tetrahedron(CSimplex& a_Simplex, CVector3& a_Direction)
 {
-    CVector3 a = a_Simplex[0];
-    CVector3 b = a_Simplex[1];
-    CVector3 c = a_Simplex[2];
-    CVector3 d = a_Simplex[3];
+    CVector3 d = a_Simplex[0];
+    CVector3 c = a_Simplex[1];
+    CVector3 b = a_Simplex[2];
+    CVector3 a = a_Simplex[3];
     CVector3 ab = b - a;
     CVector3 ac = c - a;
     CVector3 ad = d - a;
@@ -124,19 +125,22 @@ bool Cinkes::CGJKAlgorithm::Tetrahedron(CSimplex& a_Simplex, CVector3& a_Directi
     CVector3 acd = ac.Cross(ad);
     CVector3 adb = ad.Cross(ab);
 
-    if(abc == ao)
+    if(SameDirection(abc, ao))
     {
         return Triangle(a_Simplex = { a,b,c }, a_Direction);
     }
-    if(acd == ao)
+    if(SameDirection(acd, ao))
     {
         return Triangle(a_Simplex = { a,c,d }, a_Direction);
     }
-    if(adb == ao)
+    if(SameDirection(adb, ao))
     {
         return Triangle(a_Simplex = { a,d,b }, a_Direction);
     }
-
-
     return true;
+}
+
+bool Cinkes::CGJKAlgorithm::SameDirection(const CVector3& a_Direction, const CVector3& a_AO)
+{
+    return a_Direction.Dot(a_AO) > 0;
 }

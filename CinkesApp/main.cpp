@@ -140,6 +140,12 @@ int main()
 		hitmaterialInfo.m_AlbedoFactor = { 0.f, 1.f, 0.f };
 		auto hitmaterial = renderer->CreateMaterial(hitmaterialInfo);
 
+		MaterialCreateInfo narrowmaterialInfo;
+		narrowmaterialInfo.m_MetallicFactor = 0.0f;
+		narrowmaterialInfo.m_RoughnessFactor = 1.0f;
+		narrowmaterialInfo.m_AlbedoFactor = { 0.f, 0.f, 1.f };
+		auto narrowmaterial = renderer->CreateMaterial(narrowmaterialInfo);
+
 		//Create one light.
 		SphereLight light;
 		light.SetPosition(5.f, 100.f, 0.f);
@@ -154,27 +160,38 @@ int main()
 		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
 		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
 		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
+		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
 
 		cubeTransform.SetTranslation({ 10, 10, 10 });
 		objects[1].m_Transform = cubeTransform.GetTransformation();
 		objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(10, 10, 10));
 
-		cubeTransform.SetTranslation({ 3,3,3 });
-		objects[2].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(3, 3, 3));
+		cubeTransform.SetTranslation({ 3.5,3.5,3.5 });
+		objects[2].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(3.5, 3.5, 3.5));
 		objects[2].m_Transform = cubeTransform.GetTransformation();
 
 		cubeTransform.SetTranslation({ 20,20,20 });
 		objects[3].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(20, 20, 20));
 		objects[3].m_Transform = cubeTransform.GetTransformation();
 
+		cubeTransform.SetTranslation({ 20.4,20.4,20.4 });
+		objects[4].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(20.4f, 20.4f, 20.4f));
+		objects[4].m_Transform = cubeTransform.GetTransformation();
+
 		collisionWorld->RunCollision(1);
-		for (auto& object : collisionWorld->m_BVH->m_Contacts)
+		for (auto& object : collisionWorld->getContacts())
 		{
 			for (auto& current : objects)
 			{
 				if(current.m_Cinkes == object->m_First || current.m_Cinkes == object->m_Second)
 				{
-					current.m_Material = hitmaterial;
+					if(object->m_PassedNarrowphase)
+					{
+						current.m_Material = narrowmaterial;
+					}
+					else {
+						current.m_Material = hitmaterial;
+					}
 				}
 			}
 		}
@@ -187,6 +204,7 @@ int main()
 			MaterialHandle materialHandle;
 			auto regularMaterialHandle = drawData->AddMaterial(material);
 			auto hitMaterialHandle = drawData->AddMaterial(hitmaterial);
+			auto narrowMaterialHandle = drawData->AddMaterial(narrowmaterial);
 			drawData->AddLight(light);
 			
 
@@ -200,6 +218,10 @@ int main()
 				if (current.m_Material == hitmaterial)
 				{
 					materialHandle = hitMaterialHandle;
+				}
+				else if(current.m_Material == narrowmaterial)
+				{
+					materialHandle = narrowMaterialHandle;
 				}
 				else { materialHandle = regularMaterialHandle; }
 				auto instanceHandle = drawData->AddInstance(current.m_Transform, materialHandle, 0);
