@@ -53,8 +53,13 @@ void Cinkes::CBVH::CreateBVH(std::vector<std::shared_ptr<CAABB>>& a_Objects)
 		}
 	}
 
-	if(midpoints[0] == 1 || midpoints[1] == 1 || midpoints[2] == 1 || m_RecurseCounter == m_MaxRecurse)
+	if((midpoints[0] == 1 && midpoints[1] == 1 && midpoints[2] == 1) || m_RecurseCounter == m_MaxRecurse)
 	{
+		std::shared_ptr<CBroadContactInfo> leftover = std::make_shared<CBroadContactInfo>();
+		for (auto& current : a_Objects)
+		{
+			leftover->m_Objects.push_back(current->m_Object);
+		}
 		return;
 	}
 
@@ -105,16 +110,16 @@ void Cinkes::CBVH::CreateBVH(std::vector<std::shared_ptr<CAABB>>& a_Objects)
 
 	if(static_cast<int>(left.size() == 2))
 	{
-		std::shared_ptr<CContactInfo> info = std::make_shared<CContactInfo>();
-		info->m_First = left[0]->m_Object;
-		info->m_Second = left[1]->m_Object;
+		std::shared_ptr<CBroadContactInfo> info = std::make_shared<CBroadContactInfo>();
+		info->m_Objects.push_back(left[0]->m_Object);
+		info->m_Objects.push_back(left[1]->m_Object);
 		m_Contacts.push_back(info);
 	}
 	if (static_cast<int>(right.size() == 2))
 	{
-		std::shared_ptr<CContactInfo> info = std::make_shared<CContactInfo>();
-		info->m_First = right[0]->m_Object;
-		info->m_Second = right[1]->m_Object;
+		std::shared_ptr<CBroadContactInfo> info = std::make_shared<CBroadContactInfo>();
+		info->m_Objects.push_back(right[0]->m_Object);
+		info->m_Objects.push_back(right[1]->m_Object);
 		m_Contacts.push_back(info);
 
 	}

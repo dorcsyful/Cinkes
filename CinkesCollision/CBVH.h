@@ -29,7 +29,7 @@ namespace Cinkes
 		void CalculateAxisLength();
 		void Update();
 
-		std::vector<std::shared_ptr<CContactInfo>> m_Contacts;
+		std::vector<std::shared_ptr<CBroadContactInfo>> m_Contacts;
 		//TODO: find a way to make this private
 		std::vector<std::shared_ptr<CAABB>> m_AABBs;
 

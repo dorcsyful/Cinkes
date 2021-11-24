@@ -101,10 +101,16 @@ void Cinkes::CCollisionWorld::RunCollision(CScalar a_T)
 	m_BVH->Update();
 	for (auto& element : m_BVH->m_Contacts)
 	{
-		if(!(m_GJK->Algorithm(element->m_First.get(), element->m_Second.get())))
-		{
-			element->m_PassedNarrowphase = false;
+		for (int i = 0; i < element->m_Objects.size() - 1; i++) {
+			bool algorithm = m_GJK->Algorithm(element->m_Objects[i].get(), element->m_Objects[i + 1].get());
+			if(algorithm)
+			{
+				std::shared_ptr<CContactInfo> contact = std::make_shared<CContactInfo>();
+				contact->m_First = element->m_Objects[i];
+				contact->m_Second = element->m_Objects[i + 1];
+				m_Contacts.push_back(contact);
+				
+			}
 		}
-		else { element->m_PassedNarrowphase = true; }
 	}
 }

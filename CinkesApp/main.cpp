@@ -185,15 +185,9 @@ int main()
 			{
 				if(current.m_Cinkes == object->m_First || current.m_Cinkes == object->m_Second)
 				{
-					if(object->m_PassedNarrowphase)
-					{
 						current.m_Material = narrowmaterial;
-					}
-					else {
-						current.m_Material = hitmaterial;
-					}
 				}
-			}
+				}
 		}
 		
 		//LOOP
