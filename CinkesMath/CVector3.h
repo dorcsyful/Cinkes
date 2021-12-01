@@ -19,8 +19,11 @@ namespace Cinkes {
 
 		//Subgroup: Other {
 		CScalar getX();
+		CScalar getX() const;
 		CScalar getY();
+		CScalar getY() const;
 		CScalar getZ();
+		CScalar getZ() const;
 
 		void setX(CScalar a_New);
 		void setY(CScalar a_New);

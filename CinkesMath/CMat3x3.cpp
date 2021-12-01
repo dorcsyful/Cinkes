@@ -12,6 +12,11 @@ CMat3x3::CMat3x3()
 	m_Rows[2] = CVector3(0, 0, 1);
 }
 
+Cinkes::CMat3x3::CMat3x3(const CVector3& a_Axis, CScalar a_Angle)
+{
+	SetFromAxisAngle(a_Axis, a_Angle);
+}
+
 CMat3x3::CMat3x3(const CVector3& a_Row1, const CVector3& a_Row2, const CVector3& a_Row3)
 {
 	m_Rows[0] = a_Row1;
@@ -364,4 +369,29 @@ CMat3x3 CMat3x3::Abs()
 	matrix[2][2] = CUtils::Abs(m_Rows[2][2]);
 
 	return matrix;
+}
+
+void Cinkes::CMat3x3::SetFromAxisAngle(const CVector3& a_Axis, CScalar a_Angle)
+{
+	CScalar cos = CUtils::Cos(a_Angle);
+	CScalar sin = CUtils::Sin(a_Angle);
+	CScalar t = 1 - cos;
+
+	CScalar xyt = a_Axis.getX() * a_Axis.getY() * t;
+	CScalar zsin = a_Axis.getZ() * sin;
+	CScalar xzt = a_Axis.getX() * a_Axis.getZ() * t;
+	CScalar ysin = a_Axis.getY() * sin;
+	CScalar xsin = a_Axis.getX() * sin;
+	CScalar yzt = a_Axis.getY() * a_Axis.getZ() * t;
+
+	m_Rows[0][0] = cos + a_Axis.getX() * a_Axis.getX() * t;
+	m_Rows[0][1] = xyt - zsin;
+	m_Rows[0][2] = xzt + ysin;
+	m_Rows[1][0] = xyt + zsin;
+	m_Rows[1][1] = cos + a_Axis.getY() * a_Axis.getY() * t;
+	m_Rows[1][2] = yzt - xsin;
+	m_Rows[2][0] = xzt - ysin;
+	m_Rows[2][1] = xyt + xsin;
+	m_Rows[2][2] = t * a_Axis.getZ() * a_Axis.getZ() + cos;
+	
 }

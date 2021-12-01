@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "../CinkesMath/CVector3.h"
 
 namespace Cinkes
 {
@@ -14,6 +15,8 @@ namespace Cinkes
 	{
 		std::shared_ptr<CCollisionObject> m_First;
 		std::shared_ptr<CCollisionObject> m_Second;
+		CVector3 m_Normal;
+		CScalar m_PenetrationDepth;
 	};
 }
 

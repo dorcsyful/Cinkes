@@ -31,6 +31,7 @@
     <ClInclude Include="CConeShape.h" />
     <ClInclude Include="CConvexHull.h" />
     <ClInclude Include="CCylinder.h" />
+    <ClInclude Include="CEPA.h" />
     <ClInclude Include="CGJKAlgorithm.h" />
     <ClInclude Include="CContactInfo.h" />
     <ClInclude Include="CSimplex.h" />
@@ -49,6 +50,7 @@
     <ClCompile Include="CConeShape.cpp" />
     <ClCompile Include="CConvexHull.cpp" />
     <ClCompile Include="CCylinder.cpp" />
+    <ClCompile Include="CEPA.cpp" />
     <ClCompile Include="CGJKAlgorithm.cpp" />
     <ClCompile Include="CSimplex.cpp" />
     <ClCompile Include="CSphereShape.cpp" />

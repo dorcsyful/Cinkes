@@ -13,6 +13,7 @@ namespace Cinkes
 		
 		//Subgroup: Constructors {
 		CMat3x3();
+		CMat3x3(const CVector3& a_Axis, CScalar a_Angle);
 		CMat3x3(const CVector3& a_Row1, const CVector3& a_Row2, const CVector3& a_Row3);
 		CMat3x3(CScalar a_00, CScalar a_01, CScalar a_02,
 				CScalar a_10, CScalar a_11, CScalar a_12,
@@ -64,6 +65,7 @@ namespace Cinkes
 		CQuaternion ToQuaternion();
 		void GetEuler(CScalar& a_Yaw, CScalar& a_Pitch, CScalar& a_Roll);
 		CMat3x3 Abs();
+		void SetFromAxisAngle(const CVector3& a_Axis, CScalar a_Angle);
 		//}
 	private:
 		//Subgroup: Matrix Elements {

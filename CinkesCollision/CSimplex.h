@@ -39,6 +39,7 @@ namespace Cinkes
 		}
 
 		CVector3& operator[](int a_Number) { return m_Points[a_Number]; }
+		CVector3 operator[](int a_Number) const { return m_Points[a_Number]; }
 		unsigned Size() { return  m_Points.size(); }
 
 	};

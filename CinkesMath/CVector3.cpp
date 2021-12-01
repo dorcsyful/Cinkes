@@ -37,12 +37,27 @@ CScalar Cinkes::CVector3::getX()
 	return m_Values[0];
 }
 
+CScalar Cinkes::CVector3::getX() const
+{
+	return m_Values[0];
+}
+
 CScalar Cinkes::CVector3::getY()
 {
 	return m_Values[1];
 }
 
+CScalar Cinkes::CVector3::getY() const
+{
+	return m_Values[1];
+}
+
 CScalar Cinkes::CVector3::getZ()
+{
+	return m_Values[2];
+}
+
+CScalar Cinkes::CVector3::getZ() const
 {
 	return m_Values[2];
 }
