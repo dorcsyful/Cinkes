@@ -3,10 +3,10 @@
 #include <vector>
 #include "CBVH.h"
 #include "CGJKAlgorithm.h"
+#include "CEPA.h"
 #include "../CinkesMath/CScalar.h"
 namespace Cinkes
 {
-	class CEPA;
 	struct CContactInfo;
 	class CBVH;
 	class CCollisionObject;
