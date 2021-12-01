@@ -16,7 +16,7 @@ namespace Cinkes
 		CGJKAlgorithm& operator=(const CGJKAlgorithm& a_Cgjk) = default;
 		CGJKAlgorithm& operator=(CGJKAlgorithm&& a_Cgjk) = default;
 		
-		static bool Algorithm(CCollisionObject* a_Object1, CCollisionObject* a_Object2);
+		static bool Algorithm(CCollisionObject* a_Object1, CCollisionObject* a_Object2, CSimplex& a_Simplex);
 		static bool NextSimplex(CSimplex& a_Simplex, CVector3& a_Direction);
 		static bool Line(CSimplex& a_Simplex, CVector3& a_Direction);
 		static bool Triangle(CSimplex& a_Simplex, CVector3& a_Direction);

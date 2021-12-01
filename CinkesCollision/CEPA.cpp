@@ -1,6 +1,7 @@
 #include "CEPA.h"
 
 #include <corecrt_math_defines.h>
+#include <functional>
 
 #include "CCollisionObject.h"
 #include "CCollisionShape.h"
@@ -8,16 +9,16 @@
 #include "../CinkesMath/CUtils.h"
 #include "CSimplex.h"
 
-void Cinkes::CEPA::Run(CContactInfo& a_Contact, CSimplex& a_Simplex)
+void Cinkes::CEPA::Run(std::shared_ptr<CContactInfo> a_Contact, CSimplex& a_Simplex)
 {
 	while(a_Simplex.Size() < 4)
 	{
 		BlowUp(a_Simplex, a_Contact);
 	}
-
+	Algorithm(a_Contact, a_Simplex);
 }
 
-void Cinkes::CEPA::Algorithm(CContactInfo& a_Contact, const CSimplex& a_Simplex)
+void Cinkes::CEPA::Algorithm(std::shared_ptr<CContactInfo> a_Contact, const CSimplex& a_Simplex)
 {
 	//the tetrahedron from GJK, the faces contain every triangle that are on it by the vertex indices
 	std::vector<CVector3> polytope = { a_Simplex[0],a_Simplex[1],a_Simplex[2],a_Simplex[3] };
@@ -32,13 +33,13 @@ void Cinkes::CEPA::Algorithm(CContactInfo& a_Contact, const CSimplex& a_Simplex)
 
 	CVector3 minNormal;
 	CScalar minDistance = std::numeric_limits<CScalar>::max();
-	while(minDistance == std::numeric_limits<CScalar>::max())
+	while(minDistance == std::numeric_limits<CScalar>::max())  // NOLINT(clang-diagnostic-float-equal)
 	{
 		minNormal = normals.first[normals.second].m_Normal;
 		minDistance = normals.first[normals.second].m_Distance;
 
-		CVector3 support = a_Contact.m_First->GetCollisionShape()->Support(minNormal, a_Contact.m_First->GetTransform().getOrigin()) -
-				a_Contact.m_Second->GetCollisionShape()->Support(minNormal, a_Contact.m_Second->GetTransform().getOrigin());
+		CVector3 support = a_Contact->m_First->GetCollisionShape()->Support(minNormal, a_Contact->m_First->GetTransform().getOrigin()) -
+				a_Contact->m_Second->GetCollisionShape()->Support(minNormal, a_Contact->m_Second->GetTransform().getOrigin());
 		CScalar distance = minNormal.Dot(support);
 		if(CUtils::Abs(distance - minDistance) > static_cast<CScalar>(0.001))
 		{
@@ -70,7 +71,7 @@ void Cinkes::CEPA::Algorithm(CContactInfo& a_Contact, const CSimplex& a_Simplex)
 			{
 				newFaces.push_back(i.first);
 				newFaces.push_back(i.first);
-				newFaces.push_back(polytope.size());
+				newFaces.push_back(polytope.size());  // NOLINT(clang-diagnostic-shorten-64-to-32)
 			}
 
 			polytope.push_back(support);
@@ -86,7 +87,7 @@ void Cinkes::CEPA::Algorithm(CContactInfo& a_Contact, const CSimplex& a_Simplex)
 			}
 
 			if (newNormals.first[newNormals.second].m_Distance < oldMinDistance) {
-				normals.second = newNormals.second + normals.first.size();
+				normals.second = newNormals.second + normals.first.size();  // NOLINT(clang-diagnostic-shorten-64-to-32)
 			}
 
 			faces.insert(faces.end(), newFaces.begin(), newFaces.end());
@@ -94,11 +95,11 @@ void Cinkes::CEPA::Algorithm(CContactInfo& a_Contact, const CSimplex& a_Simplex)
 		}
 	}
 
-	a_Contact.m_Normal = minNormal;
-	a_Contact.m_PenetrationDepth = minDistance + 0.001f;
+	a_Contact->m_Normal = minNormal;
+	a_Contact->m_PenetrationDepth = minDistance + 0.001f;
 }
 
-void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, const CContactInfo& a_Contact)
+void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, std::shared_ptr<CContactInfo> a_Contact)
 {
 	CVector3 d = a_Simplex[1] - a_Simplex[0];
 	CVector3 axis = SmallestAxis(d);
@@ -116,11 +117,11 @@ void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, const CContactInfo& a_Contact)
 	{
 		a_Simplex.Push_Back(CVector3());
 		vector = d.Cross(axis);
-		CMat3x3 rotation = CMat3x3(d, M_PI * static_cast<CScalar>(0.3));
+		CMat3x3 rotation = CMat3x3(d, static_cast<CScalar>(M_PI * 0.3));
 
-		for(int i = 0; i < 6; i++)
+		for(unsigned i = 0; i < 6; i++)
 		{
-			a_Simplex[a_Simplex.Size() - 1] = (CSOSupport(a_Contact, vector));
+			a_Simplex[a_Simplex.Size() - 1] = (CSOSupport(a_Contact.get(), vector));    // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
 			if (a_Simplex[2].Length2() > epsilon2) { break; }
 			vector = rotation * vector;
 		}
@@ -132,28 +133,28 @@ void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, const CContactInfo& a_Contact)
 		CVector3 v1 = a_Simplex[1] - a_Simplex[0];
 		CVector3 v2 = a_Simplex[2] - a_Simplex[0];
 		vector = v1.Cross(v2);
-		a_Simplex[a_Simplex.Size() - 1] = (CSOSupport(a_Contact, vector));
+		a_Simplex[a_Simplex.Size() - 1] = CSOSupport(a_Contact.get(), vector);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
 
 		if(a_Simplex[3].Length2() < epsilon2)
 		{
 			vector *= -1;
-			CSOSupport(a_Contact, vector);
+			CSOSupport(a_Contact.get(), vector);
 		}
 	}
 }
 
-Cinkes::CVector3 Cinkes::CEPA::CSOSupport(const CContactInfo& a_Contact, const CVector3& a_Dir)
+Cinkes::CVector3 Cinkes::CEPA::CSOSupport(const CContactInfo* a_Contact, const CVector3& a_Dir)
 {
 	CVector3 dir = a_Dir;
 	dir.Normalize();
-	CVector3 localA = a_Contact.m_First->GetTransform().getBasis().GetInverse() * dir;
-	CVector3 localB = a_Contact.m_Second->GetTransform().getBasis().GetInverse() * dir;
+	CVector3 localA = a_Contact->m_First->GetTransform().getBasis().GetInverse() * dir;
+	CVector3 localB = a_Contact->m_Second->GetTransform().getBasis().GetInverse() * dir;
 
-	CVector3 supportA = a_Contact.m_First->GetCollisionShape()->Support(localA, CVector3(0, 0, 0));
-	CVector3 supportB = a_Contact.m_Second->GetCollisionShape()->Support(localB, CVector3(0, 0, 0));
+	CVector3 supportA = a_Contact->m_First->GetCollisionShape()->Support(localA, CVector3(0, 0, 0));
+	CVector3 supportB = a_Contact->m_Second->GetCollisionShape()->Support(localB, CVector3(0, 0, 0));
 
-	supportA = a_Contact.m_First->GetTransform().getBasis() * supportA + a_Contact.m_First->GetTransform().getOrigin();
-	supportB = a_Contact.m_Second->GetTransform().getBasis() * supportB + a_Contact.m_Second->GetTransform().getOrigin();
+	supportA = a_Contact->m_First->GetTransform().getBasis() * supportA + a_Contact->m_First->GetTransform().getOrigin();
+	supportB = a_Contact->m_Second->GetTransform().getBasis() * supportB + a_Contact->m_Second->GetTransform().getOrigin();
 	return supportA - supportB;
 }
 
@@ -187,7 +188,7 @@ std::pair<std::vector<Cinkes::CFaceData>, unsigned> Cinkes::CEPA::GetFaceNormals
 	unsigned int minTriangle = 0;
 	CScalar minDistance = std::numeric_limits<CScalar>::max();
 
-	for(size_t i = 0; i < a_Faces.size(); i += 3)
+	for(unsigned i = 0; i < a_Faces.size(); i += 3)
 	{
 		CVector3 a = a_Polytope[static_cast<int>(a_Faces[i])];
 		CVector3 b = a_Polytope[static_cast<int>(a_Faces[i + 1])];

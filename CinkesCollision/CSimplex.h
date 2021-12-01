@@ -1,5 +1,4 @@
 #pragma once
-#include <array>
 #include <vector>
 
 #include "../CinkesMath/CVector3.h"
@@ -40,7 +39,7 @@ namespace Cinkes
 
 		CVector3& operator[](int a_Number) { return m_Points[a_Number]; }
 		CVector3 operator[](int a_Number) const { return m_Points[a_Number]; }
-		unsigned Size() { return  m_Points.size(); }
+		unsigned Size() const { return  static_cast<unsigned>(m_Points.size()); }
 
 	};
 }

@@ -1,12 +1,11 @@
 #include "CGJKAlgorithm.h"
 
-#include "CBoxShape.h"
 #include "CCollisionObject.h"
 #include "CCollisionShape.h"
 #include "CSimplex.h"
 #include "../CinkesMath/CVector3.h"
 
-bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObject* a_Object2)
+bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObject* a_Object2, CSimplex& a_Simplex)
 {
     CVector3 dir = (a_Object1->GetCollisionShape()->Support(CVector3(1, 0, 0),a_Object1->GetTransform().getOrigin())) -
         (a_Object2->GetCollisionShape()->Support(CVector3(-1, 0, 0),a_Object2->GetTransform().getOrigin()));
@@ -22,6 +21,7 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
               a_Object2->GetCollisionShape()->Support(next * -1, a_Object2->GetTransform().getOrigin());
         if(dir.Dot(next) <= 0)
         {
+            a_Simplex = simplex;
 	        return false;
         }
 
@@ -29,6 +29,7 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
 
         if(NextSimplex(simplex, next))
         {
+            a_Simplex = simplex;
         	return true;
         }
     }

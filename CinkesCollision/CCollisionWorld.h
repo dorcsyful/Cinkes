@@ -6,6 +6,7 @@
 #include "../CinkesMath/CScalar.h"
 namespace Cinkes
 {
+	class CEPA;
 	struct CContactInfo;
 	class CBVH;
 	class CCollisionObject;
@@ -18,13 +19,13 @@ namespace Cinkes
 		//Subgroup: Constructors {
 		CCollisionWorld();
 		~CCollisionWorld() = default;
-		CCollisionWorld(const CCollisionWorld& a_Rhs);
-		CCollisionWorld(CCollisionWorld&& a_Rhs) noexcept;
+		CCollisionWorld(const CCollisionWorld& a_Rhs) = delete;
+		CCollisionWorld(CCollisionWorld&& a_Rhs) noexcept = default;
 
 		//}
 
 		//Subgroup: Operators {
-		CCollisionWorld& operator=(CCollisionWorld&& a_Rhs) noexcept;
+		CCollisionWorld& operator=(CCollisionWorld&& a_Rhs) noexcept = default;
 		CCollisionWorld& operator=(const CCollisionWorld& a_Rhs);
 		std::shared_ptr<CCollisionObject> operator[](int a_Rhs) { return m_Objects[a_Rhs]; }
 		//}
@@ -33,11 +34,11 @@ namespace Cinkes
 		bool AddObject(const std::shared_ptr<CCollisionObject>& a_Object);
 		bool RemoveObject(const std::shared_ptr<CCollisionObject>& a_Object);
 		bool RemoveObjectByIndex(int a_Index);
-		unsigned int GetNumberOfObjects() { return m_Objects.size(); }
+		unsigned int GetNumberOfObjects() const { return m_Objects.size(); }  // NOLINT(clang-diagnostic-shorten-64-to-32)
 		std::shared_ptr<CCollisionObject> GetObjectByIndex(int a_Num) { return m_Objects[a_Num]; }
 		void Stop() { m_ShouldUpdate = false; }
 		void Start() { m_ShouldUpdate = true; }
-		bool GetStatus() { return m_ShouldUpdate; }
+		bool GetStatus() const { return m_ShouldUpdate; }
 
 		//}
 
@@ -54,6 +55,7 @@ namespace Cinkes
 		std::vector<std::shared_ptr<CContactInfo>> m_Contacts;
 		std::unique_ptr<CBVH> m_BVH;
 		std::unique_ptr<CGJKAlgorithm> m_GJK;
+		std::unique_ptr<CEPA> m_CEPA;
 		//}
 	};
 
