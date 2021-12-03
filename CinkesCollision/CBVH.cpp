@@ -133,6 +133,7 @@ void Cinkes::CBVH::CreateBVH(std::vector<std::shared_ptr<CAABB>>& a_Objects)
 	}
 }
 
+
 void Cinkes::CBVH::CalculateAxisLength()
 {
 	std::vector<int> todelete;

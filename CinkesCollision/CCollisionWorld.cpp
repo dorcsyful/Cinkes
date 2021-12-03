@@ -79,7 +79,7 @@ void Cinkes::CCollisionWorld::RunCollision(CScalar a_T)
 				std::shared_ptr<CContactInfo> contact = std::make_shared<CContactInfo>();
 				contact->m_First = element->m_Objects[i];
 				contact->m_Second = element->m_Objects[i + 1];
-				m_CEPA->Run(contact, simplex);
+				//m_CEPA->Run(contact, simplex);
 				m_Contacts.push_back(contact);
 				
 			}

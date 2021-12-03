@@ -1,23 +1,23 @@
 #include <filesystem>
+#include <iostream>
 #include <memory>
 #include <glm/glm/glm.hpp>
 
 #include "Egg/EggRenderer.h"
 #include "Egg/InputQueue.h"
-#include "Egg/Timer.h"
-#include "Egg/Profiler.h"
+
 #include "../CinkesMath/CVector3.h"
 #include "../CinkesCollision/CCollisionWorld.h"
 #include "../CinkesCollision/CCollisionShape.h"
 #include "../CinkesCollision/CBoxShape.h"
 #include "../CinkesCollision/CBVH.h"
-
+#include "../CinkesCollision/CContactInfo.h"
 struct CinkesToEgg
 {
 	std::shared_ptr<Cinkes::CCollisionObject> m_Cinkes;
 	std::shared_ptr<egg::EggStaticMesh> m_Egg;
 	std::shared_ptr<egg::EggMaterial> m_Material;
-	glm::mat4x4 m_Transform;
+	glm::mat4x4 m_Transform{};
 };
 
 CinkesToEgg CreateObject(const std::shared_ptr<Cinkes::CCollisionWorld>& a_World, const std::shared_ptr<Cinkes::CBoxShape>& a_Shape,
@@ -39,7 +39,7 @@ CinkesToEgg CreateObject(const std::shared_ptr<Cinkes::CCollisionWorld>& a_World
 	egg::Transform meshTransform;
 	meshTransform.Translate({ 2.f, 2.f, 2.f });
 	egg::ShapeCreateInfo shapeInfo;
-	shapeInfo.m_Radius = 1.f;
+	shapeInfo.m_Radius = 0.5f;
 	shapeInfo.m_ShapeType = egg::Shape::CUBE;
 	shapeInfo.m_InitialTransform = meshTransform.GetTransformation();
 	returnValue.m_Egg = a_Renderer->CreateMesh(shapeInfo);
@@ -62,7 +62,7 @@ void HandleInput(egg::Camera& a_Camera, egg::EggRenderer* a_Renderer)
 	//All input logic.
 	auto input = a_Renderer->QueryInput();
 	egg::MouseEvent mEvent;
-	egg::KeyboardEvent kEvent;
+	
 	while (input.GetNextEvent(mEvent))
 	{
 		constexpr float mouseDivider = 400.f;
@@ -174,20 +174,37 @@ int main()
 		objects[3].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(20, 20, 20));
 		objects[3].m_Transform = cubeTransform.GetTransformation();
 
-		cubeTransform.SetTranslation({ 20.4,20.4,20.4 });
-		objects[4].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(20.4f, 20.4f, 20.4f));
+		cubeTransform.SetTranslation({ 20.f, 20.5f, 20.f });
+		objects[4].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(20.f, 20.5f, 20.f));
 		objects[4].m_Transform = cubeTransform.GetTransformation();
 
 		collisionWorld->RunCollision(1);
-		for (auto& object : collisionWorld->getContacts())
+		std::vector<std::shared_ptr<Cinkes::CContactInfo>> narrow;
+		std::vector<std::shared_ptr<Cinkes::CBroadContactInfo>> broad;
+		collisionWorld->getContacts(narrow, broad);
+
+		for(auto& current : objects)
+		{
+			for (auto& broad1 : broad)
+			{
+				for(auto& element : broad1->m_Objects)
+				{
+					if (current.m_Cinkes.get() == element.get()) { current.m_Material = hitmaterial; break; }
+				}
+			}
+		}
+
+		for (auto& object : narrow)
 		{
 			for (auto& current : objects)
 			{
-				if(current.m_Cinkes == object->m_First || current.m_Cinkes == object->m_Second)
+				if(current.m_Cinkes.get() == object->m_First.get() || current.m_Cinkes.get() == object->m_Second.get())
 				{
-						current.m_Material = narrowmaterial;
+					current.m_Material = narrowmaterial;
+					//std::cout << "Current collision normal: ";
+					//std::cout << object->m_Normal.getX() << object->m_Normal.getY() << object->m_Normal.getZ();
 				}
-				}
+			}
 		}
 		
 		//LOOP

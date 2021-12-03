@@ -43,7 +43,11 @@ namespace Cinkes
 		//}
 
 		//Subgroup: Collision test {
-		std::vector<std::shared_ptr<CContactInfo>>& getContacts() { return m_Contacts; }
+		void getContacts(std::vector<std::shared_ptr<CContactInfo>>& a_Narrow, std::vector<std::shared_ptr<CBroadContactInfo>>& a_Broad)
+		{
+			a_Narrow = m_Contacts;
+			a_Broad = m_BVH->m_Contacts;
+		}
 		void RunCollision(CScalar a_T);
 		//}
 

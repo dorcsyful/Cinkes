@@ -115,7 +115,7 @@ void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, std::shared_ptr<CContactInfo> a_C
 
 	if(a_Simplex.Size() == 2)
 	{
-		a_Simplex.Push_Back(CVector3());
+		a_Simplex.Push_Front(CVector3());
 		vector = d.Cross(axis);
 		CMat3x3 rotation = CMat3x3(d, static_cast<CScalar>(M_PI * 0.3));
 
@@ -129,7 +129,7 @@ void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, std::shared_ptr<CContactInfo> a_C
 
 	if(a_Simplex.Size() == 3)
 	{
-		a_Simplex.Push_Back(CVector3());
+		a_Simplex.Push_Front(CVector3());
 		CVector3 v1 = a_Simplex[1] - a_Simplex[0];
 		CVector3 v2 = a_Simplex[2] - a_Simplex[0];
 		vector = v1.Cross(v2);

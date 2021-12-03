@@ -16,7 +16,7 @@ namespace Cinkes
 		std::shared_ptr<CCollisionObject> m_First;
 		std::shared_ptr<CCollisionObject> m_Second;
 		CVector3 m_Normal;
-		CScalar m_PenetrationDepth;
+		CScalar m_PenetrationDepth{};
 	};
 }
 
