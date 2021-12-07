@@ -201,8 +201,8 @@ int main()
 				if(current.m_Cinkes.get() == object->m_First.get() || current.m_Cinkes.get() == object->m_Second.get())
 				{
 					current.m_Material = narrowmaterial;
-					//std::cout << "Current collision normal: ";
-					//std::cout << object->m_Normal.getX() << object->m_Normal.getY() << object->m_Normal.getZ();
+					std::cout << "Current collision normal: ";
+					std::cout << object->m_Normal.getX() << " " << object->m_Normal.getY() << " " << object->m_Normal.getZ() << "\n";
 				}
 			}
 		}

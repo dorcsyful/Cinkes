@@ -244,10 +244,11 @@ CScalar Cinkes::CVector3::Length()
 void Cinkes::CVector3::Normalize()
 {
 	CScalar length = Length();
-	
-	m_Values[0] /= length;
-	m_Values[1] /= length;
-	m_Values[2] /= length;
+	if (length != CScalar(0)) {
+		m_Values[0] /= length;
+		m_Values[1] /= length;
+		m_Values[2] /= length;
+	}
 }
 
 CScalar Cinkes::CVector3::Dot(const CVector3 & a_Rhs)

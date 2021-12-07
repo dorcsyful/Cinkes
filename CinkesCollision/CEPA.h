@@ -33,10 +33,10 @@ namespace Cinkes
 
 		void Run(std::shared_ptr<CContactInfo> a_Contact, CSimplex& a_Simplex);
 		void Algorithm(std::shared_ptr<CContactInfo> a_Contact, const CSimplex& a_Simplex);
-		void BlowUp(CSimplex& a_Simplex, std::shared_ptr<CContactInfo> a_Contact);
+		void BlowUp(CSimplex& a_Simplex, const std::shared_ptr<CContactInfo>& a_Contact);
 		CVector3 CSOSupport(const CContactInfo* a_Contact, const CVector3& a_Dir);
 		CVector3 SmallestAxis(const CVector3& a_Vector3);
 		std::pair<std::vector<CFaceData>, unsigned> GetFaceNormals(const std::vector<CVector3>& a_Polytope, const std::vector<unsigned>& a_Faces);
-		void AddUniqueEdge(std::vector<std::pair<unsigned, unsigned>>& a_Edges, const std::vector<unsigned> a_Faces, unsigned a_A, unsigned a_B);
+		void AddUniqueEdge(std::vector<std::pair<unsigned, unsigned>>& a_Edges, const std::vector<unsigned>& a_Faces, unsigned a_A, unsigned a_B);
 	};
 }

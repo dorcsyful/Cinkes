@@ -29,27 +29,33 @@ void Cinkes::CEPA::Algorithm(std::shared_ptr<CContactInfo> a_Contact, const CSim
 		1,3,2
 	};
 
-	std::pair<std::vector<CFaceData>, unsigned> normals = GetFaceNormals(polytope, faces);
+	std::pair<std::vector<CFaceData>, unsigned> temp = GetFaceNormals(polytope, faces);
+
+	std::vector<CFaceData>& normals = temp.first;
+	unsigned minFace = temp.second;
 
 	CVector3 minNormal;
 	CScalar minDistance = std::numeric_limits<CScalar>::max();
+
 	while(minDistance == std::numeric_limits<CScalar>::max())  // NOLINT(clang-diagnostic-float-equal)
 	{
-		minNormal = normals.first[normals.second].m_Normal;
-		minDistance = normals.first[normals.second].m_Distance;
+		minNormal = normals[minFace].m_Normal;
+		minDistance = normals[minFace].m_Distance;
 
 		CVector3 support = a_Contact->m_First->GetCollisionShape()->Support(minNormal, a_Contact->m_First->GetTransform().getOrigin()) -
-				a_Contact->m_Second->GetCollisionShape()->Support(minNormal, a_Contact->m_Second->GetTransform().getOrigin());
+				a_Contact->m_Second->GetCollisionShape()->Support(minNormal * (-1), a_Contact->m_Second->GetTransform().getOrigin());
+
 		CScalar distance = minNormal.Dot(support);
+
 		if(CUtils::Abs(distance - minDistance) > static_cast<CScalar>(0.001))
 		{
 			minDistance = std::numeric_limits<CScalar>::max();
 
 			std::vector<std::pair<unsigned, unsigned>> unique;
 
-			for(unsigned i = 0; i < normals.first.size(); i++)
+			for(unsigned i = 0; i < normals.size(); i++)
 			{
-				if(normals.first[i].m_Normal.Dot(support) > 0)
+				if(normals[i].m_Normal.Dot(support) > 0)
 				{
 					unsigned face = i * 3;
 
@@ -57,41 +63,41 @@ void Cinkes::CEPA::Algorithm(std::shared_ptr<CContactInfo> a_Contact, const CSim
 					AddUniqueEdge(unique, faces, face + 1, face + 2);
 					AddUniqueEdge(unique, faces, face + 2, face);
 
-					faces[face + 2] = faces.back(); faces.pop_back();
-					faces[face + 1] = faces.back(); faces.pop_back();
+					faces[2 + face] = faces.back(); faces.pop_back();
+					faces[1 + face] = faces.back(); faces.pop_back();
 					faces[face] = faces.back(); faces.pop_back();
 
-					normals.first[i] = normals.first.back(); normals.first.pop_back();
+					normals[i] = normals.back(); normals.pop_back();
 
 					i--;
 				}
 			}
 			std::vector<unsigned> newFaces;
-			for (auto& i : unique)
+			for (const auto& i : unique)
 			{
 				newFaces.push_back(i.first);
-				newFaces.push_back(i.first);
+				newFaces.push_back(i.second);
 				newFaces.push_back(polytope.size());  // NOLINT(clang-diagnostic-shorten-64-to-32)
 			}
 
 			polytope.push_back(support);
 
-			std::pair<std::vector<Cinkes::CFaceData>, unsigned> newNormals = GetFaceNormals(polytope, newFaces);
+			std::pair<std::vector<Cinkes::CFaceData>, unsigned> newStuff = GetFaceNormals(polytope, newFaces);
 
 			CScalar oldMinDistance = std::numeric_limits<CScalar>::max();
-			for (unsigned i = 0; i < newNormals.first.size(); i++) {
-				if (newNormals.first[i].m_Distance < oldMinDistance) {
-					oldMinDistance = newNormals.first[i].m_Distance;
-					normals.second = i;
+			for (unsigned i = 0; i < normals.size(); i++) {
+				if (normals[i].m_Distance < oldMinDistance) {
+					oldMinDistance = normals[i].m_Distance;
+					minFace = i;
 				}
 			}
 
-			if (newNormals.first[newNormals.second].m_Distance < oldMinDistance) {
-				normals.second = newNormals.second + normals.first.size();  // NOLINT(clang-diagnostic-shorten-64-to-32)
+			if (newStuff.first[newStuff.second].m_Distance < oldMinDistance) {
+				minFace = newStuff.second + normals.size();  // NOLINT(clang-diagnostic-shorten-64-to-32)
 			}
 
 			faces.insert(faces.end(), newFaces.begin(), newFaces.end());
-			normals.first.insert(normals.first.end(), newNormals.first.begin(), newNormals.first.end());
+			normals.insert(normals.end(), newStuff.first.begin(), newStuff.first.end());
 		}
 	}
 
@@ -99,7 +105,7 @@ void Cinkes::CEPA::Algorithm(std::shared_ptr<CContactInfo> a_Contact, const CSim
 	a_Contact->m_PenetrationDepth = minDistance + 0.001f;
 }
 
-void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, std::shared_ptr<CContactInfo> a_Contact)
+void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, const std::shared_ptr<CContactInfo>& a_Contact)
 {
 	CVector3 d = a_Simplex[1] - a_Simplex[0];
 	CVector3 axis = SmallestAxis(d);
@@ -190,11 +196,11 @@ std::pair<std::vector<Cinkes::CFaceData>, unsigned> Cinkes::CEPA::GetFaceNormals
 
 	for(unsigned i = 0; i < a_Faces.size(); i += 3)
 	{
-		CVector3 a = a_Polytope[static_cast<int>(a_Faces[i])];
-		CVector3 b = a_Polytope[static_cast<int>(a_Faces[i + 1])];
-		CVector3 c = a_Polytope[static_cast<int>(a_Faces[i + 2])];
+		CVector3 a = a_Polytope[a_Faces[i]];
+		CVector3 b = a_Polytope[a_Faces[1 + i]];
+		CVector3 c = a_Polytope[a_Faces[2 + i]];
 
-		CVector3 normal = CVector3((b - a).Cross(c - a));
+		CVector3 normal = CVector3( (b - a).Cross(c - a) );
 		normal.Normalize();
 		CScalar distance = normal.Dot(a);
 		if(distance < 0)
@@ -214,10 +220,11 @@ std::pair<std::vector<Cinkes::CFaceData>, unsigned> Cinkes::CEPA::GetFaceNormals
 	return std::pair<std::vector<CFaceData>, CScalar>(normals,minTriangle);
 }
 
-void Cinkes::CEPA::AddUniqueEdge(std::vector<std::pair<unsigned, unsigned>>& a_Edges, const std::vector<unsigned> a_Faces, unsigned a_A, unsigned a_B)
+void Cinkes::CEPA::AddUniqueEdge(std::vector<std::pair<unsigned, unsigned>>& a_Edges, const std::vector<unsigned>& a_Faces, unsigned a_A, unsigned a_B)
 {
 	//Actual return value: std::vector<std::pair<unsigned, unsigned>>::iterator
-	auto reverse = std::find(a_Edges.begin(), a_Edges.end(), std::make_pair(a_Faces[a_B], a_Faces[a_A]));
+	auto reverse = std::find(a_Edges.begin(), a_Edges.end(),
+		std::make_pair(a_Faces[a_B], a_Faces[a_A]));
 	if(reverse != a_Edges.end())
 	{
 		a_Edges.erase(reverse);
