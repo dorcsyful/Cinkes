@@ -41,6 +41,7 @@ namespace Cinkes
         //Subgroup: Other {
         CVector3 Support(const CVector3& a_V, const CVector3& a_Position) override;
         void CreateAABB(CVector3& a_Min, CVector3& a_Max) override;
+        std::vector<CVector3> SupportPointsForContact(const CVector3& a_Direction, const CVector3& a_Position) override;
         //}
 
     private:

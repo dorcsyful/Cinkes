@@ -14,3 +14,8 @@ void Cinkes::CCapsuleShape::CreateAABB(CVector3& a_Min, CVector3& a_Max)
     a_Min = CVector3(m_Radius * (-1), m_Radius * (-1), m_Height * (-1) - m_Radius);
     a_Max = CVector3(m_Radius, m_Height, m_Height + m_Radius);
 }
+
+std::vector<Cinkes::CVector3> Cinkes::CCapsuleShape::SupportPointsForContact(const CVector3& a_Direction, const CVector3& a_Position)
+{
+    return std::vector<CVector3>();
+}

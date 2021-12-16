@@ -1,8 +1,12 @@
 #pragma once
+#include <vector>
+
 #include "../CinkesMath/CVector3.h"
 
 namespace Cinkes
 {
+	class CTransform;
+
 	enum class ESHAPE_TYPE
 	{
 		SHAPE_NO_TYPE,
@@ -37,6 +41,7 @@ namespace Cinkes
 		virtual ESHAPE_TYPE GetType() const { return m_Type; }
 		virtual CVector3 Support(const CVector3& a_V, const CVector3& a_Position) = 0;
 		virtual void CreateAABB(CVector3& a_Min, CVector3& a_Max) = 0;
+		virtual std::vector<CVector3> SupportPointsForContact(const CVector3& a_Direction, const CVector3& a_Position) = 0;
 		//}
 
 	private:

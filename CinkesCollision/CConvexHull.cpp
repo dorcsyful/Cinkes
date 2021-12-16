@@ -80,3 +80,8 @@ Cinkes::CVector3 Cinkes::CConvexHull::Support(const CVector3& a_V, const CVector
 
 	return base->m_Position;
 }
+
+std::vector<Cinkes::CVector3> Cinkes::CConvexHull::SupportPointsForContact(const CVector3& a_Direction, const CVector3& a_Position)
+{
+	return std::vector<CVector3>();
+}

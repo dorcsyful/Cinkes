@@ -105,7 +105,7 @@ int main()
 	using namespace egg;
 
 	std::shared_ptr<Cinkes::CBoxShape> collisionShape = std::make_shared<Cinkes::CBoxShape>();
-	collisionShape->SetDimensions(1.f, 1.f, 1.f);
+	collisionShape->SetDimensions(0.5f, 0.5f, 0.5f);
 	std::shared_ptr collisionWorld = std::make_unique<Cinkes::CCollisionWorld>();
 
 
@@ -158,25 +158,13 @@ int main()
 
 		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
 		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
-		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
-		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
-		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
 
-		cubeTransform.SetTranslation({ 10, 10, 10 });
+
+		cubeTransform.SetTranslation({ 1.5, 2, 1.5 });
 		objects[1].m_Transform = cubeTransform.GetTransformation();
-		objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(10, 10, 10));
+		objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(1.5, 2, 2));
 
-		cubeTransform.SetTranslation({ 3.5,3.5,3.5 });
-		objects[2].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(3.5, 3.5, 3.5));
-		objects[2].m_Transform = cubeTransform.GetTransformation();
 
-		cubeTransform.SetTranslation({ 20,20,20 });
-		objects[3].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(20, 20, 20));
-		objects[3].m_Transform = cubeTransform.GetTransformation();
-
-		cubeTransform.SetTranslation({ 20.f, 20.5f, 20.f });
-		objects[4].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(20.f, 20.5f, 20.f));
-		objects[4].m_Transform = cubeTransform.GetTransformation();
 
 		collisionWorld->RunCollision(1);
 		std::vector<std::shared_ptr<Cinkes::CContactInfo>> narrow;
@@ -203,6 +191,11 @@ int main()
 					current.m_Material = narrowmaterial;
 					std::cout << "Current collision normal: ";
 					std::cout << object->m_Normal.getX() << " " << object->m_Normal.getY() << " " << object->m_Normal.getZ() << "\n";
+					std::cout << "Current contact points: ";
+					for (auto& points : object->m_ContactPoints)
+					{
+						std::cout << points.getX() << " " << points.getY() << " " << points.getZ() << "\n";
+					}
 				}
 			}
 		}

@@ -73,3 +73,8 @@ void Cinkes::CConeShape::CreateAABB(CVector3& a_Min, CVector3& a_Max)
 	a_Min = CVector3(m_Radius * (-1), m_Radius * (-1), m_Height * (-1));
 	a_Max = CVector3(m_Radius, m_Height, m_Height);
 }
+
+std::vector<Cinkes::CVector3> Cinkes::CConeShape::SupportPointsForContact(const CVector3& a_Direction, const CVector3& a_Position)
+{
+	return std::vector<CVector3>();
+}

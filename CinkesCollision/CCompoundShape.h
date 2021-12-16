@@ -30,6 +30,7 @@ namespace Cinkes
 		std::vector<std::shared_ptr<CCollisionShape>> GetAllShapesOfType(ESHAPE_TYPE a_Type);
 		std::vector<std::shared_ptr<CCollisionShape>> GetAllShapes();
 		std::vector<CVector3> GetAllPositions();
+    	std::vector<CVector3> SupportPointsForContact(const CVector3& a_Direction, const CVector3& a_Position) override;
 		//}
 
     private:

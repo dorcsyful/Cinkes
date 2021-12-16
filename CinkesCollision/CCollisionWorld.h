@@ -5,8 +5,11 @@
 #include "CGJKAlgorithm.h"
 #include "CEPA.h"
 #include "../CinkesMath/CScalar.h"
+#include "CContactPointCalculator.h"
+
 namespace Cinkes
 {
+	class CContactPointCalculator;
 	struct CContactInfo;
 	class CBVH;
 	class CCollisionObject;
@@ -60,6 +63,7 @@ namespace Cinkes
 		std::unique_ptr<CBVH> m_BVH;
 		std::unique_ptr<CGJKAlgorithm> m_GJK;
 		std::unique_ptr<CEPA> m_CEPA;
+		std::unique_ptr<CContactPointCalculator> m_ContactPointCalculator;
 		//}
 	};
 

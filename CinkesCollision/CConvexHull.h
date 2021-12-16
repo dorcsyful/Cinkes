@@ -26,6 +26,7 @@ namespace Cinkes
 		//Subgroup: Other {
 		void BuildHull(const std::vector<float>& a_Vertices, const std::vector<unsigned int>& a_Indices, const std::vector<int>& a_Triangles);
 		CVector3 Support(const CVector3& a_V, const CVector3& a_Position) override;
+		std::vector<CVector3> SupportPointsForContact(const CVector3& a_Direction, const CVector3& a_Position) override;
 		//}
 	private:
 		std::map<unsigned int, std::shared_ptr<CVertex>> m_Vertices;
