@@ -15,9 +15,11 @@ void Cinkes::CContactPointCalculator::RunForAllContacts(std::vector<CContactInfo
 
 void Cinkes::CContactPointCalculator::GetPoints(CContactInfo& a_Contact)
 {
-	std::vector<CVector3> verticesA = a_Contact.m_First->GetCollisionShape()->SupportPointsForContact(a_Contact.m_Normal,a_Contact.m_First->GetTransform().getOrigin());
-	std::vector<CVector3> verticesB = a_Contact.m_Second->GetCollisionShape()->SupportPointsForContact(a_Contact.m_Normal * -1, a_Contact.m_Second->GetTransform().getOrigin());
-
+	std::vector<CVector3> verticesA = a_Contact.m_First->GetCollisionShape()->SupportPointsForContact(
+		a_Contact.m_Normal, a_Contact.m_First->GetTransform());
+	std::vector<CVector3> verticesB = a_Contact.m_Second->GetCollisionShape()->SupportPointsForContact(
+		a_Contact.m_Normal * -1, a_Contact.m_Second->GetTransform());
+	ContactEdgeEdge(verticesA, verticesB, a_Contact);
 
 }
 

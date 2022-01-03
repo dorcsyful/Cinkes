@@ -7,6 +7,8 @@
 #include "Egg/InputQueue.h"
 
 #include "../CinkesMath/CVector3.h"
+#include "../CinkesMath/CQuaternion.h"
+#include "../CinkesMath/CMat3x3.h"
 #include "../CinkesCollision/CCollisionWorld.h"
 #include "../CinkesCollision/CCollisionShape.h"
 #include "../CinkesCollision/CBoxShape.h"
@@ -39,7 +41,7 @@ CinkesToEgg CreateObject(const std::shared_ptr<Cinkes::CCollisionWorld>& a_World
 	egg::Transform meshTransform;
 	meshTransform.Translate({ 2.f, 2.f, 2.f });
 	egg::ShapeCreateInfo shapeInfo;
-	shapeInfo.m_Radius = 0.5f;
+	shapeInfo.m_Radius = 1.f;
 	shapeInfo.m_ShapeType = egg::Shape::CUBE;
 	shapeInfo.m_InitialTransform = meshTransform.GetTransformation();
 	returnValue.m_Egg = a_Renderer->CreateMesh(shapeInfo);
@@ -160,9 +162,12 @@ int main()
 		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
 
 
-		cubeTransform.SetTranslation({ 1.5, 2, 1.5 });
+		cubeTransform.SetTranslation({ 2, 1.1, 2 });
+		//cubeTransform.SetRotation({  -0.9589243, 0, 0.2836622, 0 });
 		objects[1].m_Transform = cubeTransform.GetTransformation();
-		objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(1.5, 2, 2));
+		objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(2.f, 1.1f, 2));
+		//auto mat = Cinkes::CMat3x3(Cinkes::CVector3(0, -1, 0), 2.5663706);
+		//objects[1].m_Cinkes->GetTransform().setBasis(mat);
 
 
 

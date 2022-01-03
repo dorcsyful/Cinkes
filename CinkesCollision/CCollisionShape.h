@@ -39,9 +39,9 @@ namespace Cinkes
 
 		//Subgroup: Other {
 		virtual ESHAPE_TYPE GetType() const { return m_Type; }
-		virtual CVector3 Support(const CVector3& a_V, const CVector3& a_Position) = 0;
+		virtual CVector3 Support(const CVector3& a_V, const CTransform& a_Position) = 0;
 		virtual void CreateAABB(CVector3& a_Min, CVector3& a_Max) = 0;
-		virtual std::vector<CVector3> SupportPointsForContact(const CVector3& a_Direction, const CVector3& a_Position) = 0;
+		virtual std::vector<CVector3> SupportPointsForContact(const CVector3& a_Direction, const CTransform& a_Position) = 0;
 		//}
 
 	private:

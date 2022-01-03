@@ -29,8 +29,8 @@ namespace Cinkes
 		void SetDimensions(const CVector3& a_Dimensions) { m_Dimensions = a_Dimensions; };
 		void SetDimensions(const CScalar& a_X, const CScalar& a_Y, const CScalar& a_Z) { m_Dimensions = CVector3(a_X, a_Y, a_Z); };
 
-		CVector3 Support(const CVector3& a_V, const CVector3& a_Position) override;
-		std::vector<CVector3> SupportPointsForContact(const CVector3& a_Direction, const CVector3& a_Position) override;
+		CVector3 Support(const CVector3& a_V, const CTransform& a_Position) override;
+		std::vector<CVector3> SupportPointsForContact(const CVector3& a_Direction, const CTransform& a_Position) override;
 		void CreateAABB(CVector3& a_Min, CVector3& a_Max) override;
 
 	private:

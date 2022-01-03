@@ -42,8 +42,8 @@ void Cinkes::CEPA::Algorithm(std::shared_ptr<CContactInfo> a_Contact, const CSim
 		minNormal = normals[minFace].m_Normal;
 		minDistance = normals[minFace].m_Distance;
 
-		CVector3 support = a_Contact->m_First->GetCollisionShape()->Support(minNormal, a_Contact->m_First->GetTransform().getOrigin()) -
-				a_Contact->m_Second->GetCollisionShape()->Support(minNormal * (-1), a_Contact->m_Second->GetTransform().getOrigin());
+		CVector3 support = a_Contact->m_First->GetCollisionShape()->Support(minNormal, a_Contact->m_First->GetTransform()) -
+				a_Contact->m_Second->GetCollisionShape()->Support(minNormal * (-1), a_Contact->m_Second->GetTransform());
 
 		CScalar distance = minNormal.Dot(support);
 
@@ -156,8 +156,8 @@ Cinkes::CVector3 Cinkes::CEPA::CSOSupport(const CContactInfo* a_Contact, const C
 	CVector3 localA = a_Contact->m_First->GetTransform().getBasis().GetInverse() * dir;
 	CVector3 localB = a_Contact->m_Second->GetTransform().getBasis().GetInverse() * dir;
 
-	CVector3 supportA = a_Contact->m_First->GetCollisionShape()->Support(localA, CVector3(0, 0, 0));
-	CVector3 supportB = a_Contact->m_Second->GetCollisionShape()->Support(localB, CVector3(0, 0, 0));
+	CVector3 supportA = a_Contact->m_First->GetCollisionShape()->Support(localA, CTransform());
+	CVector3 supportB = a_Contact->m_Second->GetCollisionShape()->Support(localB, CTransform());
 
 	supportA = a_Contact->m_First->GetTransform().getBasis() * supportA + a_Contact->m_First->GetTransform().getOrigin();
 	supportB = a_Contact->m_Second->GetTransform().getBasis() * supportB + a_Contact->m_Second->GetTransform().getOrigin();

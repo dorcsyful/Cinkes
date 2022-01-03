@@ -1,5 +1,4 @@
 #include "CGJKAlgorithm.h"
-
 #include "CCollisionObject.h"
 #include "CCollisionShape.h"
 #include "CSimplex.h"
@@ -7,8 +6,8 @@
 
 bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObject* a_Object2, CSimplex& a_Simplex)
 {
-    CVector3 support = (a_Object1->GetCollisionShape()->Support(CVector3(1, 0, 0),a_Object1->GetTransform().getOrigin())) -
-        (a_Object2->GetCollisionShape()->Support(CVector3(-1, 0, 0),a_Object2->GetTransform().getOrigin()));
+    CVector3 support = (a_Object1->GetCollisionShape()->Support(CVector3(1, 0, 0),a_Object1->GetTransform())) -
+        (a_Object2->GetCollisionShape()->Support(CVector3(-1, 0, 0),a_Object2->GetTransform()));
 
     CSimplex simplex;
     simplex.Push_Front(support);
@@ -18,9 +17,10 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
     while(true)
     {
         next.Normalize();
-        support = a_Object1->GetCollisionShape()->Support(next, a_Object1->GetTransform().getOrigin()) -
-              a_Object2->GetCollisionShape()->Support(next * -1, a_Object2->GetTransform().getOrigin());
-        if(support.Dot(next) <= 0)
+        support = a_Object1->GetCollisionShape()->Support(next, a_Object1->GetTransform()) -
+              a_Object2->GetCollisionShape()->Support(next * (-1), a_Object2->GetTransform());
+
+    	if(support.Dot(next) <= 0)
         {
             a_Simplex = simplex;
 	        return false;
@@ -87,14 +87,16 @@ bool Cinkes::CGJKAlgorithm::Triangle(CSimplex& a_Simplex, CVector3& a_Direction)
 	    }
         else
         {
-            return Line(a_Simplex = { a,b }, a_Direction);
+            a_Simplex = { a,b };
+            return Line(a_Simplex, a_Direction);
         }
     }
     else
     {
         if (SameDirection(ab.Cross(abc), ao))
         {
-            return Line(a_Simplex = { a,b }, a_Direction);
+            a_Simplex = { a,b };
+            return Line(a_Simplex, a_Direction);
         }
         else
         {
@@ -128,15 +130,18 @@ bool Cinkes::CGJKAlgorithm::Tetrahedron(CSimplex& a_Simplex, CVector3& a_Directi
 
     if(SameDirection(abc, ao))
     {
-        return Triangle(a_Simplex = { a,b,c }, a_Direction);
+        a_Simplex = { a,b,c };
+        return Triangle(a_Simplex, a_Direction);
     }
     if(SameDirection(acd, ao))
     {
-        return Triangle(a_Simplex = { a,c,d }, a_Direction);
+        a_Simplex = { a,c,d };
+        return Triangle(a_Simplex, a_Direction);
     }
     if(SameDirection(adb, ao))
     {
-        return Triangle(a_Simplex = { a,d,b }, a_Direction);
+        a_Simplex = { a,d,b };
+        return Triangle(a_Simplex, a_Direction);
     }
     return true;
 }

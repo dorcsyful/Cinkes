@@ -120,7 +120,7 @@ std::vector<Cinkes::CVector3> Cinkes::CCompoundShape::GetAllPositions()
 	return positions;
 }
 
-std::vector<Cinkes::CVector3> Cinkes::CCompoundShape::SupportPointsForContact(const CVector3& a_Direction, const CVector3& a_Position)
+std::vector<Cinkes::CVector3> Cinkes::CCompoundShape::SupportPointsForContact(const CVector3& a_Direction, const CTransform& a_Position)
 {
 	return std::vector<CVector3>();
 }

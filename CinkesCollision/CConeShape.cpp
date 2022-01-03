@@ -1,5 +1,7 @@
 #include "CConeShape.h"
 
+#include "../CinkesMath/CTransform.h"
+
 Cinkes::CConeShape::CConeShape(CScalar a_Radius, CScalar a_Height)
 {
 	m_Height = a_Height;
@@ -54,17 +56,18 @@ void Cinkes::CConeShape::setHeight(CScalar a_New)
 	m_SinOfAngle = CUtils::Sin(m_Height / hypotenuse);
 }
 
-Cinkes::CVector3 Cinkes::CConeShape::Support(const CVector3& a_V, const CVector3& a_Position)
+Cinkes::CVector3 Cinkes::CConeShape::Support(const CVector3& a_V, const CTransform& a_Position)
 {
-	CVector3 temp = CVector3(a_V[0], a_V[1], 0);
+	CVector3 dir = a_Position.getBasis() * a_V;
+	CVector3 temp = CVector3(dir[0], dir[1], 0);
 	CVector3 result = (temp / temp.Length()) * m_Radius;
 	CVector3 temp2 = CVector3(0, 0, m_Height);
-	if(result.Dot(a_V) > temp2.Dot(a_V))
+	if(result.Dot(dir) > temp2.Dot(dir))
 	{
-		return a_Position + result;
+		return a_Position.getOrigin() + result;
 	} else
 	{
-		return a_Position + temp2;
+		return a_Position.getOrigin() + temp2;
 	}
 }
 
@@ -74,7 +77,7 @@ void Cinkes::CConeShape::CreateAABB(CVector3& a_Min, CVector3& a_Max)
 	a_Max = CVector3(m_Radius, m_Height, m_Height);
 }
 
-std::vector<Cinkes::CVector3> Cinkes::CConeShape::SupportPointsForContact(const CVector3& a_Direction, const CVector3& a_Position)
+std::vector<Cinkes::CVector3> Cinkes::CConeShape::SupportPointsForContact(const CVector3& a_Direction, const CTransform& a_Position)
 {
 	return std::vector<CVector3>();
 }

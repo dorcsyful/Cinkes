@@ -4,6 +4,8 @@
 #include <map>
 #include <algorithm>
 
+#include "../CinkesMath/CTransform.h"
+
 
 Cinkes::CConvexHull::~CConvexHull()
 {
@@ -61,8 +63,9 @@ void Cinkes::CConvexHull::BuildHull(const std::vector<float>& a_Vertices, const 
 	}
 }
 
-Cinkes::CVector3 Cinkes::CConvexHull::Support(const CVector3& a_V, const CVector3& a_Position)
+Cinkes::CVector3 Cinkes::CConvexHull::Support(const CVector3& a_V, const CTransform& a_Position)
 {
+	CVector3 dir = a_Position.getBasis() * a_V;
 	CVertex* base = m_Vertices[0].get();
 	bool best = false;
 	while(!best)
@@ -70,7 +73,7 @@ Cinkes::CVector3 Cinkes::CConvexHull::Support(const CVector3& a_V, const CVector
 		best = true;
 		for(auto current : base->m_Adjacent)
 		{
-			if(m_Vertices[current]->m_Position.Dot(a_V) > base->m_Position.Dot(a_V))
+			if(m_Vertices[current]->m_Position.Dot(dir) > base->m_Position.Dot(dir))
 			{
 				best = false;
 				base = m_Vertices[current].get();
@@ -81,7 +84,7 @@ Cinkes::CVector3 Cinkes::CConvexHull::Support(const CVector3& a_V, const CVector
 	return base->m_Position;
 }
 
-std::vector<Cinkes::CVector3> Cinkes::CConvexHull::SupportPointsForContact(const CVector3& a_Direction, const CVector3& a_Position)
+std::vector<Cinkes::CVector3> Cinkes::CConvexHull::SupportPointsForContact(const CVector3& a_Direction, const CTransform& a_Position)
 {
 	return std::vector<CVector3>();
 }
