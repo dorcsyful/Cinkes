@@ -42,7 +42,7 @@ CinkesToEgg CreateObject(const std::shared_ptr<Cinkes::CCollisionWorld>& a_World
 	egg::ShapeCreateInfo shapeInfo;
 	shapeInfo.m_Radius = 1.f;
 	shapeInfo.m_ShapeType = egg::Shape::CUBE;
-	shapeInfo.m_InitialTransform = meshTransform.GetTransformation();
+	//shapeInfo.m_InitialTransform = meshTransform.GetTransformation();
 	returnValue.m_Egg = a_Renderer->CreateMesh(shapeInfo);
 
 	returnValue.m_Material = a_Material;
@@ -53,7 +53,7 @@ CinkesToEgg CreateObject(const std::shared_ptr<Cinkes::CCollisionWorld>& a_World
 	return returnValue;
 }
 
-void HandleInput(egg::Camera& a_Camera, egg::EggRenderer* a_Renderer)
+bool HandleInput(egg::Camera& a_Camera, egg::EggRenderer* a_Renderer, Cinkes::CVector3& a_CameraRotation)
 {
 	//All input logic.
 	auto input = a_Renderer->QueryInput();
@@ -61,24 +61,48 @@ void HandleInput(egg::Camera& a_Camera, egg::EggRenderer* a_Renderer)
 	
 	while (input.GetNextEvent(mEvent))
 	{
-		constexpr float mouseDivider = 400.f;
+		constexpr float mouseDivider = 20.f;
 		if (mEvent.action == egg::MouseAction::SCROLL)
 		{
 
 		}
 		else if (mEvent.action == egg::MouseAction::MOVE_X)
 		{
-			a_Camera.GetTransform().Rotate(egg::Transform::GetWorldUp(), static_cast<float>(mEvent.value) / -mouseDivider);
+			auto value = static_cast<float>(mEvent.value) / -mouseDivider;
+			value = a_CameraRotation.getY() + value;
+			value -= ((int)value / 360) * 360;
+			a_CameraRotation.setY(value);
 		}
 		else if (mEvent.action == egg::MouseAction::MOVE_Y)
 		{
-			a_Camera.GetTransform().Rotate(a_Camera.GetTransform().GetRight(), static_cast<float>(mEvent.value) / -mouseDivider);
+			auto value = static_cast<float>(mEvent.value) / -mouseDivider;
+			value = a_CameraRotation.getX() + value;
+			if(value > 179)
+			{
+				value = 179;
+			}
+			else if (value < 1) value = 1;
+			a_CameraRotation.setX(value);
 		}
 		else if (mEvent.action == egg::MouseAction::CLICK)
 		{
 			std::string mbutton = (mEvent.button == egg::MouseButton::MMB ? "MMB" : mEvent.button == egg::MouseButton::RMB ? "RMB" : "LMB");
 			printf("Mouse button clicked: %s.\n", mbutton.c_str());
 		}
+
+		//Update the camera rotation.
+		a_Camera.GetTransform().SetRotation(a_Camera.GetTransform().GetUp(), 0.f);
+		a_Camera.GetTransform().Rotate(a_Camera.GetTransform().GetUp(), a_CameraRotation.getY() * (3.141592f / 180.f));
+		a_Camera.GetTransform().Rotate(a_Camera.GetTransform().GetRight(), (-3.141592f / 2.f) + a_CameraRotation.getX() * (3.141592f / 180.f));
+	}
+
+	egg::KeyboardEvent kEvent;
+	while(input.GetNextEvent(kEvent))
+	{
+	    if(kEvent.keyCode == EGG_KEY_ESCAPE)
+	    {
+			return false;
+	    }
 	}
 
 	constexpr float movementSpeed = 0.01f;
@@ -94,10 +118,13 @@ void HandleInput(egg::Camera& a_Camera, egg::EggRenderer* a_Renderer)
 	if (backwardState != egg::ButtonState::NOT_PRESSED) a_Camera.GetTransform().Translate(a_Camera.GetTransform().GetBack() * -movementSpeed);
 	if (upState != egg::ButtonState::NOT_PRESSED) a_Camera.GetTransform().Translate(a_Camera.GetTransform().GetWorldUp() * movementSpeed);
 	if (downState != egg::ButtonState::NOT_PRESSED) a_Camera.GetTransform().Translate(a_Camera.GetTransform().GetWorldDown() * movementSpeed);
+
+	return true;
 }
 
 int main()
 {
+	using namespace Cinkes;
 	using namespace egg;
 
 	std::shared_ptr<Cinkes::CBoxShape> collisionShape = std::make_shared<Cinkes::CBoxShape>();
@@ -117,6 +144,8 @@ int main()
 	auto renderer = EggRenderer::CreateInstance(settings);
 	Camera camera;
 	camera.UpdateProjection(70.f, 0.1f, 600.f, static_cast<float>(settings.resolutionX) / static_cast<float>(settings.resolutionY));
+
+	CVector3 cameraRotation = CVector3(0, 0, 0);
 
 	if (renderer->Init(settings))
 	{
@@ -156,7 +185,7 @@ int main()
 		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
 		glm::quat q = glm::quat(0.732759f, 0.4618481f, 0.1909372f, 0.4618481f);
 		cubeTransform.SetRotation(q);
-		cubeTransform.SetTranslation({ 2.3f, 3, 2 });
+		cubeTransform.SetTranslation({ 2.f, 3, 2 });
 		objects[1].m_Transform = cubeTransform.GetTransformation();
 		objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(2.f, 3.f, 2));
 		auto mat = Cinkes::CMat3x3(Cinkes::CVector3(0.678701, 0.2805885, 0.678701), 1.4968576);
@@ -201,6 +230,9 @@ int main()
 		//LOOP
 		while (run) {
 
+			EggRenderer* renderpointer = renderer.get();
+			run = HandleInput(camera, renderpointer, cameraRotation);
+
 			//All frame drawing logic.
 			auto drawData = renderer->CreateDrawData();
 			MaterialHandle materialHandle;
@@ -235,23 +267,18 @@ int main()
 			drawCallHandles.push_back(drawCallHandle);
 			drawData->AddDeferredShadingDrawPass(drawCallHandles.data(), drawCallHandles.size());
 			drawData->SetCamera(camera);
-			run = renderer->DrawFrame(drawData);
-
-			EggRenderer* renderpointer = renderer.get();
-			HandleInput(camera, renderpointer);
+			run = renderer->DrawFrame(drawData) && run;
 		}
-
-
-
-		if (renderer->CleanUp())
-		{
-			printf("Renderer successfully cleaned up!\n");
-		}
-		else
-		{
-			printf("Could not clean up renderer properly!\n");
-		}
-		return 0;
 	}
+
+	if (renderer->CleanUp())
+	{
+		printf("Renderer successfully cleaned up!\n");
+	}
+	else
+	{
+		printf("Could not clean up renderer properly!\n");
+	}
+	return 0;
 }
 
