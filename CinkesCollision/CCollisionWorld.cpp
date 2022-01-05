@@ -82,7 +82,7 @@ void Cinkes::CCollisionWorld::RunCollision(CScalar a_T)
 				contact->m_Second = element->m_Objects[i + 1];
 				m_CEPA->Run(contact, simplex);
 				m_Contacts.push_back(contact);
-				m_ContactPointCalculator->GetPoints(*m_Contacts[m_Contacts.size() - 1]);
+				m_ContactPointCalculator->GetPoints(m_Contacts[m_Contacts.size() - 1].get());
 			}
 		}
 	}

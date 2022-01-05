@@ -7,7 +7,7 @@
 
 Cinkes::CVector3 Cinkes::CBoxShape::Support(const CVector3& a_V, const CTransform& a_Position)
 {
-	CVector3 dir = a_Position.getBasis() * a_V;
+	CVector3 dir = /*a_Position.getBasis() * */a_V;
 	CVector3 result = a_Position.getOrigin();
 
 	CScalar temp1 = CUtils::Sgn(1, dir[0]) * (m_Dimensions[0]);
@@ -20,7 +20,7 @@ Cinkes::CVector3 Cinkes::CBoxShape::Support(const CVector3& a_V, const CTransfor
 
 std::vector<Cinkes::CVector3> Cinkes::CBoxShape::SupportPointsForContact(const CVector3& a_Direction, const CTransform& a_Position)
 {
-	CVector3 dir = a_Position.getBasis() * a_Direction;
+	CVector3 dir = /*a_Position.getBasis() * */a_Direction;
 	std::vector<CVector3> returns;
 	CVector3 vertices[8];
 	vertices[0] = CVector3(a_Position.getOrigin().getX() - m_Dimensions.getX(), a_Position.getOrigin().getY() - m_Dimensions.getY(), a_Position.getOrigin().getZ() - m_Dimensions.getZ());

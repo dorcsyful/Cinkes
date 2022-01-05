@@ -4,7 +4,7 @@
 #include "../CinkesMath/CVector3.h"
 namespace Cinkes {
 
-    class CSphereShape : CCollisionShape
+    class CSphereShape : public CCollisionShape
     {
     public:
 		//Subgroup: Constructors {

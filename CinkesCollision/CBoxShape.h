@@ -10,7 +10,7 @@ namespace Cinkes
 	{
 	public:
 		//Subgroup: Constructors {
-		CBoxShape() = default;
+		CBoxShape() { m_Type = ESHAPE_TYPE::SHAPE_BOX; }
 		CBoxShape(const CVector3& a_Dimensions) { m_Dimensions = a_Dimensions; }
 		CBoxShape(const CScalar a_X, const CScalar a_Y, const CScalar a_Z) { m_Dimensions = CVector3(a_X, a_Y, a_Z); }
 		~CBoxShape() override = default;
@@ -35,6 +35,6 @@ namespace Cinkes
 
 	private:
 		CVector3 m_Dimensions;
-		ESHAPE_TYPE m_Type = ESHAPE_TYPE::SHAPE_BOX;
+		//ESHAPE_TYPE m_Type = ESHAPE_TYPE::SHAPE_BOX;
 	};
 }

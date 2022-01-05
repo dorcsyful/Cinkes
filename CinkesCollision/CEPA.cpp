@@ -63,8 +63,8 @@ void Cinkes::CEPA::Algorithm(std::shared_ptr<CContactInfo> a_Contact, const CSim
 					AddUniqueEdge(unique, faces, face + 1, face + 2);
 					AddUniqueEdge(unique, faces, face + 2, face);
 
-					faces[2 + face] = faces.back(); faces.pop_back();
-					faces[1 + face] = faces.back(); faces.pop_back();
+					faces[face + 2] = faces.back(); faces.pop_back();
+					faces[face + 1] = faces.back(); faces.pop_back();
 					faces[face] = faces.back(); faces.pop_back();
 
 					normals[i] = normals.back(); normals.pop_back();

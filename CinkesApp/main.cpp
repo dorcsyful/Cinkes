@@ -35,7 +35,6 @@ CinkesToEgg CreateObject(const std::shared_ptr<Cinkes::CCollisionWorld>& a_World
 	collisionObject->SetTransform(cTransform);
 	a_World->AddObject(collisionObject);
 	returnValue.m_Cinkes = collisionObject;
-	returnValue.m_Cinkes->SetTransform(cTransform);
 
 	//Create one cube.
 	egg::Transform meshTransform;
@@ -49,12 +48,7 @@ CinkesToEgg CreateObject(const std::shared_ptr<Cinkes::CCollisionWorld>& a_World
 	returnValue.m_Material = a_Material;
 
 	Cinkes::CMat3x3 mat = collisionObject->GetTransform().getBasis();
-	returnValue.m_Transform = glm::mat4x4(
-		mat[0][0], mat[1][0], mat[2][0],0.f,
-		mat[0][1], mat[1][1], mat[2][1],0.f,
-		mat[0][2], mat[1][2], mat[2][2],0.f,
-		collisionObject->GetTransform().getOrigin().getX(), collisionObject->GetTransform().getOrigin().getY(), 
-		collisionObject->GetTransform().getOrigin().getZ(), 1.f);
+	returnValue.m_Transform = meshTransform.GetTransformation();
 
 	return returnValue;
 }
@@ -160,14 +154,13 @@ int main()
 
 		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
 		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
-
-
-		cubeTransform.SetTranslation({ 2, 1.1, 2 });
-		//cubeTransform.SetRotation({  -0.9589243, 0, 0.2836622, 0 });
+		glm::quat q = glm::quat(0.732759f, 0.4618481f, 0.1909372f, 0.4618481f);
+		cubeTransform.SetRotation(q);
+		cubeTransform.SetTranslation({ 2.3f, 3, 2 });
 		objects[1].m_Transform = cubeTransform.GetTransformation();
-		objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(2.f, 1.1f, 2));
-		//auto mat = Cinkes::CMat3x3(Cinkes::CVector3(0, -1, 0), 2.5663706);
-		//objects[1].m_Cinkes->GetTransform().setBasis(mat);
+		objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(2.f, 3.f, 2));
+		auto mat = Cinkes::CMat3x3(Cinkes::CVector3(0.678701, 0.2805885, 0.678701), 1.4968576);
+		objects[1].m_Cinkes->GetTransform().setBasis(mat);
 
 
 

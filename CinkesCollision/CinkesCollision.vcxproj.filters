@@ -22,6 +22,9 @@
     <Filter Include="Header Files\Algorithms">
       <UniqueIdentifier>{f113b65c-8cce-4890-a5cf-202cf925cf71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Algorithms">
+      <UniqueIdentifier>{cf85888f-115c-4b0f-95a2-4a6cd66015ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCollisionWorld.h">
@@ -69,17 +72,17 @@
     <ClInclude Include="CSimplex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CBVH.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CContactInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CEPA.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="CBVH.h">
+      <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
     <ClInclude Include="CContactPointCalculator.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="CEPA.h">
+      <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -101,9 +104,6 @@
     <ClCompile Include="CCompoundPartialShape.cpp">
       <Filter>Source Files\Shapes</Filter>
     </ClCompile>
-    <ClCompile Include="CGJKAlgorithm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CCapsuleShape.cpp">
       <Filter>Source Files\Shapes</Filter>
     </ClCompile>
@@ -123,16 +123,19 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CBVH.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CSphereShape.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CEPA.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
     <ClCompile Include="CContactPointCalculator.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="CEPA.cpp">
+      <Filter>Source Files\Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="CGJKAlgorithm.cpp">
+      <Filter>Source Files\Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="CSphereShape.cpp">
+      <Filter>Source Files\Shapes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

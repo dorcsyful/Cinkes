@@ -1,85 +1,61 @@
 #include "CContactPointCalculator.h"
-
-#include <algorithm>
-
+#include "CBoxShape.h"
 #include "CCollisionObject.h"
 #include "CCollisionShape.h"
+#include "CSphereShape.h"
 
-void Cinkes::CContactPointCalculator::RunForAllContacts(std::vector<CContactInfo>& a_All)
+
+void Cinkes::CContactPointCalculator::GetPoints(CContactInfo* a_Contact)
 {
-	for (auto& element : a_All)
+	if(a_Contact->m_First->GetCollisionShape()->GetType() == ESHAPE_TYPE::SHAPE_SPHERE &&
+		a_Contact->m_Second->GetCollisionShape()->GetType() == ESHAPE_TYPE::SHAPE_SPHERE)
 	{
-		GetPoints(element);
+		SphereSphere(a_Contact);
 	}
-}
-
-void Cinkes::CContactPointCalculator::GetPoints(CContactInfo& a_Contact)
-{
-	std::vector<CVector3> verticesA = a_Contact.m_First->GetCollisionShape()->SupportPointsForContact(
-		a_Contact.m_Normal, a_Contact.m_First->GetTransform());
-	std::vector<CVector3> verticesB = a_Contact.m_Second->GetCollisionShape()->SupportPointsForContact(
-		a_Contact.m_Normal * -1, a_Contact.m_Second->GetTransform());
-	ContactEdgeEdge(verticesA, verticesB, a_Contact);
-
-}
-
-Cinkes::CVector3 Cinkes::CContactPointCalculator::ClosestToEdge(const CVector3& a_Vertex1, const CVector3& a_OtherVertex1, const CVector3& a_OtherVertex2)
-{
-	CVector3 ab = a_OtherVertex1 - a_OtherVertex2;
-	CVector3 ap = a_Vertex1 - a_OtherVertex1;
-	CScalar dotab = ab.Dot(ab);
-	CScalar dotabap = ap.Dot(ab);
-	CScalar distance = dotabap - dotab;
-	if (distance < CScalar(0)) { distance = 0; }
+	else if (a_Contact->m_First->GetCollisionShape()->GetType() == ESHAPE_TYPE::SHAPE_BOX &&
+		a_Contact->m_Second->GetCollisionShape()->GetType() == ESHAPE_TYPE::SHAPE_BOX)
+	{
+		BoxBox(a_Contact);
+	}
 	else
 	{
-		if (distance > CScalar(1)) { distance = 1; }
+		SphereBox(a_Contact);
 	}
-	return a_OtherVertex1 + ab * distance;
-
 }
 
-void Cinkes::CContactPointCalculator::ContactFaceFace(const std::vector<CVector3>& a_FaceA, const std::vector<CVector3>& a_FaceB, CContactInfo& a_Contact)
+void Cinkes::CContactPointCalculator::SphereSphere(CContactInfo* a_Contact)
 {
-
+	a_Contact->m_ContactPoints.emplace_back();
+	CVector3 addition = a_Contact->m_First->GetTransform().getOrigin() - a_Contact->m_Second->GetTransform().getOrigin();
+	addition *= static_cast<CScalar>(0.5);
+	a_Contact->m_ContactPoints[0] = a_Contact->m_First->GetTransform().getOrigin() + addition;
 }
 
-void Cinkes::CContactPointCalculator::ContactFaceEdge(const std::vector<CVector3>& a_Face, const std::vector<CVector3>& a_Edge, CContactInfo& a_Contact)
+void Cinkes::CContactPointCalculator::SphereBox(CContactInfo* a_Contact)
 {
-}
-
-void Cinkes::CContactPointCalculator::ContactFaceVertex(const std::vector<CVector3>& a_Face, const CVector3& a_Vertex, CContactInfo& a_Contact)
-{
-}
-
-void Cinkes::CContactPointCalculator::ContactEdgeEdge(std::vector<CVector3>& a_EdgeA, std::vector<CVector3>& a_EdgeB, CContactInfo& a_Contact)
-{
-	CVector3 direction = a_EdgeA[0] - a_EdgeA[1];
-
-	std::vector<CSorter> sorted;
-	sorted.emplace_back(a_EdgeA[0], a_Contact.m_First.get(), direction);
-	sorted.emplace_back(a_EdgeA[1], a_Contact.m_First.get(), direction);
-	sorted.emplace_back(a_EdgeB[0], a_Contact.m_Second.get(), direction);
-	sorted.emplace_back(a_EdgeB[1], a_Contact.m_Second.get(), direction);
-	std::sort(sorted.begin(), sorted.end(), IsLarger);
-
-	for(auto& current : sorted)
+	//the normal points from the "first" to the second
+	CVector3 normal;
+	CVector3 radius;
+	CCollisionObject* object;
+	if(a_Contact->m_First->GetCollisionShape()->GetType() == ESHAPE_TYPE::SHAPE_SPHERE)
 	{
-		if(current.m_CollisionObject == a_Contact.m_First.get())
-		{
-			a_Contact.m_ContactPoints.push_back(current.m_Vertex);
-			a_Contact.m_ContactPoints.push_back(ClosestToEdge(current.m_Vertex, a_EdgeB[0], a_EdgeB[1]));
-		} else
-		{
-			a_Contact.m_ContactPoints.push_back(ClosestToEdge(current.m_Vertex, a_EdgeA[0], a_EdgeA[1]));
-			a_Contact.m_ContactPoints.push_back(current.m_Vertex);
+		object = a_Contact->m_First.get();
+		normal = a_Contact->m_Normal;
+		radius = dynamic_cast<CBoxShape*>(object->GetCollisionShape().get())->GetDimensions();
+		a_Contact->m_ContactPoints.emplace_back(object->GetTransform().getOrigin() +(CVector3(normal * radius)));
 
-		}
+	} else
+	{
+		object = a_Contact->m_Second.get();
+		normal = a_Contact->m_Normal * (-1);
+		radius = dynamic_cast<CBoxShape*>(object->GetCollisionShape().get())->GetDimensions();
+		a_Contact->m_ContactPoints.emplace_back(object->GetTransform().getOrigin() + (CVector3(normal * radius)));
 	}
+
 }
 
-void Cinkes::CContactPointCalculator::ContactEdgeVertex(const std::vector<CVector3>& a_Edge, const CVector3& a_Vertex, CContactInfo& a_Contact)
+void Cinkes::CContactPointCalculator::BoxBox(CContactInfo* a_Contact)
 {
-	a_Contact.m_ContactPoints.push_back(ClosestToEdge(a_Vertex, a_Edge[0], a_Edge[1]));
-	a_Contact.m_ContactPoints.push_back(a_Vertex);
+	//a_Contact->m_ContactPoints = a_Contact->m_First->GetCollisionShape()->SupportPointsForContact(a_Contact->m_Normal, a_Contact->m_First->GetTransform());
 }
+
