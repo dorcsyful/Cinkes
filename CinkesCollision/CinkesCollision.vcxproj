@@ -37,6 +37,7 @@
     <ClInclude Include="CContactInfo.h" />
     <ClInclude Include="CSimplex.h" />
     <ClInclude Include="CSphereShape.h" />
+    <ClInclude Include="CTriangleShape.h" />
     <ClInclude Include="CVertex.h" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +57,7 @@
     <ClCompile Include="CGJKAlgorithm.cpp" />
     <ClCompile Include="CSimplex.cpp" />
     <ClCompile Include="CSphereShape.cpp" />
+    <ClCompile Include="CTriangleShape.cpp" />
     <ClCompile Include="CVertex.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

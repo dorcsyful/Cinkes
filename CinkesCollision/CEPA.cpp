@@ -22,6 +22,8 @@ void Cinkes::CEPA::Algorithm(std::shared_ptr<CContactInfo> a_Contact, const CSim
 {
 	//the tetrahedron from GJK, the faces contain every triangle that are on it by the vertex indices
 	std::vector<CVector3> polytope = { a_Simplex[0],a_Simplex[1],a_Simplex[2],a_Simplex[3] };
+	std::vector<CVector3> polytopeA = { a_Simplex.getPointA(0),a_Simplex.getPointA(1),a_Simplex.getPointA(2),a_Simplex.getPointA(3) };
+	std::vector<CVector3> polytopeB = { a_Simplex.getPointB(0),a_Simplex.getPointB(1),a_Simplex.getPointB(2),a_Simplex.getPointB(3) };
 	std::vector<unsigned> faces{
 		0,1,2,
 		0,3,1,
@@ -41,9 +43,10 @@ void Cinkes::CEPA::Algorithm(std::shared_ptr<CContactInfo> a_Contact, const CSim
 	{
 		minNormal = normals[minFace].m_Normal;
 		minDistance = normals[minFace].m_Distance;
-
-		CVector3 support = a_Contact->m_First->GetCollisionShape()->Support(minNormal, a_Contact->m_First->GetTransform()) -
-				a_Contact->m_Second->GetCollisionShape()->Support(minNormal * (-1), a_Contact->m_Second->GetTransform());
+		polytopeA.push_back(a_Contact->m_First->GetCollisionShape()->Support(minNormal));
+		polytopeB.push_back(a_Contact->m_Second->GetCollisionShape()->Support(minNormal * (-1)));
+		CVector3 support = (polytopeA[polytopeA.size() -1] + a_Contact->m_First->GetTransform().getOrigin()) -
+				(polytopeB[polytopeB.size() - 1] + a_Contact->m_Second->GetTransform().getOrigin());
 
 		CScalar distance = minNormal.Dot(support);
 
@@ -100,9 +103,13 @@ void Cinkes::CEPA::Algorithm(std::shared_ptr<CContactInfo> a_Contact, const CSim
 			normals.insert(normals.end(), newStuff.first.begin(), newStuff.first.end());
 		}
 	}
-
+	a_Contact->m_PolytopeA = polytopeA[minFace];
+	a_Contact->m_PolytopeB = polytopeA[minFace + 1];
+	a_Contact->m_PolytopeC = polytopeA[minFace + 2];
+	a_Contact->m_Triangle = { polytope[minFace],polytope[minFace + 1],polytope[minFace + 2] };
 	a_Contact->m_Normal = minNormal;
 	a_Contact->m_PenetrationDepth = minDistance + 0.001f;
+	a_Contact->m_PenetrationPoint = normals[minFace].m_Normal * normals[minFace].m_Distance;
 }
 
 void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, const std::shared_ptr<CContactInfo>& a_Contact)
@@ -156,8 +163,8 @@ Cinkes::CVector3 Cinkes::CEPA::CSOSupport(const CContactInfo* a_Contact, const C
 	CVector3 localA = a_Contact->m_First->GetTransform().getBasis().GetInverse() * dir;
 	CVector3 localB = a_Contact->m_Second->GetTransform().getBasis().GetInverse() * dir;
 
-	CVector3 supportA = a_Contact->m_First->GetCollisionShape()->Support(localA, CTransform());
-	CVector3 supportB = a_Contact->m_Second->GetCollisionShape()->Support(localB, CTransform());
+	CVector3 supportA = a_Contact->m_First->GetCollisionShape()->Support(localA);
+	CVector3 supportB = a_Contact->m_Second->GetCollisionShape()->Support(localB);
 
 	supportA = a_Contact->m_First->GetTransform().getBasis() * supportA + a_Contact->m_First->GetTransform().getOrigin();
 	supportB = a_Contact->m_Second->GetTransform().getBasis() * supportB + a_Contact->m_Second->GetTransform().getOrigin();

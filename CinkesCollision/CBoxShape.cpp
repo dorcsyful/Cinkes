@@ -5,17 +5,12 @@
 #include "../CinkesMath/CTransform.h"
 #include "../CinkesMath/CUtils.h"
 
-Cinkes::CVector3 Cinkes::CBoxShape::Support(const CVector3& a_V, const CTransform& a_Position)
+Cinkes::CVector3 Cinkes::CBoxShape::Support(const CVector3& a_V)
 {
-	CVector3 dir = /*a_Position.getBasis() * */a_V;
-	CVector3 result = a_Position.getOrigin();
-
-	CScalar temp1 = CUtils::Sgn(1, dir[0]) * (m_Dimensions[0]);
-	CScalar temp2 = CUtils::Sgn(1, dir[1]) * (m_Dimensions[1]);
-	CScalar temp3 = CUtils::Sgn(1, dir[2]) * (m_Dimensions[2]);
-	result += CVector3(temp1, temp2, temp3);
-
-	return result;
+	CScalar temp1 = CUtils::Sgn(1, a_V[0]) * (m_Dimensions[0]);
+	CScalar temp2 = CUtils::Sgn(1, a_V[1]) * (m_Dimensions[1]);
+	CScalar temp3 = CUtils::Sgn(1, a_V[2]) * (m_Dimensions[2]);
+	return CVector3(temp1, temp2, temp3);
 }
 
 std::vector<Cinkes::CVector3> Cinkes::CBoxShape::SupportPointsForContact(const CVector3& a_Direction, const CTransform& a_Position)

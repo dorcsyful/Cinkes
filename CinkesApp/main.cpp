@@ -183,13 +183,13 @@ int main()
 
 		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
 		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
-		glm::quat q = glm::quat(0.732759f, 0.4618481f, 0.1909372f, 0.4618481f);
-		cubeTransform.SetRotation(q);
-		cubeTransform.SetTranslation({ 2.f, 3, 2 });
+		//glm::quat q = glm::quat(0.732759f, 0.4618481f, 0.1909372f, 0.4618481f);
+		//cubeTransform.SetRotation(q);
+		cubeTransform.SetTranslation({ 2.1f, 2.7f, 2 });
 		objects[1].m_Transform = cubeTransform.GetTransformation();
-		objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(2.f, 3.f, 2));
-		auto mat = Cinkes::CMat3x3(Cinkes::CVector3(0.678701, 0.2805885, 0.678701), 1.4968576);
-		objects[1].m_Cinkes->GetTransform().setBasis(mat);
+		objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(2.1f, 2.7f, 2));
+		//auto mat = Cinkes::CMat3x3(Cinkes::CVector3(0.678701, 0.2805885, 0.678701), 1.4968576);
+		//objects[1].m_Cinkes->GetTransform().setBasis(mat);
 
 
 
@@ -223,6 +223,7 @@ int main()
 					{
 						std::cout << points.getX() << " " << points.getY() << " " << points.getZ() << "\n";
 					}
+					std::cout << "Current penetration depth: " << object->m_PenetrationDepth << std::endl;
 				}
 			}
 		}

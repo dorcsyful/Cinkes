@@ -3,6 +3,7 @@
 
 namespace Cinkes
 {
+	class CSimplex;
 
 	class CContactPointCalculator
 	{
@@ -24,9 +25,7 @@ namespace Cinkes
 
 
 	private:
-		void SphereSphere(CContactInfo* a_Contact);
-		void SphereBox(CContactInfo* a_Contact);
-		void BoxBox(CContactInfo* a_Contact);
+		CVector3 GetBaryCentric(const CVector3& a_Distance, const std::vector<CVector3>& a_Triangle);
 
 	};
 }

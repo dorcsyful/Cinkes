@@ -3,6 +3,7 @@
 #include <utility>
 #include <vector>
 #include "../CinkesMath/CVector3.h"
+
 namespace Cinkes
 {
 	class CCollisionObject;

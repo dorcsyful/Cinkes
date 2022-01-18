@@ -84,6 +84,9 @@
     <ClInclude Include="CEPA.h">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
+    <ClInclude Include="CTriangleShape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCollisionWorld.cpp">
@@ -136,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="CSphereShape.cpp">
       <Filter>Source Files\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="CTriangleShape.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

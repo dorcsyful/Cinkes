@@ -22,7 +22,7 @@ namespace Cinkes
 		//}
 
 		//Subgroup: Other {
-		CVector3 Support(const CVector3& a_V, const CTransform& a_Position) override;
+		CVector3 Support(const CVector3& a_V) override;
 		void CreateAABB(CVector3& a_Min, CVector3& a_Max) override;
 		std::vector<CVector3> SupportPointsForContact(const CVector3& a_Direction, const CTransform& a_Position) override;
 		//}
