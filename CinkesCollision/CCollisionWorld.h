@@ -14,7 +14,7 @@ namespace Cinkes
 	class CBVH;
 	class CCollisionObject;
 	//Group: CCollision
-	/*ClassDescription: Main class of CCollision. Collects all objects and runs the collision detection
+	/*ClassDescription: Main class of CCollision. Collects all objects and runs the collision detection. 
 	*/
 	class CCollisionWorld
 	{

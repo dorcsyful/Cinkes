@@ -52,6 +52,19 @@ Cinkes::CCollisionObject& Cinkes::CCollisionObject::operator=(CCollisionObject&&
 	return *this;
 }
 
+Cinkes::CCollisionObject& Cinkes::CCollisionObject::operator=(const CCollisionObject& a_Rhs)
+{
+	if (&a_Rhs == this)
+	{
+		return *this;
+	}
+	m_Transform = a_Rhs.m_Transform;
+	m_Shape = a_Rhs.m_Shape;
+	m_Moved = false;
+
+	return *this;
+}
+
 void Cinkes::CCollisionObject::	SetCollisionShape(const std::shared_ptr<CCollisionShape>& a_Shape)
 {
 	if(a_Shape != nullptr)
@@ -73,4 +86,10 @@ void Cinkes::CCollisionObject::SetTransform(const CTransform& a_Transform)
 Cinkes::CTransform& Cinkes::CCollisionObject::GetTransform()
 {
 	return m_Transform;
+}
+
+Cinkes::CTransform Cinkes::CCollisionObject::GetTransform() const
+{
+	return m_Transform;
+
 }

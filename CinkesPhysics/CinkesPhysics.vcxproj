@@ -151,7 +151,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CBody.cpp" />
+    <ClCompile Include="CForceGenerator.cpp" />
     <ClCompile Include="CinkesPhysics.cpp" />
+    <ClCompile Include="CPhysicsWorld.cpp" />
+    <ClCompile Include="CRigidBody.cpp" />
+    <ClCompile Include="CSpring.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CBody.h" />
+    <ClInclude Include="CForceGenerator.h" />
+    <ClInclude Include="CPhysicsWorld.h" />
+    <ClInclude Include="CRigidBody.h" />
+    <ClInclude Include="CSpring.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
