@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\ForceGenerators">
+      <UniqueIdentifier>{ef89a3a4-fb15-436f-8e27-57c07b0478d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CinkesPhysics.cpp">
@@ -33,6 +36,12 @@
     <ClCompile Include="CBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CForceGeneratorRegistry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CGravitiyGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPhysicsWorld.h">
@@ -44,10 +53,16 @@
     <ClInclude Include="CSpring.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CForceGenerator.h">
+    <ClInclude Include="CBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CBody.h">
+    <ClInclude Include="CForceGenerator.h">
+      <Filter>Header Files\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="CForceGeneratorRegistry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CGravitiyGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

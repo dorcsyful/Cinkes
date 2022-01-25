@@ -9,14 +9,14 @@ Cinkes::CCollisionObject::CCollisionObject()
 {
 	m_Shape = nullptr;
 	m_Transform = CTransform();
-	m_Moved = false;
+	m_Moveable = false;
 }
 
 Cinkes::CCollisionObject::CCollisionObject(const CTransform& a_Transform, std::shared_ptr<CCollisionShape> a_Shape)
 {
 	m_Transform = a_Transform;
 	m_Shape = std::move(a_Shape);
-	m_Moved = false;
+	m_Moveable = false;
 }
 
 Cinkes::CCollisionObject::~CCollisionObject()
@@ -28,14 +28,14 @@ Cinkes::CCollisionObject::CCollisionObject(const CCollisionObject& a_Rhs)
 {
 	m_Transform = a_Rhs.m_Transform;
 	m_Shape = a_Rhs.m_Shape;
-	m_Moved = false;
+	m_Moveable = false;
 }
 
 Cinkes::CCollisionObject::CCollisionObject(CCollisionObject&& a_Rhs) noexcept 
 {
 	m_Transform = a_Rhs.m_Transform;
 	m_Shape = a_Rhs.m_Shape;
-	m_Moved = false;
+	m_Moveable = false;
 }
 
 
@@ -47,7 +47,7 @@ Cinkes::CCollisionObject& Cinkes::CCollisionObject::operator=(CCollisionObject&&
 	}
 	m_Transform = a_Rhs.m_Transform;
 	m_Shape = a_Rhs.m_Shape;
-	m_Moved = false;
+	m_Moveable = false;
 
 	return *this;
 }
@@ -60,7 +60,7 @@ Cinkes::CCollisionObject& Cinkes::CCollisionObject::operator=(const CCollisionOb
 	}
 	m_Transform = a_Rhs.m_Transform;
 	m_Shape = a_Rhs.m_Shape;
-	m_Moved = false;
+	m_Moveable = false;
 
 	return *this;
 }

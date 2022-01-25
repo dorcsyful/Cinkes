@@ -1,36 +1,36 @@
 #pragma once
-#include "../CinkesCollision/CCollisionWorld.h"
-
+#include "CCollisionWorld.h"
+#include "CForceGeneratorRegistry.h"
 namespace Cinkes
 {
-	class CForceGenerator;
 	class CSprings;
 	class CRigidBody;
 
 	class CPhysicsWorld : public CCollisionWorld
 	{
 	public:
-		CPhysicsWorld();
-
-		void Integrate(const std::shared_ptr<CRigidBody>& a_RigidBody);
+		CPhysicsWorld() {
+			m_FGenerators = new CForceGeneratorRegistry();
+		}
+		~CPhysicsWorld() { /* delete m_FGenerators; */ }
+		void Integrate(const std::shared_ptr<CRigidBody>& a_RigidBody, CScalar a_T);
 		void Update(CScalar a_T);
 
-		
-		bool AddGenerator(const std::shared_ptr<CForceGenerator>& a_Generator);
-		bool RemoveGeneratorByValue(const std::shared_ptr<CForceGenerator>& a_Generator, bool a_Delete);
-		bool RemoveGeneratorByIndex(int a_Index, bool a_Delete);
-
-		bool AddRigidBody(const std::shared_ptr<CRigidBody>& a_Generator);
-		bool RemoveRigidBodyByValue(const std::shared_ptr<CRigidBody>& a_Generator, bool a_Delete);
+		bool AddRigidBody(const std::shared_ptr<CRigidBody>& a_Body);
+		bool RemoveRigidBodyByValue(const std::shared_ptr<CRigidBody>& a_Body, bool a_Delete);
 		bool RemoveRigidBodyByIndex(int a_Index, bool a_Delete);
 
-		bool AddSpring(const std::shared_ptr<CForceGenerator>& a_Generator);
-		bool RemoveSpringByValue(const std::shared_ptr<CForceGenerator>& a_Generator, bool a_Delete);
+		bool AddSpring(const std::shared_ptr<CForceGenerator>& a_Generator) { return false; }
+		bool RemoveSpringByValue(const std::shared_ptr<CForceGenerator>& a_Generator, bool a_Delete) { return false; }
 		bool RemoveSpringByIndex(int a_Index, bool a_Delete);
 		bool RemoveSpringByType(int a_Index, bool a_Delete);
 
+		std::vector<std::shared_ptr<CRigidBody>> GetAllRigidBodies() const { return m_RigidBodies; }
+		CForceGeneratorRegistry* GetGeneratorRegistry() const { return m_FGenerators; }
+
 	private:
-		std::vector<std::shared_ptr<CForceGenerator>> m_FGenerators;
+		//std::shared_ptr<CForceGeneratorRegistry> m_FGenerators;
+		CForceGeneratorRegistry* m_FGenerators;
 		std::vector<std::shared_ptr<CSprings>> m_Springs;
 		std::vector<std::shared_ptr<CRigidBody>> m_RigidBodies;
 	};

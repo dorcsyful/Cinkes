@@ -7,13 +7,17 @@
 #include "Egg/InputQueue.h"
 
 #include "../CinkesMath/CVector3.h"
-#include "../CinkesMath/CQuaternion.h"
-#include "../CinkesMath/CMat3x3.h"
-#include "../CinkesCollision/CCollisionWorld.h"
-#include "../CinkesCollision/CCollisionShape.h"
-#include "../CinkesCollision/CBoxShape.h"
-#include "../CinkesCollision/CBVH.h"
-#include "../CinkesCollision/CContactInfo.h"
+#include "CTransform.h"
+#include "CCollisionShape.h"
+#include "CBoxShape.h"
+#include "CContactInfo.h"
+#include "CPhysicsWorld.h"
+#include "CForceGeneratorRegistry.h"
+
+namespace Cinkes
+{
+}
+
 struct CinkesToEgg
 {
 	std::shared_ptr<Cinkes::CCollisionObject> m_Cinkes;
@@ -47,7 +51,6 @@ CinkesToEgg CreateObject(const std::shared_ptr<Cinkes::CCollisionWorld>& a_World
 
 	returnValue.m_Material = a_Material;
 
-	Cinkes::CMat3x3 mat = collisionObject->GetTransform().getBasis();
 	returnValue.m_Transform = meshTransform.GetTransformation();
 
 	return returnValue;
@@ -70,7 +73,7 @@ bool HandleInput(egg::Camera& a_Camera, egg::EggRenderer* a_Renderer, Cinkes::CV
 		{
 			auto value = static_cast<float>(mEvent.value) / -mouseDivider;
 			value = a_CameraRotation.getY() + value;
-			value -= ((int)value / 360) * 360;
+			value -= value / 360 * 360;
 			a_CameraRotation.setY(value);
 		}
 		else if (mEvent.action == egg::MouseAction::MOVE_Y)
@@ -129,9 +132,10 @@ int main()
 
 	std::shared_ptr<Cinkes::CBoxShape> collisionShape = std::make_shared<Cinkes::CBoxShape>();
 	collisionShape->SetDimensions(0.5f, 0.5f, 0.5f);
-	std::shared_ptr collisionWorld = std::make_unique<Cinkes::CCollisionWorld>();
-
-
+	//CPhysicsWorld* collisionWorld = new CPhysicsWorld();
+	//collisionWorld->GetGeneratorRegistry()->GetGeneratorByType(EGENERATOR_TYPE::TYPE_GRAVITY);
+	CForceGeneratorRegistry* f = new CForceGeneratorRegistry();
+	f->GetGeneratorByType(EGENERATOR_TYPE::TYPE_GRAVITY);
 
 	RendererSettings settings;
 	settings.debugFlags = DebugPrintFlags::ERROR | DebugPrintFlags::WARNING;
@@ -181,22 +185,21 @@ int main()
 
 		bool run = true;
 
-		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
-		objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
-		//glm::quat q = glm::quat(0.732759f, 0.4618481f, 0.1909372f, 0.4618481f);
-		//cubeTransform.SetRotation(q);
-		cubeTransform.SetTranslation({ 2.1f, 2.7f, 2 });
-		objects[1].m_Transform = cubeTransform.GetTransformation();
-		objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(2.1f, 2.7f, 2));
+		//objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
+		//objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
+		////glm::quat q = glm::quat(0.732759f, 0.4618481f, 0.1909372f, 0.4618481f);
+		////cubeTransform.SetRotation(q);
+		//cubeTransform.SetTranslation({ 2.1f, 2.7f, 2 });
+		//objects[1].m_Transform = cubeTransform.GetTransformation();
+		//objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(2.1f, 2.7f, 2));
 		//auto mat = Cinkes::CMat3x3(Cinkes::CVector3(0.678701, 0.2805885, 0.678701), 1.4968576);
 		//objects[1].m_Cinkes->GetTransform().setBasis(mat);
 
 
 
-		collisionWorld->RunCollision(1);
 		std::vector<std::shared_ptr<Cinkes::CContactInfo>> narrow;
 		std::vector<std::shared_ptr<Cinkes::CBroadContactInfo>> broad;
-		collisionWorld->getContacts(narrow, broad);
+		//collisionWorld->getContacts(narrow, broad);
 
 		for(auto& current : objects)
 		{
@@ -230,6 +233,8 @@ int main()
 		
 		//LOOP
 		while (run) {
+
+			//collisionWorld->Update(0.05f);
 
 			EggRenderer* renderpointer = renderer.get();
 			run = HandleInput(camera, renderpointer, cameraRotation);

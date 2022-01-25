@@ -15,6 +15,7 @@ Cinkes::CBVH::CBVH(const std::vector<std::shared_ptr<CCollisionObject>>& a_Objec
 
 std::shared_ptr<Cinkes::CAABB> Cinkes::CBVH::CreateAABB(const std::shared_ptr<CCollisionObject>& a_Object)
 {
+	a_Object->SetHasContact(nullptr);
 	std::shared_ptr<CAABB> temp = std::make_shared<CAABB>();
 	CVector3 min, max;
 	a_Object->GetCollisionShape()->CreateAABB(min, max);

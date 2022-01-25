@@ -1,9 +1,10 @@
 #pragma once
 #include <memory>
 
-#include "../CinkesMath/CTransform.h"
+#include "CTransform.h"
 namespace Cinkes
 {
+	struct CContactInfo;
 	class CCollisionShape;
 
 	class CCollisionObject
@@ -32,17 +33,21 @@ namespace Cinkes
 		void SetTransform(const CTransform& a_Transform);
 		CTransform& GetTransform();
 		CTransform GetTransform() const;
-		void SetMoved(bool a_Rhs) { m_Moved = a_Rhs; }
-		bool GetMoved() { return m_Moved; }
-		bool GetMoved() const { return m_Moved; }
+		void SetMoveable(bool a_Rhs) { m_Moveable = a_Rhs; }
+		bool GetMoveable() { return m_Moveable; }
+		bool GetMoveable() const { return m_Moveable; }
+		void SetHasContact(CContactInfo* a_Rhs) { m_HasContact = a_Rhs; }
+		bool GetHasContact() { return m_HasContact; }
+		bool GetHasContact() const { return m_HasContact; }
 		//}
 
 		bool m_AABBDirty = false;
 
 	protected:
+		CContactInfo* m_HasContact;
 		std::shared_ptr<CCollisionShape> m_Shape;
 		CTransform m_Transform;
-		bool m_Moved;
+		bool m_Moveable;
 
 	};
 

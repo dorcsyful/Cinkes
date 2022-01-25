@@ -4,11 +4,12 @@
 #include "CBVH.h"
 #include "CGJKAlgorithm.h"
 #include "CEPA.h"
-#include "../CinkesMath/CScalar.h"
+#include "CScalar.h"
 #include "CContactPointCalculator.h"
 
 namespace Cinkes
 {
+	class CRigidBody;
 	class CContactPointCalculator;
 	struct CContactInfo;
 	class CBVH;
@@ -37,7 +38,7 @@ namespace Cinkes
 		bool AddObject(const std::shared_ptr<CCollisionObject>& a_Object);
 		bool RemoveObject(const std::shared_ptr<CCollisionObject>& a_Object);
 		bool RemoveObjectByIndex(int a_Index);
-		unsigned int GetNumberOfObjects() const { return m_Objects.size(); }  // NOLINT(clang-diagnostic-shorten-64-to-32)
+		size_t GetNumberOfObjects() const { return m_Objects.size(); }
 		std::shared_ptr<CCollisionObject> GetObjectByIndex(int a_Num) { return m_Objects[a_Num]; }
 		void Stop() { m_ShouldUpdate = false; }
 		void Start() { m_ShouldUpdate = true; }
@@ -46,7 +47,7 @@ namespace Cinkes
 		//}
 
 		//Subgroup: Collision test {
-		void getContacts(std::vector<std::shared_ptr<CContactInfo>>& a_Narrow, std::vector<std::shared_ptr<CBroadContactInfo>>& a_Broad)
+		void getContacts(std::vector<std::shared_ptr<CContactInfo>>& a_Narrow, std::vector<std::shared_ptr<CBroadContactInfo>>& a_Broad) const
 		{
 			a_Narrow = m_Contacts;
 			a_Broad = m_BVH->m_Contacts;
@@ -59,6 +60,7 @@ namespace Cinkes
 		//Subgroup: Class members
 		bool m_ShouldUpdate;
 		std::vector<std::shared_ptr<CCollisionObject>> m_Objects;
+		std::vector<std::shared_ptr<CRigidBody>> m_RigidBodies;
 		std::vector<std::shared_ptr<CContactInfo>> m_Contacts;
 		std::unique_ptr<CBVH> m_BVH;
 		std::unique_ptr<CGJKAlgorithm> m_GJK;

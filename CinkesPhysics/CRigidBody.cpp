@@ -8,16 +8,7 @@ Cinkes::CRigidBody::CRigidBody(const CTransform& a_Transform, const std::shared_
 	m_AttachedSprings = a_AttachedSprings;
 	m_Transform = a_Transform;
 	m_Shape = a_CollisionShape->GetCollisionShape();
-}
-
-Cinkes::CRigidBody::CRigidBody(const CBody& a_Rhs, const std::vector<std::shared_ptr<CSpring>>& a_AttachedSprings,
-                               float a_Mass, const CVector3& a_CenterOfMass)
-{
-	m_Mass = a_Mass;
-	m_AttachedSprings = a_AttachedSprings;
-	m_Transform = a_Rhs.GetTransform();
-	m_Shape = a_Rhs.GetCollisionShape();
-	m_CenterOfMass = a_CenterOfMass;
+	m_Moveable = true;
 }
 
 Cinkes::CRigidBody::CRigidBody(CBody&& a_Rhs, const std::vector<std::shared_ptr<CSpring>>& a_AttachedSprings,
@@ -27,35 +18,28 @@ Cinkes::CRigidBody::CRigidBody(CBody&& a_Rhs, const std::vector<std::shared_ptr<
 	m_AttachedSprings = a_AttachedSprings;
 	m_Transform = a_Rhs.GetTransform();
 	m_Shape = a_Rhs.GetCollisionShape();
-}
+	m_Moveable = true;
 
-Cinkes::CRigidBody::CRigidBody(const CRigidBody& a_Rhs)
-{
-	m_Transform = a_Rhs.GetTransform();
-	m_Shape = a_Rhs.GetCollisionShape();
-	m_Mass = 0;
 }
-
 Cinkes::CRigidBody::CRigidBody(CRigidBody&& a_Rhs) noexcept
 {
 	m_Transform = a_Rhs.GetTransform();
 	m_Shape = a_Rhs.GetCollisionShape();
 	m_Mass = 0;
-}
+	m_Moveable = true;
 
-Cinkes::CRigidBody::~CRigidBody()
-{
-	
 }
 
 Cinkes::CRigidBody& Cinkes::CRigidBody::operator=(CRigidBody&& a_Rhs) noexcept  // NOLINT(bugprone-exception-escape)
 {
-	if (this == &a_Rhs) { return *this; }
+		if (this == &a_Rhs) { return *this; }
 	m_CenterOfMass = a_Rhs.GetCenterOfMass();
 	m_Mass = a_Rhs.m_Mass;
 	m_AttachedSprings = a_Rhs.m_AttachedSprings;
 	m_Transform = a_Rhs.GetTransform();
 	m_Shape = a_Rhs.GetCollisionShape();
+	m_Moveable = true;
+
 	return *this;
 }
 
@@ -67,6 +51,8 @@ Cinkes::CRigidBody& Cinkes::CRigidBody::operator=(const CRigidBody& a_Rhs)
 	m_AttachedSprings = a_Rhs.m_AttachedSprings;
 	m_Transform = a_Rhs.GetTransform();
 	m_Shape = a_Rhs.GetCollisionShape();
+	m_Moveable = true;
+
 	return *this;
 }
 
@@ -93,9 +79,14 @@ float Cinkes::CRigidBody::GetMass()
 	return m_Mass;
 }
 
+CScalar Cinkes::CRigidBody::GetMass() const
+{
+	return m_Mass;
+}
+
 void Cinkes::CRigidBody::SetMass(CScalar a_Rhs)
 {
-	m_Mass = a_Rhs;
+	m_Mass = 1/a_Rhs;
 }
 
 Cinkes::CVector3 Cinkes::CRigidBody::GetCenterOfMass()

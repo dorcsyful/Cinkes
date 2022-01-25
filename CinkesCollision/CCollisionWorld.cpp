@@ -32,7 +32,6 @@ Cinkes::CCollisionWorld& Cinkes::CCollisionWorld::operator=(const CCollisionWorl
 
 bool Cinkes::CCollisionWorld::AddObject(const std::shared_ptr<CCollisionObject>& a_Object)
 {
-
 	auto size = m_Objects.size();
 	m_Objects.push_back(a_Object);
 	if(size == m_Objects.size() - 1)
@@ -79,6 +78,8 @@ void Cinkes::CCollisionWorld::RunCollision(CScalar a_T)
 			{
 				std::shared_ptr<CContactInfo> contact = std::make_shared<CContactInfo>();
 				contact->m_First = element->m_Objects[i];
+				element->m_Objects[i]->SetHasContact(contact.get());
+				element->m_Objects[i + 1]->SetHasContact(contact.get());
 				contact->m_Second = element->m_Objects[i + 1];
 				m_CEPA->Run(contact, simplex);
 				m_Contacts.push_back(contact);

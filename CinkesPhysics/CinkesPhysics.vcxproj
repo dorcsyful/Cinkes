@@ -124,6 +124,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\Users\dorcs\Documents\GitHub\Cinkes\CinkesMath;C:\Users\dorcs\Documents\GitHub\Cinkes\CinkesCollision;$(SolutionDir)CinkesCollision;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -153,6 +154,8 @@
   <ItemGroup>
     <ClCompile Include="CBody.cpp" />
     <ClCompile Include="CForceGenerator.cpp" />
+    <ClCompile Include="CForceGeneratorRegistry.cpp" />
+    <ClCompile Include="CGravitiyGenerator.cpp" />
     <ClCompile Include="CinkesPhysics.cpp" />
     <ClCompile Include="CPhysicsWorld.cpp" />
     <ClCompile Include="CRigidBody.cpp" />
@@ -161,6 +164,8 @@
   <ItemGroup>
     <ClInclude Include="CBody.h" />
     <ClInclude Include="CForceGenerator.h" />
+    <ClInclude Include="CForceGeneratorRegistry.h" />
+    <ClInclude Include="CGravitiyGenerator.h" />
     <ClInclude Include="CPhysicsWorld.h" />
     <ClInclude Include="CRigidBody.h" />
     <ClInclude Include="CSpring.h" />
