@@ -3,13 +3,18 @@
 #include <vector>
 
 #include "CForceGenerator.h"
+#include "CGravitiyGenerator.h"
+
 namespace Cinkes
 {
+	class CPhysicsWorld;
+
 	class CForceGeneratorRegistry
 	{
 	public:
-		CForceGeneratorRegistry()  {
-			//m_ForceGenerators.push_back(std::make_shared<CGravityGenerator>());
+		CForceGeneratorRegistry(CPhysicsWorld* a_PhysicsWorld = nullptr)  {
+			m_PhysicsWorld = a_PhysicsWorld;
+			m_ForceGenerators.push_back(std::make_shared<CGravityGenerator>());
 		}
 		~CForceGeneratorRegistry() {
 			for (int i = static_cast<int>(m_ForceGenerators.size()) - 1; i >= 0; i--)
@@ -28,9 +33,13 @@ namespace Cinkes
 		bool RemoveByType(EGENERATOR_TYPE a_Type);
 		bool RemoveByValue(CForceGenerator* a_Generator);
 		CForceGenerator* GetGeneratorByType(EGENERATOR_TYPE a_Type);
+		std::vector<std::shared_ptr<CForceGenerator>> GetGeneratorsThatContain(const CRigidBody* a_RigidBody);
+
+		void UpdateGenerators();
 
 	private:
 		std::vector<std::shared_ptr<CForceGenerator>> m_ForceGenerators;
+		CPhysicsWorld* m_PhysicsWorld;
 	};
 }
 

@@ -18,6 +18,7 @@ namespace Cinkes
 		CMat3x3(CScalar a_00, CScalar a_01, CScalar a_02,
 				CScalar a_10, CScalar a_11, CScalar a_12,
 				CScalar a_20, CScalar a_21, CScalar a_22);
+		CMat3x3(const CQuaternion& a_Rotation);
 		CMat3x3(const CMat3x3& a_Copy);
 		//}
 		//Subgroup: Operators

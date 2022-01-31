@@ -17,7 +17,9 @@ namespace Cinkes
 
 		//Subgroup: Operators { 
 		void operator*=(const CTransform& a_Rhs);
+		void operator*=(const CVector3& a_Rhs);
 		CTransform operator*(const CTransform& a_Rhs);
+		CVector3 operator*(const CVector3& a_Rhs);
 		CTransform& operator=(const CTransform& a_Rhs);
 		bool operator==(const CTransform& a_Rhs);
 		bool operator!=(const CTransform& a_Rhs);

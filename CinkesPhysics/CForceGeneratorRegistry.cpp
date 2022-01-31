@@ -1,5 +1,6 @@
 #include "CForceGeneratorRegistry.h"
-
+#include "CPhysicsWorld.h"
+#include "CRigidBody.h"
 bool Cinkes::CForceGeneratorRegistry::AddForceGenerator(const std::shared_ptr<CForceGenerator>& a_Generator, bool a_AddToAll)
 {
 	for (const auto& element : m_ForceGenerators)
@@ -12,12 +13,12 @@ bool Cinkes::CForceGeneratorRegistry::AddForceGenerator(const std::shared_ptr<CF
 
 bool Cinkes::CForceGeneratorRegistry::RemoveGeneratorByIndex(unsigned a_Index)
 {
-    //if (m_ForceGenerators.size() <= a_Index) { return false; }
+    if (m_ForceGenerators.size() <= a_Index) { return false; }
 
-    //for (auto& element : m_CollisionWorld->GetAllRigidBodies())
-    //{
-    //    element->RemoveGeneratorByValue(m_ForceGenerators[a_Index].get());
-    //}
+    for (auto& element : m_PhysicsWorld->GetAllRigidBodies())
+    {
+        element->RemoveGeneratorByValue(m_ForceGenerators[a_Index].get());
+    }
 
     return true;
 }
@@ -44,4 +45,28 @@ Cinkes::CForceGenerator* Cinkes::CForceGeneratorRegistry::GetGeneratorByType(EGE
 	    }
     }
     return returnValue;
+}
+
+std::vector<std::shared_ptr<Cinkes::CForceGenerator>> Cinkes::CForceGeneratorRegistry::GetGeneratorsThatContain(const CRigidBody* a_RigidBody)
+{
+    std::vector<std::shared_ptr<CForceGenerator>> generators;
+	for (const auto& element : m_ForceGenerators)
+	{
+		if(element->IsInGenerator(a_RigidBody))
+		{
+            generators.push_back(element);
+		}
+	}
+    return generators;
+}
+
+void Cinkes::CForceGeneratorRegistry::UpdateGenerators()
+{
+	for (auto element : m_ForceGenerators)
+	{
+		for (auto object : element->m_Objects)
+		{
+            element->UpdateForce(object);
+		}
+	}
 }

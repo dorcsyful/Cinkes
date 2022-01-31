@@ -164,6 +164,9 @@
     <ProjectReference Include="..\CinkesMath\CinkesMath.vcxproj">
       <Project>{3b27a253-a4c5-4d98-90e4-40f39fc5a7f7}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\CinkesPhysics\CinkesPhysics.vcxproj">
+      <Project>{a5e53787-d5b7-4922-93c3-9482a22acf79}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

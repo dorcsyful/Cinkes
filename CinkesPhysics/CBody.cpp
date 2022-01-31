@@ -13,17 +13,12 @@ Cinkes::CBody& Cinkes::CBody::operator=(const CBody& a_Rhs)
 
 bool Cinkes::CBody::AddGenerator(CForceGenerator* a_Generator)
 {
-	if(std::find(m_ForceGenerators.begin(),m_ForceGenerators.end(),a_Generator) != m_ForceGenerators.end())
+	if(std::find(m_ForceGenerators.begin(),m_ForceGenerators.end(),a_Generator) == m_ForceGenerators.end())
 	{
 		m_ForceGenerators.push_back(a_Generator);
 		return true;
 	}
 	return false;
-}
-
-void Cinkes::CBody::AddForce(const CVector3& a_ForceToAdd)
-{
-	m_Force += a_ForceToAdd;
 }
 
 unsigned Cinkes::CBody::HasForceGenerator(EGENERATOR_TYPE a_Type)

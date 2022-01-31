@@ -16,6 +16,9 @@
     <Filter Include="Header Files\ForceGenerators">
       <UniqueIdentifier>{ef89a3a4-fb15-436f-8e27-57c07b0478d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ForceGenerators">
+      <UniqueIdentifier>{d86ad89c-92d0-4d8b-a6f7-f1ff55e1338b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CinkesPhysics.cpp">
@@ -27,19 +30,16 @@
     <ClCompile Include="CRigidBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CSpring.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CForceGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CForceGeneratorRegistry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CGravitiyGenerator.cpp">
+    <ClCompile Include="CForceGenerator.cpp">
+      <Filter>Source Files\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="CSpringForceGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -63,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CGravitiyGenerator.h">
+      <Filter>Header Files\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="CSpringForceGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

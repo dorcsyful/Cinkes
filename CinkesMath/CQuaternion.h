@@ -51,20 +51,23 @@ namespace Cinkes
 		//Subgroup: Operators {
 		bool operator==(const CQuaternion& a_Rhs);
 		bool operator!=(const CQuaternion& a_Rhs);
-		void operator=(const CQuaternion& a_Rhs);
+		CQuaternion& operator=(const CQuaternion& a_Rhs);
 
 		void operator+=(const CQuaternion& a_Rhs);
+		void operator+=(const CVector3& a_Rhs);
 		void operator-=(const CQuaternion& a_Rhs);
 		void operator*=(const CQuaternion& a_Rhs);
 		void operator*=(CScalar a_Rhs);
 
 		CQuaternion operator+(const CQuaternion& a_Rhs);
+		CQuaternion operator+(const CVector3& a_Rhs);
 		CQuaternion operator-(const CQuaternion& a_Rhs);
 		CQuaternion operator*(const CQuaternion& a_Rhs);
 		CQuaternion operator*(const CScalar& a_Rhs);
 		CQuaternion operator/(const CScalar& a_Rhs);
 		CQuaternion operator-();
 		CScalar& operator[](int a_Rhs);
+		CScalar operator[](int a_Rhs) const { return m_Values[a_Rhs]; };
 		//}
 		//Subgroup: Other
 

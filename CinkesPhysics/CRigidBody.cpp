@@ -1,13 +1,16 @@
 #include "CRigidBody.h"
 
+#include "CQuaternion.h"
+#include "CUtils.h"
 
-Cinkes::CRigidBody::CRigidBody(const CTransform& a_Transform, const std::shared_ptr<CBody>& a_CollisionShape, const std::vector<std::shared_ptr<CSpring>>& a_AttachedSprings, CScalar a_Mass, const CVector3& a_CenterOfMass)
+
+Cinkes::CRigidBody::CRigidBody(const CTransform& a_Transform, const std::shared_ptr<CCollisionShape>& a_CollisionShape, CScalar a_Mass, const CVector3& a_CenterOfMass)
 {
 	m_Mass = a_Mass;
+	m_InverseMass = 1/a_Mass;
 	m_CenterOfMass = a_CenterOfMass;
-	m_AttachedSprings = a_AttachedSprings;
 	m_Transform = a_Transform;
-	m_Shape = a_CollisionShape->GetCollisionShape();
+	m_Shape = a_CollisionShape;
 	m_Moveable = true;
 }
 
@@ -15,7 +18,7 @@ Cinkes::CRigidBody::CRigidBody(CBody&& a_Rhs, const std::vector<std::shared_ptr<
                                float a_Mass, CVector3 a_CenterOfMass): m_CenterOfMass(std::move(a_CenterOfMass))
 {
 	m_Mass = a_Mass;
-	m_AttachedSprings = a_AttachedSprings;
+	m_InverseMass = 1/a_Mass;
 	m_Transform = a_Rhs.GetTransform();
 	m_Shape = a_Rhs.GetCollisionShape();
 	m_Moveable = true;
@@ -23,9 +26,10 @@ Cinkes::CRigidBody::CRigidBody(CBody&& a_Rhs, const std::vector<std::shared_ptr<
 }
 Cinkes::CRigidBody::CRigidBody(CRigidBody&& a_Rhs) noexcept
 {
+	m_Mass = a_Rhs.m_Mass;
 	m_Transform = a_Rhs.GetTransform();
 	m_Shape = a_Rhs.GetCollisionShape();
-	m_Mass = 0;
+	m_InverseMass = 1/m_Mass;
 	m_Moveable = true;
 
 }
@@ -34,8 +38,7 @@ Cinkes::CRigidBody& Cinkes::CRigidBody::operator=(CRigidBody&& a_Rhs) noexcept  
 {
 		if (this == &a_Rhs) { return *this; }
 	m_CenterOfMass = a_Rhs.GetCenterOfMass();
-	m_Mass = a_Rhs.m_Mass;
-	m_AttachedSprings = a_Rhs.m_AttachedSprings;
+	m_InverseMass = a_Rhs.m_InverseMass;
 	m_Transform = a_Rhs.GetTransform();
 	m_Shape = a_Rhs.GetCollisionShape();
 	m_Moveable = true;
@@ -47,8 +50,8 @@ Cinkes::CRigidBody& Cinkes::CRigidBody::operator=(const CRigidBody& a_Rhs)
 {
 	if (this == &a_Rhs) { return *this; }
 	m_CenterOfMass = a_Rhs.GetCenterOfMass();
-	m_Mass = a_Rhs.m_Mass;
-	m_AttachedSprings = a_Rhs.m_AttachedSprings;
+	m_InverseMass = a_Rhs.m_InverseMass;
+
 	m_Transform = a_Rhs.GetTransform();
 	m_Shape = a_Rhs.GetCollisionShape();
 	m_Moveable = true;
@@ -56,51 +59,29 @@ Cinkes::CRigidBody& Cinkes::CRigidBody::operator=(const CRigidBody& a_Rhs)
 	return *this;
 }
 
-std::vector<std::shared_ptr<Cinkes::CSpring>> Cinkes::CRigidBody::GetAllSprings()
-{
-	return m_AttachedSprings;
-}
-
-std::vector<std::shared_ptr<Cinkes::CSpring>> Cinkes::CRigidBody::GetSpringsByType(ESPRING_TYPE a_Type)
-{
-	std::vector<std::shared_ptr<CSpring>> returnValue;
-	for(auto& current : m_AttachedSprings)
-	{
-		if(current->GetType() == a_Type)
-		{
-			returnValue.push_back(current);
-		}
-	}
-	return returnValue;
-}
-
-float Cinkes::CRigidBody::GetMass()
-{
-	return m_Mass;
-}
-
-CScalar Cinkes::CRigidBody::GetMass() const
-{
-	return m_Mass;
-}
-
 void Cinkes::CRigidBody::SetMass(CScalar a_Rhs)
 {
-	m_Mass = 1/a_Rhs;
+	m_InverseMass = 1/a_Rhs;
+	m_Mass = a_Rhs;
 }
 
-Cinkes::CVector3 Cinkes::CRigidBody::GetCenterOfMass()
+void Cinkes::CRigidBody::Integrate(CScalar a_T)
 {
-	return m_CenterOfMass;
-}
+	m_LastFrameAcceleration = m_Acceleration;
+	m_LastFrameAcceleration += m_Force * m_InverseMass;
 
-Cinkes::CVector3 Cinkes::CRigidBody::GetCenterOfMass() const
-{
-	return m_CenterOfMass;
-}
+	CVector3 angularAcceleration = m_InverseIntertiaTensor * m_Force;
 
-void Cinkes::CRigidBody::SetCenterOfMass(const CVector3& a_Rhs)
-{
-	m_CenterOfMass = a_Rhs;
-}
+	m_Velocity += m_LastFrameAcceleration * a_T;
+	m_AngularVelocity += m_AngularAcceleration * a_T;
 
+	m_Velocity *= CUtils::Pow(m_LinearDamping, a_T);
+	m_AngularVelocity *= CUtils::Pow(m_AngularDamping, a_T);
+
+	CQuaternion q = m_Transform.getQuaternion() + CVector3(angularAcceleration * a_T);
+	CVector3 p = m_Transform.getOrigin() + m_Velocity * a_T;
+
+	m_Transform = CTransform(CMat3x3(q), p);
+
+	ClearForces();
+}

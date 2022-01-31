@@ -133,30 +133,32 @@ void Cinkes::CQuaternion::GetEuler(CScalar& a_Yaw, CScalar& a_Pitch, CScalar& a_
 
 bool Cinkes::CQuaternion::operator==(const CQuaternion& a_Rhs)
 {
-	bool x = getX() == a_Rhs.getX();
-	bool y = getY() == a_Rhs.getY();
-	bool z = getZ() == a_Rhs.getZ();
-	bool w = getW() == a_Rhs.getW();
+	bool x = CUtils::Abs(getX() - a_Rhs.getX()) < static_cast<CScalar>(0.001);
+	bool y = CUtils::Abs(getY() - a_Rhs.getY()) < static_cast<CScalar>(0.001);
+	bool z = CUtils::Abs(getZ() - a_Rhs.getZ()) < static_cast<CScalar>(0.001);
+	bool w = CUtils::Abs(getW() - a_Rhs.getW()) < static_cast<CScalar>(0.001);
 
 	return x && y && z && w;
 }
 
 bool Cinkes::CQuaternion::operator!=(const CQuaternion& a_Rhs)
 {
-	bool x = getX() != a_Rhs.getX();
-	bool y = getY() != a_Rhs.getY();
-	bool z = getZ() != a_Rhs.getZ();
-	bool w = getW() != a_Rhs.getW();
+	bool x = CUtils::Abs(getX() - a_Rhs.getX()) > static_cast<CScalar>(0.001);
+	bool y = CUtils::Abs(getY() - a_Rhs.getY()) > static_cast<CScalar>(0.001);
+	bool z = CUtils::Abs(getZ() - a_Rhs.getZ()) > static_cast<CScalar>(0.001);
+	bool w = CUtils::Abs(getW() - a_Rhs.getW()) > static_cast<CScalar>(0.001);
 
 	return x && y && z && w;
 }
 
-void Cinkes::CQuaternion::operator=(const CQuaternion& a_Rhs)
+Cinkes::CQuaternion& Cinkes::CQuaternion::operator=(const CQuaternion& a_Rhs)
 {
 	m_Values[0] = a_Rhs.getX();
 	m_Values[1] = a_Rhs.getY();
 	m_Values[2] = a_Rhs.getZ();
 	m_Values[3] = a_Rhs.getW();
+
+	return *this;
 }
 
 void Cinkes::CQuaternion::operator+=(const CQuaternion& a_Rhs)
@@ -165,6 +167,16 @@ void Cinkes::CQuaternion::operator+=(const CQuaternion& a_Rhs)
 	m_Values[1] += a_Rhs.m_Values[1];
 	m_Values[2] += a_Rhs.m_Values[2];
 	m_Values[3] += a_Rhs.m_Values[3];
+}
+
+void Cinkes::CQuaternion::operator+=(const CVector3& a_Rhs)
+{
+	CQuaternion q(a_Rhs.getX(), a_Rhs.getY(), a_Rhs.getZ(), 0);
+	q *= *this;
+	m_Values[3] += q[3] * static_cast<CScalar>(0.5);
+	m_Values[0] += q[0] * static_cast<CScalar>(0.5);
+	m_Values[1] += q[1] * static_cast<CScalar>(0.5);
+	m_Values[2] += q[2] * static_cast<CScalar>(0.5);
 }
 
 void Cinkes::CQuaternion::operator-=(const CQuaternion& a_Rhs)
@@ -203,6 +215,18 @@ Cinkes::CQuaternion Cinkes::CQuaternion::operator+(const CQuaternion& a_Rhs)
 	returnValue[3] = m_Values[3] + a_Rhs.m_Values[3];
 
 	return returnValue;
+}
+
+Cinkes::CQuaternion Cinkes::CQuaternion::operator+(const CVector3& a_Rhs)
+{
+	CQuaternion q(a_Rhs.getX(),a_Rhs.getY(),a_Rhs.getZ(),0);
+	q *= *this;
+	q[3] += m_Values[3] * static_cast<CScalar>(0.5);
+	q[0] += m_Values[0] * static_cast<CScalar>(0.5);
+	q[1] += m_Values[1] * static_cast<CScalar>(0.5);
+	q[2] += m_Values[2] * static_cast<CScalar>(0.5);
+
+	return q;
 }
 
 Cinkes::CQuaternion Cinkes::CQuaternion::operator-(const CQuaternion& a_Rhs)

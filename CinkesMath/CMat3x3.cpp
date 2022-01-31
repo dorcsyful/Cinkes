@@ -31,6 +31,34 @@ CMat3x3::CMat3x3(CScalar a_00, CScalar a_01, CScalar a_02, CScalar a_10, CScalar
 	m_Rows[2] = CVector3(a_20, a_21, a_22);
 }
 
+Cinkes::CMat3x3::CMat3x3(const CQuaternion& a_Rotation)
+{
+	CScalar sqw = a_Rotation[3] * a_Rotation[3];
+	CScalar sqx = a_Rotation[0] * a_Rotation[0];
+	CScalar sqy = a_Rotation[1] * a_Rotation[1];
+	CScalar sqz = a_Rotation[2] * a_Rotation[2];
+
+	// invs (inverse square length) is only required if quaternion is not already normalised
+	CScalar invs = 1 / (sqx + sqy + sqz + sqw);
+	m_Rows[0][0] = (sqx - sqy - sqz + sqw) * invs; // since sqw + sqx + sqy + sqz =1/invs*invs
+	m_Rows[1][1] = (-sqx + sqy - sqz + sqw) * invs;
+	m_Rows[2][2] = (-sqx - sqy + sqz + sqw) * invs;
+
+	CScalar tmp1 = a_Rotation[0] * a_Rotation[1];
+	CScalar tmp2 = a_Rotation[2] * a_Rotation[3];
+	m_Rows[1][0] = static_cast<float>(2.0) * (tmp1 + tmp2) * invs;
+	m_Rows[0][1] = static_cast<float>(2.0) * (tmp1 - tmp2) * invs;
+
+	tmp1 = a_Rotation[0] * a_Rotation[2];
+	tmp2 = a_Rotation[1] * a_Rotation[3];
+	m_Rows[2][0] = static_cast<CScalar>(2.0) * (tmp1 - tmp2) * invs;
+	m_Rows[0][2] = static_cast<CScalar>(2.0) * (tmp1 + tmp2) * invs;
+	tmp1 = a_Rotation[1] * a_Rotation[2];
+	tmp2 = a_Rotation[0] * a_Rotation[3];
+	m_Rows[2][1] = static_cast<CScalar>(2.0) * (tmp1 + tmp2) * invs;
+	m_Rows[1][2] = static_cast<CScalar>(2.0) * (tmp1 - tmp2) * invs;
+}
+
 
 CMat3x3::CMat3x3(const CMat3x3& a_Copy)
 {

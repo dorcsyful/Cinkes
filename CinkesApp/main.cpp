@@ -26,18 +26,15 @@ struct CinkesToEgg
 	glm::mat4x4 m_Transform{};
 };
 
-CinkesToEgg CreateObject(const std::shared_ptr<Cinkes::CCollisionWorld>& a_World, const std::shared_ptr<Cinkes::CBoxShape>& a_Shape,
-						egg::EggRenderer* a_Renderer, const std::shared_ptr<egg::EggMaterial>& a_Material)
-{
-	CinkesToEgg returnValue;
+CinkesToEgg CreateObject(Cinkes::CPhysicsWorld* a_World, const std::shared_ptr<Cinkes::CBoxShape>& a_Shape,
+	egg::EggRenderer* a_Renderer, const std::shared_ptr<egg::EggMaterial>& a_Material) {
 
-	std::shared_ptr<Cinkes::CCollisionObject> collisionObject = std::make_shared<Cinkes::CCollisionObject>();
-	std::shared_ptr<Cinkes::CCollisionShape> meow = std::static_pointer_cast<Cinkes::CCollisionShape>(a_Shape);
-	collisionObject->SetCollisionShape(meow);
+	CinkesToEgg returnValue;
 	Cinkes::CTransform cTransform = Cinkes::CTransform();
 	cTransform.setOrigin(Cinkes::CVector3(2, 2, 2));
-	collisionObject->SetTransform(cTransform);
-	a_World->AddObject(collisionObject);
+	std::shared_ptr<Cinkes::CRigidBody> collisionObject = std::make_shared<Cinkes::CRigidBody>(cTransform,a_Shape,1,Cinkes::CVector3(0,0,0));
+
+	a_World->AddRigidBody(collisionObject);
 	returnValue.m_Cinkes = collisionObject;
 
 	//Create one cube.
@@ -46,7 +43,6 @@ CinkesToEgg CreateObject(const std::shared_ptr<Cinkes::CCollisionWorld>& a_World
 	egg::ShapeCreateInfo shapeInfo;
 	shapeInfo.m_Radius = 1.f;
 	shapeInfo.m_ShapeType = egg::Shape::CUBE;
-	//shapeInfo.m_InitialTransform = meshTransform.GetTransformation();
 	returnValue.m_Egg = a_Renderer->CreateMesh(shapeInfo);
 
 	returnValue.m_Material = a_Material;
@@ -132,10 +128,8 @@ int main()
 
 	std::shared_ptr<Cinkes::CBoxShape> collisionShape = std::make_shared<Cinkes::CBoxShape>();
 	collisionShape->SetDimensions(0.5f, 0.5f, 0.5f);
-	//CPhysicsWorld* collisionWorld = new CPhysicsWorld();
-	//collisionWorld->GetGeneratorRegistry()->GetGeneratorByType(EGENERATOR_TYPE::TYPE_GRAVITY);
-	CForceGeneratorRegistry* f = new CForceGeneratorRegistry();
-	f->GetGeneratorByType(EGENERATOR_TYPE::TYPE_GRAVITY);
+	CPhysicsWorld* physicsWorld = new CPhysicsWorld();
+	physicsWorld->GetGeneratorRegistry()->GetGeneratorByType(EGENERATOR_TYPE::TYPE_GRAVITY);
 
 	RendererSettings settings;
 	settings.debugFlags = DebugPrintFlags::ERROR | DebugPrintFlags::WARNING;
@@ -185,17 +179,12 @@ int main()
 
 		bool run = true;
 
-		//objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
-		//objects.push_back(CreateObject(collisionWorld, collisionShape, renderer.get(), material));
-		////glm::quat q = glm::quat(0.732759f, 0.4618481f, 0.1909372f, 0.4618481f);
-		////cubeTransform.SetRotation(q);
+		objects.push_back(CreateObject(physicsWorld, collisionShape, renderer.get(), material));
+		//objects.push_back(CreateObject(physicsWorld, collisionShape, renderer.get(), material));
+
 		//cubeTransform.SetTranslation({ 2.1f, 2.7f, 2 });
 		//objects[1].m_Transform = cubeTransform.GetTransformation();
 		//objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(2.1f, 2.7f, 2));
-		//auto mat = Cinkes::CMat3x3(Cinkes::CVector3(0.678701, 0.2805885, 0.678701), 1.4968576);
-		//objects[1].m_Cinkes->GetTransform().setBasis(mat);
-
-
 
 		std::vector<std::shared_ptr<Cinkes::CContactInfo>> narrow;
 		std::vector<std::shared_ptr<Cinkes::CBroadContactInfo>> broad;

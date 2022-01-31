@@ -68,6 +68,7 @@ bool Cinkes::CCollisionWorld::RemoveObjectByIndex(int a_Index)
 
 void Cinkes::CCollisionWorld::RunCollision(CScalar a_T)
 {
+	m_Contacts.clear();
 	m_BVH->Update();
 	for (auto& element : m_BVH->m_Contacts)
 	{

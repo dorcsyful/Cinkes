@@ -25,10 +25,31 @@ void Cinkes::CTransform::operator*=(const CTransform& a_Rhs)
 	m_Basis *= a_Rhs.m_Basis;
 }
 
+void Cinkes::CTransform::operator*=(const CVector3& a_Rhs)
+{
+}
+
 CTransform Cinkes::CTransform::operator*(const CTransform& a_Rhs)
 {
 	return CTransform(m_Basis * a_Rhs.m_Basis,
 		(*this)(a_Rhs.m_Origin));
+}
+
+CVector3 Cinkes::CTransform::operator*(const CVector3& a_Rhs)
+{
+	return {
+		a_Rhs[0] * getBasis()[0][0] +
+		a_Rhs[1] * getBasis().getColumn(0)[1] +
+		a_Rhs[2] * getBasis().getColumn(0)[2] + getOrigin().getX(),
+
+		a_Rhs[0] * getBasis().getRow(0)[1] +
+		a_Rhs[1] * getBasis().getColumn(1)[1] +
+		a_Rhs[2] * getBasis().getColumn(1)[2] + getOrigin().getY(),
+
+		a_Rhs[0] * getBasis().getRow(0)[2] +
+		a_Rhs[1] * getBasis().getRow(1)[2] +
+		a_Rhs[2] * getBasis().getColumn(2)[1] + getOrigin().getZ()
+	};
 }
 
 CTransform& Cinkes::CTransform::operator=(const CTransform& a_Rhs)

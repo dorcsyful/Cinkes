@@ -21,6 +21,7 @@ public:
 	static CScalar Deg2Rad(CScalar a_Degrees) { return a_Degrees / 57.2957795; }
 	static CScalar Rad2Deg(CScalar a_Radians) { return a_Radians * 57.2957795; }
 	static CScalar Sgn(CScalar a_Magnitude, CScalar a_Number) { return std::copysign(a_Magnitude, a_Number); }
+	static CScalar Pow(CScalar a_Number, CScalar a_Power) { return pow(a_Number, a_Power); }
 #else
 	static CScalar Cos(CScalar a_Value) { return std::cosf(a_Value); }
 	static CScalar Acos(CScalar a_Value) { return std::acosf(a_Value); }
@@ -34,6 +35,7 @@ public:
 	static CScalar Deg2Rad(CScalar a_Degrees) { return a_Degrees / 57.2957795f; }
 	static CScalar Rad2Deg(CScalar a_Radians) { return a_Radians * 57.2957795f; }
 	static CScalar Sgn(CScalar a_Magnitude, CScalar a_Number) { return std::copysignf(a_Magnitude, a_Number); }
+	static CScalar Pow(CScalar a_Number, CScalar a_Power) { return powf(a_Number, a_Power); }
 
 #endif
 };
