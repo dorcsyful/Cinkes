@@ -1,4 +1,6 @@
 #pragma once
+#include <cmath>
+
 #include "CScalar.h"
 
 namespace Cinkes {
@@ -44,6 +46,7 @@ namespace Cinkes {
 		CVector3 operator-(const CVector3& a_Rhs);
 		CVector3 operator-(const CVector3& a_Rhs) const;
 		CVector3 operator*(const CVector3& a_Rhs);
+		CVector3 operator*(const CVector3& a_Rhs) const;
 		CVector3 operator/(const CVector3& a_Rhs);
 		CVector3 operator+(CScalar a_Rhs) const;
 		CVector3 operator+(CScalar a_Rhs);
@@ -51,19 +54,22 @@ namespace Cinkes {
 		CVector3 operator*(CScalar a_Rhs) const;
 		CVector3 operator*(CScalar a_Rhs);
 		CVector3 operator/(CScalar a_Rhs);
-		CScalar& operator[](int a_Rhs);
-		CScalar operator[](int a_Rhs) const;
+		CScalar& operator[](unsigned a_Rhs);
+		CScalar operator[](unsigned a_Rhs) const;
 		bool operator==(const CVector3& a_Rhs) const;
 		bool operator!=(const CVector3& a_Rhs) const;
 		
 		CScalar Length2();
+		CScalar Length2() const;
 		CScalar Length();
 		void Normalize();
 		CScalar Dot(const CVector3& a_Rhs);
 		CScalar Dot(const CVector3& a_Rhs) const;
 		CVector3 Dot3(const CVector3& a_V0, const CVector3& a_V1, const CVector3& a_V2);
 		CVector3 Cross(const CVector3& a_Rhs);
+		CVector3 Cross(const CVector3& a_Rhs) const;
 		CVector3 Lerp(const CVector3& a_Other, CScalar a_T);
+		static CVector3 Abs(const CVector3& a_Value) { return CVector3(abs(a_Value[0]),abs(a_Value[1]),abs(a_Value[2])); }
 
 	private:
 		CScalar m_Values[3];

@@ -87,6 +87,9 @@
     <ClInclude Include="CTriangleShape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BoxBoxCollisionAlgorithms.h">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCollisionWorld.cpp">
@@ -142,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="CTriangleShape.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxBoxCollisionAlgorithms.cpp">
+      <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

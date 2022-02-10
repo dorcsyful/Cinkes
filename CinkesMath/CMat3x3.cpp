@@ -231,26 +231,62 @@ CVector3 CMat3x3::operator*(const CVector3& a_Rhs)
 	return vector;
 }
 
-CVector3 CMat3x3::operator[](int a_Row) const
+CVector3 CMat3x3::operator[](unsigned a_Row) const
 {
 	return m_Rows[a_Row];
 }
 
-CVector3& CMat3x3::operator[](int a_Row)
+CVector3& CMat3x3::operator[](unsigned a_Row)
+{
+	return m_Rows[a_Row];
+}
+
+CVector3 Cinkes::CMat3x3::getRow(unsigned a_Row) const
 {
 	return m_Rows[a_Row];
 }
 
 
-CVector3 CMat3x3::getRow(int a_Row)
+CVector3 CMat3x3::getRow(unsigned a_Row)
 {
 	return m_Rows[a_Row];
 }
 
-CVector3 CMat3x3::getColumn(int a_Column)
+CVector3 CMat3x3::getColumn(unsigned a_Column)
 {
-	return CVector3(m_Rows[0][a_Column], m_Rows[1][a_Column], m_Rows[2][a_Column]);
+	return {m_Rows[0][a_Column], m_Rows[1][a_Column], m_Rows[2][a_Column]};
 
+}
+
+CVector3 Cinkes::CMat3x3::getColumn(unsigned a_Column) const
+{
+	return {m_Rows[0][a_Column], m_Rows[1][a_Column], m_Rows[2][a_Column]};
+
+}
+
+void CMat3x3::setColumn(unsigned a_Num, const CVector3& a_Column)
+{
+	m_Rows[0][a_Num] = a_Column.getX();
+	m_Rows[1][a_Num] = a_Column.getY();
+	m_Rows[2][a_Num] = a_Column.getZ();
+}
+
+void Cinkes::CMat3x3::setFromColumns(const CVector3& a_0, const CVector3& a_1, const CVector3& a_2)
+{
+	setColumn(0, a_0);
+	setColumn(1, a_1);
+	setColumn(2, a_2);
+}
+
+void Cinkes::CMat3x3::setSkewSymmetric(const CVector3& a_Vector)
+{
+	m_Rows[0][0] = m_Rows[1][1] = m_Rows[2][2] = 0;
+	m_Rows[1][0] = -a_Vector.getZ();
+	m_Rows[2][0] = a_Vector.getY();
+	m_Rows[0][1] = a_Vector.getZ();
+	m_Rows[2][1] = -a_Vector.getX();
+	m_Rows[0][2] = -a_Vector.getY();
+	m_Rows[1][2] = a_Vector.getZ();
 }
 
 CMat3x3 CMat3x3::Transpose()
@@ -294,6 +330,14 @@ CMat3x3 CMat3x3::GetInverse()
 
 
 	return inverse;
+}
+
+CVector3 Cinkes::CMat3x3::TransformTranspose(const CVector3& a_Vector)
+{
+	return CVector3(
+		a_Vector.getX() * m_Rows[0][0] + a_Vector.getY() * m_Rows[0][1] + a_Vector.getZ() * m_Rows[2][2],
+		a_Vector.getX() * m_Rows[1][0] + a_Vector.getY() * m_Rows[1][1] + a_Vector.getZ() * m_Rows[2][2],
+		a_Vector.getX() * m_Rows[2][0] + a_Vector.getY() * m_Rows[2][1] + a_Vector.getZ() * m_Rows[2][2]);
 }
 
 CMat3x3 CMat3x3::GetIdentity()

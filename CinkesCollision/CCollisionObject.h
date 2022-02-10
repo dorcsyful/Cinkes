@@ -4,6 +4,13 @@
 #include "CTransform.h"
 namespace Cinkes
 {
+	enum class EOBJECT_TYPE
+	{
+		TYPE_COLLISION,
+		TYPE_RIGID,
+		TYPE_SOFT
+	};
+
 	struct CContactInfo;
 	class CCollisionShape;
 
@@ -39,6 +46,8 @@ namespace Cinkes
 		void SetHasContact(CContactInfo* a_Rhs) { m_HasContact = a_Rhs; }
 		bool GetHasContact() { return m_HasContact; }
 		bool GetHasContact() const { return m_HasContact; }
+		EOBJECT_TYPE GetType() const { return m_Type; }
+		EOBJECT_TYPE GetType() { return m_Type; }
 		//}
 
 		bool m_AABBDirty = false;
@@ -48,7 +57,7 @@ namespace Cinkes
 		std::shared_ptr<CCollisionShape> m_Shape;
 		CTransform m_Transform;
 		bool m_Moveable;
-
+		EOBJECT_TYPE m_Type;
 	};
 
 }

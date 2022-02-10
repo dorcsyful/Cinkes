@@ -149,7 +149,7 @@ int main()
 	{
 		std::vector<CinkesToEgg> objects;
 
-
+		
 		//Create one material.
 		MaterialCreateInfo materialInfo;
 		materialInfo.m_MetallicFactor = 0.0f;
@@ -180,15 +180,16 @@ int main()
 		bool run = true;
 
 		objects.push_back(CreateObject(physicsWorld, collisionShape, renderer.get(), material));
-		//objects.push_back(CreateObject(physicsWorld, collisionShape, renderer.get(), material));
+		objects.push_back(CreateObject(physicsWorld, collisionShape, renderer.get(), material));
 
-		//cubeTransform.SetTranslation({ 2.1f, 2.7f, 2 });
-		//objects[1].m_Transform = cubeTransform.GetTransformation();
-		//objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(2.1f, 2.7f, 2));
+		cubeTransform.SetTranslation({ 2.1f, 2.7f, 2 });
+		objects[1].m_Transform = cubeTransform.GetTransformation();
+		objects[1].m_Cinkes->GetTransform().setOrigin(Cinkes::CVector3(2.1f, 2.7f, 2));
+		physicsWorld->RunCollision(0.05f);
 
 		std::vector<std::shared_ptr<Cinkes::CContactInfo>> narrow;
 		std::vector<std::shared_ptr<Cinkes::CBroadContactInfo>> broad;
-		//collisionWorld->getContacts(narrow, broad);
+		physicsWorld->getContacts(narrow, broad);
 
 		for(auto& current : objects)
 		{
@@ -223,7 +224,7 @@ int main()
 		//LOOP
 		while (run) {
 
-			//collisionWorld->Update(0.05f);
+			physicsWorld->RunCollision(0.05f);
 
 			EggRenderer* renderpointer = renderer.get();
 			run = HandleInput(camera, renderpointer, cameraRotation);

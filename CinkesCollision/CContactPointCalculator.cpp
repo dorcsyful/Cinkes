@@ -14,11 +14,11 @@ void Cinkes::CContactPointCalculator::RunForAllContacts(std::vector<CContactInfo
 
 void Cinkes::CContactPointCalculator::GetPoints(CContactInfo* a_Contact)
 {
-		CVector3 barycentric = GetBaryCentric(a_Contact->m_PenetrationPoint, a_Contact->m_Triangle);
-		CVector3 wcolpoint = CVector3(a_Contact->m_PolytopeA * barycentric[0]) +
-			CVector3(a_Contact->m_PolytopeB * barycentric[1]) +
-			CVector3(a_Contact->m_PolytopeC * barycentric[2]);
-		a_Contact->m_ContactPoints.push_back(wcolpoint);
+		//CVector3 barycentric = GetBaryCentric(a_Contact->m_PenetrationPoint, a_Contact->m_Triangle);
+		//CVector3 wcolpoint = CVector3(a_Contact->m_PolytopeA * barycentric[0]) +
+		//	CVector3(a_Contact->m_PolytopeB * barycentric[1]) +
+		//	CVector3(a_Contact->m_PolytopeC * barycentric[2]);
+		//a_Contact->m_ContactPoints.push_back(wcolpoint);
 }
 
 Cinkes::CVector3 Cinkes::CContactPointCalculator::GetBaryCentric(const CVector3& a_Distance, const std::vector<CVector3>& a_Triangle)

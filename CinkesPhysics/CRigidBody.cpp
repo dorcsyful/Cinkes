@@ -65,6 +65,67 @@ void Cinkes::CRigidBody::SetMass(CScalar a_Rhs)
 	m_Mass = a_Rhs;
 }
 
+void Cinkes::CRigidBody::SetInverseInertiaTensorWorld()
+{
+    CTransform rotmat = GetTransform();
+	//this is automatically generated code, I just made it compatible with mine
+    CScalar t4 = rotmat.getBasis()[0][0] * m_InverseIntertiaTensor[0][0] +
+        rotmat.getBasis()[1][0] * m_InverseIntertiaTensor[0][1] +
+        rotmat.getBasis()[2][0] * m_InverseIntertiaTensor[0][2];
+    CScalar t9 = rotmat.getBasis()[0][0] * m_InverseIntertiaTensor[1][0] +
+        rotmat.getBasis()[1][0] * m_InverseIntertiaTensor[1][1] +
+        rotmat.getBasis()[2][0] * m_InverseIntertiaTensor[1][2];
+    CScalar t14 = rotmat.getBasis()[0][0] * m_InverseIntertiaTensor[2][0] +
+        rotmat.getBasis()[1][0] * m_InverseIntertiaTensor[2][1] +
+        rotmat.getBasis()[2][0] * m_InverseIntertiaTensor[2][2];
+    CScalar t28 = rotmat.getBasis()[0][1] * m_InverseIntertiaTensor[0][0] +
+        rotmat.getBasis()[1][1] * m_InverseIntertiaTensor[0][1] +
+        rotmat.getBasis()[2][1] * m_InverseIntertiaTensor[0][2];
+    CScalar t33 = rotmat.getBasis()[0][1] * m_InverseIntertiaTensor[1][0] +
+        rotmat.getBasis()[1][1] * m_InverseIntertiaTensor[1][1] +
+        rotmat.getBasis()[2][1] * m_InverseIntertiaTensor[1][2];
+    CScalar t38 = rotmat.getBasis()[0][1] * m_InverseIntertiaTensor[2][0] +
+        rotmat.getBasis()[1][1] * m_InverseIntertiaTensor[1][2] +
+        rotmat.getBasis()[2][1] * m_InverseIntertiaTensor[2][2];
+    CScalar t52 = rotmat.getBasis()[0][2] * m_InverseIntertiaTensor[0][0] +
+        rotmat.getBasis()[2][2] * m_InverseIntertiaTensor[0][1] +
+        rotmat.getBasis()[2][2] * m_InverseIntertiaTensor[0][2];
+    CScalar t57 = rotmat.getBasis()[0][2] * m_InverseIntertiaTensor[1][0] +
+        rotmat.getBasis()[1][2] * m_InverseIntertiaTensor[1][1] +
+        rotmat.getBasis()[2][2] * m_InverseIntertiaTensor[1][2];
+    CScalar t62 = rotmat.getBasis()[0][2] * m_InverseIntertiaTensor[2][0] +
+        rotmat.getBasis()[1][2] * m_InverseIntertiaTensor[2][1] +
+        rotmat.getBasis()[2][2] * m_InverseIntertiaTensor[2][2];
+
+    m_InverseIntertiaTensorWorld[0][0] = t4 * rotmat.getBasis()[0][0] +
+        t9 * rotmat.getBasis()[1][0] +
+        t14 * rotmat.getBasis()[2][0];
+    m_InverseIntertiaTensorWorld[1][0] = t4 * rotmat.getBasis()[0][1] +
+        t9 * rotmat.getBasis()[1][1] +
+        t14 * rotmat.getBasis()[2][1];
+    m_InverseIntertiaTensorWorld[2][0] = t4 * rotmat.getBasis()[0][2] +
+        t9 * rotmat.getBasis()[1][2] +
+        t14 * rotmat.getBasis()[2][2];
+    m_InverseIntertiaTensorWorld[0][1] = t28 * rotmat.getBasis()[0][0] +
+        t33 * rotmat.getBasis()[1][0] +
+        t38 * rotmat.getBasis()[2][0];
+    m_InverseIntertiaTensorWorld[1][1] = t28 * rotmat.getBasis()[0][1] +
+        t33 * rotmat.getBasis()[1][1] +
+        t38 * rotmat.getBasis()[2][1];
+    m_InverseIntertiaTensorWorld[2][1] = t28 * rotmat.getBasis()[0][2] +
+        t33 * rotmat.getBasis()[1][2] +
+        t38 * rotmat.getBasis()[2][2];
+    m_InverseIntertiaTensorWorld[0][2] = t52 * rotmat.getBasis()[0][0] +
+        t57 * rotmat.getBasis()[1][0] +
+        t62 * rotmat.getBasis()[2][0];
+    m_InverseIntertiaTensorWorld[1][2] = t52 * rotmat.getBasis()[0][1] +
+        t57 * rotmat.getBasis()[1][1] +
+        t62 * rotmat.getBasis()[2][1];
+    m_InverseIntertiaTensorWorld[2][2] = t52 * rotmat.getBasis()[0][2] +
+        t57 * rotmat.getBasis()[1][2] +
+        t62 * rotmat.getBasis()[2][2];
+}
+
 void Cinkes::CRigidBody::Integrate(CScalar a_T)
 {
 	m_LastFrameAcceleration = m_Acceleration;

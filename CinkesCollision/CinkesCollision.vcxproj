@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoxBoxCollisionAlgorithms.h" />
     <ClInclude Include="CBoxShape.h" />
     <ClInclude Include="CBVH.h" />
     <ClInclude Include="CCapsuleShape.h" />
@@ -41,6 +42,7 @@
     <ClInclude Include="CVertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BoxBoxCollisionAlgorithms.cpp" />
     <ClCompile Include="CBoxShape.cpp" />
     <ClCompile Include="CBVH.cpp" />
     <ClCompile Include="CCapsuleShape.cpp" />

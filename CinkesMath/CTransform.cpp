@@ -1,4 +1,8 @@
 #include "CTransform.h"
+
+#include <algorithm>
+#include <cassert>
+
 #include "CQuaternion.h"
 using namespace Cinkes;
 
@@ -19,14 +23,16 @@ Cinkes::CTransform::CTransform(const CTransform& a_Rhs)
 	m_Origin = a_Rhs.getOrigin();
 }
 
+Cinkes::CTransform::CTransform(CTransform&& a_Rhs) noexcept
+{
+	m_Basis = a_Rhs.getBasis();
+	m_Origin = a_Rhs.getOrigin();
+}
+
 void Cinkes::CTransform::operator*=(const CTransform& a_Rhs)
 {
 	m_Origin += m_Basis * a_Rhs.m_Origin;
 	m_Basis *= a_Rhs.m_Basis;
-}
-
-void Cinkes::CTransform::operator*=(const CVector3& a_Rhs)
-{
 }
 
 CTransform Cinkes::CTransform::operator*(const CTransform& a_Rhs)
@@ -50,6 +56,14 @@ CVector3 Cinkes::CTransform::operator*(const CVector3& a_Rhs)
 		a_Rhs[1] * getBasis().getRow(1)[2] +
 		a_Rhs[2] * getBasis().getColumn(2)[1] + getOrigin().getZ()
 	};
+}
+
+CTransform& Cinkes::CTransform::operator=(CTransform&& a_Rhs) noexcept
+{
+	m_Basis = a_Rhs.getBasis();
+	m_Origin = a_Rhs.getOrigin();
+
+	return (*this);
 }
 
 CTransform& Cinkes::CTransform::operator=(const CTransform& a_Rhs)
@@ -104,6 +118,45 @@ CVector3 Cinkes::CTransform::getOrigin() const
 {
 	return m_Origin;
 }
+
+CScalar Cinkes::CTransform::getPerValue(unsigned a_Value)
+{
+	assert(a_Value < 12);
+	if (a_Value <= 2) { return m_Basis.getColumn(0)[a_Value]; }
+	if (a_Value == 3) { return m_Origin.getX(); }
+	if (4 <= a_Value && a_Value <= 6) { return m_Basis.getColumn(1)[a_Value - 4]; }
+	if (a_Value == 7) { return m_Origin.getY(); }
+	if (8 <= a_Value && a_Value <= 10) { return m_Basis.getColumn(2)[a_Value - 8]; }
+	if (a_Value == 11) { return m_Origin.getZ(); }
+	assert(false); 
+	return std::numeric_limits<CScalar>::max();
+}
+
+CScalar Cinkes::CTransform::getPerValue(unsigned a_Value) const
+{
+	assert(a_Value < 12);
+	if (a_Value <= 2) { return m_Basis.getColumn(0)[a_Value]; }
+	if (a_Value == 3) { return m_Origin.getX(); }
+	if (4 <= a_Value && a_Value <= 6) { m_Basis.getColumn(1)[a_Value - 4]; }
+	if (a_Value == 7) { return m_Origin.getY(); }
+	if (8 <= a_Value && a_Value <= 10) { return m_Basis.getColumn(2)[a_Value - 8]; }
+	if (a_Value == 11) { return m_Origin.getZ(); }
+	assert(0 == 0);
+	return std::numeric_limits<CScalar>::max();
+}
+
+CVector3 Cinkes::CTransform::getAxisVector(unsigned a_Value)
+{
+	return CVector3(getPerValue(a_Value), getPerValue(a_Value + 4), getPerValue(a_Value + 8));
+
+}
+
+CVector3 Cinkes::CTransform::getAxisVector(unsigned a_Value) const
+{
+	return CVector3(getPerValue(a_Value), getPerValue(a_Value + 4), getPerValue(a_Value + 8));
+
+}
+
 
 CQuaternion Cinkes::CTransform::getQuaternion()
 {

@@ -172,6 +172,11 @@ CVector3 Cinkes::CVector3::operator*(const CVector3& a_Rhs)
 	return CVector3(m_Values[0] * a_Rhs.m_Values[0], m_Values[1] * a_Rhs.m_Values[1], m_Values[2] * a_Rhs.m_Values[2]);
 }
 
+CVector3 Cinkes::CVector3::operator*(const CVector3& a_Rhs) const
+{
+	return CVector3(m_Values[0] * a_Rhs.m_Values[0], m_Values[1] * a_Rhs.m_Values[1], m_Values[2] * a_Rhs.m_Values[2]);
+}
+
 CVector3 Cinkes::CVector3::operator/(const CVector3& a_Rhs)
 {
 	return CVector3(m_Values[0] / a_Rhs.m_Values[0], m_Values[1] / a_Rhs.m_Values[1], m_Values[2] / a_Rhs.m_Values[2]);
@@ -207,12 +212,12 @@ CVector3 CVector3::operator/(CScalar a_Rhs)
 	return CVector3(m_Values[0] / a_Rhs, m_Values[1] / a_Rhs, m_Values[2] / a_Rhs);
 }
 
-CScalar& Cinkes::CVector3::operator[](int a_Rhs)
+CScalar& Cinkes::CVector3::operator[](unsigned a_Rhs)
 {
 	return m_Values[a_Rhs];
 }
 
-float CVector3::operator[](int a_Rhs) const
+float CVector3::operator[](unsigned a_Rhs) const
 {
 	return m_Values[a_Rhs];
 }
@@ -228,6 +233,11 @@ bool Cinkes::CVector3::operator!=(const CVector3& a_Rhs) const
 }
 
 CScalar Cinkes::CVector3::Length2()
+{
+	return CScalar(m_Values[0] * m_Values[0] + m_Values[1] * m_Values[1] + m_Values[2] * m_Values[2]);
+}
+
+CScalar Cinkes::CVector3::Length2() const
 {
 	return CScalar(m_Values[0] * m_Values[0] + m_Values[1] * m_Values[1] + m_Values[2] * m_Values[2]);
 }
@@ -274,6 +284,20 @@ CVector3 CVector3::Cross(const CVector3& a_Rhs)
 	result[2] = m_Values[0] * a_Rhs[1] - m_Values[1] * a_Rhs[0];
 
 	if((result - CScalar(0.0001)).Length() < 0)
+	{
+		return a_Rhs;
+	}
+	return result;
+}
+
+CVector3 Cinkes::CVector3::Cross(const CVector3& a_Rhs) const
+{
+	CVector3 result;
+	result[0] = m_Values[1] * a_Rhs[2] - m_Values[2] * a_Rhs[1];
+	result[1] = m_Values[2] * a_Rhs[0] - m_Values[0] * a_Rhs[2];
+	result[2] = m_Values[0] * a_Rhs[1] - m_Values[1] * a_Rhs[0];
+
+	if ((result - CScalar(0.0001)).Length() < 0)
 	{
 		return a_Rhs;
 	}

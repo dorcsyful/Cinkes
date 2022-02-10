@@ -6,6 +6,7 @@
 #include "CEPA.h"
 #include "CScalar.h"
 #include "CContactPointCalculator.h"
+#include "BoxBoxCollisionAlgorithms.h"
 
 namespace Cinkes
 {
@@ -38,11 +39,11 @@ namespace Cinkes
 		bool AddObject(const std::shared_ptr<CCollisionObject>& a_Object);
 		bool RemoveObject(const std::shared_ptr<CCollisionObject>& a_Object);
 		bool RemoveObjectByIndex(int a_Index);
-		size_t GetNumberOfObjects() const { return m_Objects.size(); }
+		[[nodiscard]] size_t GetNumberOfObjects() const { return m_Objects.size(); }
 		std::shared_ptr<CCollisionObject> GetObjectByIndex(int a_Num) { return m_Objects[a_Num]; }
 		void Stop() { m_ShouldUpdate = false; }
 		void Start() { m_ShouldUpdate = true; }
-		bool GetStatus() const { return m_ShouldUpdate; }
+		[[nodiscard]] bool GetStatus() const { return m_ShouldUpdate; }
 
 		//}
 
@@ -66,6 +67,7 @@ namespace Cinkes
 		std::unique_ptr<CGJKAlgorithm> m_GJK;
 		std::unique_ptr<CEPA> m_CEPA;
 		std::unique_ptr<CContactPointCalculator> m_ContactPointCalculator;
+		std::unique_ptr<BoxBoxCollisionAlgorithms> m_Boxes;
 		//}
 	};
 

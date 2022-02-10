@@ -38,20 +38,25 @@ namespace Cinkes
 		CMat3x3 operator*(const CScalar& a_Rhs);
 		void operator*=(const CScalar& a_Rhs);
 		CVector3 operator*(const CVector3& a_Rhs);
-		CVector3 operator[](int a_Row) const;
-		CVector3& operator[](int a_Row);
+		CVector3 operator[](unsigned a_Row) const;
+		CVector3& operator[](unsigned a_Row);
 		//}
 
 		// Subgroup: Other {
-		CVector3 getRow(int a_Row);
-		CVector3 getColumn(int a_Column);
-
+		CVector3 getRow(unsigned a_Row);
+		CVector3 getRow(unsigned a_Row) const;
+		CVector3 getColumn(unsigned a_Column);
+		CVector3 getColumn(unsigned a_Column) const;
+		void setColumn(unsigned a_Num, const CVector3& a_Column);
+		void setFromColumns(const CVector3& a_0, const CVector3& a_1, const CVector3& a_2);
+		void setSkewSymmetric(const CVector3& a_Vector);
 		/*
 		 MemberDescription:
 		 Makes columns into rows and vice versa
 		 */
 		CMat3x3 Transpose();
 		CMat3x3 GetInverse();
+		CVector3 TransformTranspose(const CVector3& a_Vector);
 		/*
 		 MemberDescription:
 		 Static function to get the identity matrix. Do not call on member function!

@@ -103,13 +103,8 @@ void Cinkes::CEPA::Algorithm(std::shared_ptr<CContactInfo> a_Contact, const CSim
 			normals.insert(normals.end(), newStuff.first.begin(), newStuff.first.end());
 		}
 	}
-	a_Contact->m_PolytopeA = polytopeA[minFace];
-	a_Contact->m_PolytopeB = polytopeA[minFace + 1];
-	a_Contact->m_PolytopeC = polytopeA[minFace + 2];
-	a_Contact->m_Triangle = { polytope[minFace],polytope[minFace + 1],polytope[minFace + 2] };
 	a_Contact->m_Normal = minNormal;
 	a_Contact->m_PenetrationDepth = minDistance + 0.001f;
-	a_Contact->m_PenetrationPoint = normals[minFace].m_Normal * normals[minFace].m_Distance;
 }
 
 void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, const std::shared_ptr<CContactInfo>& a_Contact)
