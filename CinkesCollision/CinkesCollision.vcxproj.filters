@@ -66,9 +66,6 @@
     <ClInclude Include="CCylinder.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="CVertex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CSimplex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -84,11 +81,14 @@
     <ClInclude Include="CEPA.h">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="CTriangleShape.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BoxBoxCollisionAlgorithms.h">
       <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="CTriangleShape.h">
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CVertex.h">
+      <Filter>Header Files\Shapes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

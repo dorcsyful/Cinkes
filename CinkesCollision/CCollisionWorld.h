@@ -39,12 +39,12 @@ namespace Cinkes
 		bool AddObject(const std::shared_ptr<CCollisionObject>& a_Object);
 		bool RemoveObject(const std::shared_ptr<CCollisionObject>& a_Object);
 		bool RemoveObjectByIndex(int a_Index);
-		[[nodiscard]] size_t GetNumberOfObjects() const { return m_Objects.size(); }
+		size_t GetNumberOfObjects() const { return m_Objects.size(); }
 		std::shared_ptr<CCollisionObject> GetObjectByIndex(int a_Num) { return m_Objects[a_Num]; }
 		void Stop() { m_ShouldUpdate = false; }
 		void Start() { m_ShouldUpdate = true; }
-		[[nodiscard]] bool GetStatus() const { return m_ShouldUpdate; }
-
+		bool GetStatus() const { return m_ShouldUpdate; }
+		std::vector<std::shared_ptr<CCollisionObject>>& GetAllObjects() { return m_Objects; }
 		//}
 
 		//Subgroup: Collision test {
@@ -56,10 +56,10 @@ namespace Cinkes
 		void RunCollision(CScalar a_T);
 		//}
 
-
 	private:
 		//Subgroup: Class members
 		bool m_ShouldUpdate;
+
 		std::vector<std::shared_ptr<CCollisionObject>> m_Objects;
 		std::vector<std::shared_ptr<CRigidBody>> m_RigidBodies;
 		std::vector<std::shared_ptr<CContactInfo>> m_Contacts;
