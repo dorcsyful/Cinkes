@@ -15,10 +15,7 @@ bool Cinkes::CForceGeneratorRegistry::RemoveGeneratorByIndex(unsigned a_Index)
 {
     if (m_ForceGenerators.size() <= a_Index) { return false; }
 
-    for (auto& element : m_PhysicsWorld->GetAllRigidBodies())
-    {
-        element->RemoveGeneratorByValue(m_ForceGenerators[a_Index].get());
-    }
+	m_ForceGenerators.erase(std::find(m_ForceGenerators.begin(),m_ForceGenerators.end(),m_ForceGenerators[a_Index]));
 
     return true;
 }
@@ -62,7 +59,7 @@ std::vector<std::shared_ptr<Cinkes::CForceGenerator>> Cinkes::CForceGeneratorReg
 
 void Cinkes::CForceGeneratorRegistry::UpdateGenerators()
 {
-	for (auto element : m_ForceGenerators)
+	for (const auto& element : m_ForceGenerators)
 	{
 		for (auto object : element->m_Objects)
 		{

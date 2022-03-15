@@ -17,10 +17,7 @@ namespace Cinkes
 			m_ForceGenerators.push_back(std::make_shared<CGravityGenerator>());
 		}
 		~CForceGeneratorRegistry() {
-			for (int i = static_cast<int>(m_ForceGenerators.size()) - 1; i >= 0; i--)
-			{
-				RemoveGeneratorByIndex(i);
-			}
+			m_ForceGenerators.clear();
 		}
 		CForceGeneratorRegistry(CForceGeneratorRegistry&& a_Rhs) = delete;
 		CForceGeneratorRegistry(const CForceGeneratorRegistry& a_Rhs) = delete;

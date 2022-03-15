@@ -50,7 +50,7 @@ void Cinkes::CBVH::CreateBVH(std::vector<std::shared_ptr<CAABB>>& a_Objects)
 		{
 			if (elements->m_Min[i] < min[i]) { min[i] = elements->m_Min[i]; }
 			if (elements->m_Max[i] > max[i]) { max[i] = elements->m_Max[i]; }
-			midpoints[i] = static_cast<CScalar>(max[i] + min[i]) * static_cast<CScalar>(0.5);
+			midpoints[i] = static_cast<int>(static_cast<CScalar>(max[i] + min[i]) * static_cast<CScalar>(0.5));
 		}
 	}
 

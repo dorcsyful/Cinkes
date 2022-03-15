@@ -130,7 +130,7 @@ namespace UnitTest
 
 		TEST_METHOD(GetEuler)
 		{
-			CQuaternion base = CQuaternion(0.696706709346738, 0.7173560908999379, 4.3925392028473336e-17, 4.26609820772984e-17);
+			CQuaternion base = CQuaternion(0.696706709346738f, 0.7173560908999379f, 4.3925392028473336e-17f, 4.26609820772984e-17f);
 			CScalar x, y, z;
 			base.GetEuler(x ,y, z);
 

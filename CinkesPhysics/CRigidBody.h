@@ -1,5 +1,4 @@
 #pragma once
-#include <utility>
 #include <vector>
 
 #include "CBody.h"
@@ -10,11 +9,12 @@ namespace Cinkes
 	class CRigidBody : public CBody
 	{
 	public:
-		CRigidBody(float a_Mass,
-		           CVector3 a_CenterOfMass) : CBody(), m_Mass(a_Mass),
-		                                      m_InverseMass(1/a_Mass), m_CenterOfMass(
-			                                      std::move(a_CenterOfMass))
+		explicit CRigidBody(float a_Mass = 1,
+		                    const CVector3& a_CenterOfMass = CVector3(0,0,0))
 		{
+			m_Mass = 1;
+			m_InverseMass = 1 / m_Mass;
+			m_CenterOfMass = a_CenterOfMass;
 			m_Moveable = true;
 			m_Type = EOBJECT_TYPE::TYPE_RIGID;
 		}
@@ -96,8 +96,8 @@ namespace Cinkes
 		CVector3 m_Velocity;
 		CVector3 m_AngularVelocity;
 
-		CScalar m_AngularDamping = 0.8f;
-		CScalar m_LinearDamping = 0.8f;
+		CScalar m_AngularDamping = 0.995f;
+		CScalar m_LinearDamping = 0.995f;
 
 		CVector3 m_LastFrameAcceleration;
 		CVector3 m_Acceleration;

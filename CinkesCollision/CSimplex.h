@@ -8,9 +8,10 @@ namespace Cinkes
 	class CSimplex
 	{
 	private:
-		std::vector<Cinkes::CVector3> m_Points;
-		std::vector<Cinkes::CVector3> m_PointsA;
-		std::vector<Cinkes::CVector3> m_PointsB;
+		std::vector<CVector3> m_Points;
+		std::vector<CVector3> m_PointsA;
+		std::vector<CVector3> m_PointsB;
+		std::vector<CVector3> m_LocalPoints;
 
 	public:
 		CSimplex() { m_Points.reserve(4); }
@@ -45,6 +46,14 @@ namespace Cinkes
 				m_PointsB[std::distance(a_Rhs.begin(), i)] = *i;
 			}
 			return *this;
+		}
+
+		void SetFinishedLocal()
+		{
+			for(size_t i = 0; i < m_Points.size(); i++)
+			{
+				m_LocalPoints.push_back(m_PointsA[i] - m_PointsB[i]);
+			}
 		}
 
 		void Push_Front(const CVector3& a_Vector3)
