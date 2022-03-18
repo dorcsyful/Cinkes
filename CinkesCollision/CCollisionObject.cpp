@@ -11,6 +11,7 @@ Cinkes::CCollisionObject::CCollisionObject()
 	m_Transform = CTransform();
 	m_Moveable = false;
 	m_Type = EOBJECT_TYPE::TYPE_COLLISION;
+	m_HasContact = nullptr;
 }
 
 Cinkes::CCollisionObject::CCollisionObject(const CTransform& a_Transform, std::shared_ptr<CCollisionShape> a_Shape)
@@ -18,6 +19,8 @@ Cinkes::CCollisionObject::CCollisionObject(const CTransform& a_Transform, std::s
 	m_Transform = a_Transform;
 	m_Shape = std::move(a_Shape);
 	m_Moveable = false;
+	m_Type = EOBJECT_TYPE::TYPE_COLLISION;
+	m_HasContact = nullptr;
 }
 
 Cinkes::CCollisionObject::~CCollisionObject()
@@ -30,6 +33,8 @@ Cinkes::CCollisionObject::CCollisionObject(const CCollisionObject& a_Rhs)
 	m_Transform = a_Rhs.m_Transform;
 	m_Shape = a_Rhs.m_Shape;
 	m_Moveable = false;
+	m_Type = EOBJECT_TYPE::TYPE_COLLISION;
+	m_HasContact = nullptr;
 }
 
 Cinkes::CCollisionObject::CCollisionObject(CCollisionObject&& a_Rhs) noexcept 
@@ -37,6 +42,8 @@ Cinkes::CCollisionObject::CCollisionObject(CCollisionObject&& a_Rhs) noexcept
 	m_Transform = a_Rhs.m_Transform;
 	m_Shape = a_Rhs.m_Shape;
 	m_Moveable = false;
+	m_Type = EOBJECT_TYPE::TYPE_COLLISION;
+	m_HasContact = nullptr;
 }
 
 

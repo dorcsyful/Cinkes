@@ -41,7 +41,7 @@ bool Cinkes::CPhysicsWorld::AddRigidBody(const std::shared_ptr<CRigidBody>& a_Bo
 	return true;
 }
 
-bool Cinkes::CPhysicsWorld::RemoveRigidBodyByValue(const std::shared_ptr<CRigidBody>& a_Body, bool a_Delete)
+bool Cinkes::CPhysicsWorld:: RemoveRigidBodyByValue(const std::shared_ptr<CRigidBody>& a_Body, bool a_Delete)
 {
 	auto it = std::find(m_RigidBodies.begin(), m_RigidBodies.end(), a_Body);
 	if (it == m_RigidBodies.end()) { return false; }
@@ -49,22 +49,19 @@ bool Cinkes::CPhysicsWorld::RemoveRigidBodyByValue(const std::shared_ptr<CRigidB
 	if(a_Delete)
 	{
 		RemoveObject(std::static_pointer_cast<CCollisionObject>(a_Body));
-		delete std::get_deleter<CRigidBody>(a_Body);
+		a_Body->m_InRemoveQueue = true;
 	}
 
 	return true;
 }
 
-bool Cinkes::CPhysicsWorld::RemoveRigidBodyByIndex(int a_Index, bool a_Delete)
+bool Cinkes::CPhysicsWorld::RemoveRigidBodyByIndex(int a_Index)
 {
+	m_RigidBodies[a_Index]->m_InRemoveQueue = true;
 	CRigidBody* rigid = m_RigidBodies[a_Index].get();
 	if(m_RigidBodies.erase(std::find(m_RigidBodies.begin(),m_RigidBodies.end(),m_RigidBodies[a_Index])) != m_RigidBodies.end())
 	{
 		return false;
-	}
-	if(a_Delete)
-	{
-		delete rigid;
 	}
 	return true;
 }

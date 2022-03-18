@@ -51,6 +51,7 @@ bool Cinkes::CCollisionWorld::RemoveObject(const std::shared_ptr<CCollisionObjec
 
 	if (removed == m_Objects.end())
 	{
+		a_Object->m_InRemoveQueue = true;
 		return true;
 	}
 	return false;
@@ -58,8 +59,10 @@ bool Cinkes::CCollisionWorld::RemoveObject(const std::shared_ptr<CCollisionObjec
 
 bool Cinkes::CCollisionWorld::RemoveObjectByIndex(int a_Index)
 {
+	m_Objects[a_Index]->m_InRemoveQueue = true;
 	auto size = m_Objects.size();
 	m_Objects.erase(m_Objects.begin() + a_Index);
+
 	if(size -1 ==m_Objects.size())
 	{
 		return true;

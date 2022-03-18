@@ -51,6 +51,7 @@ namespace Cinkes
 		//}
 
 		bool m_AABBDirty = false;
+		bool m_InRemoveQueue = false;
 
 	protected:
 		CContactInfo* m_HasContact;

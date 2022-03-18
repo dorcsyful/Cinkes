@@ -17,7 +17,7 @@ namespace Cinkes
 
 		bool AddRigidBody(const std::shared_ptr<CRigidBody>& a_Body);
 		bool RemoveRigidBodyByValue(const std::shared_ptr<CRigidBody>& a_Body, bool a_Delete);
-		bool RemoveRigidBodyByIndex(int a_Index, bool a_Delete);
+		bool RemoveRigidBodyByIndex(int a_Index);
 
 		bool AddSpring(const std::shared_ptr<CForceGenerator>& a_Generator) { return false; }
 		bool RemoveSpringByValue(const std::shared_ptr<CForceGenerator>& a_Generator, bool a_Delete) { return false; }
