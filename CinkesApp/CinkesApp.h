@@ -4,6 +4,14 @@
 #include <OgreRoot.h>
 #include <OgreEntity.h>
 #include <OgreRenderWindow.h>
+#include <OgreConfigFile.h>
+
+#include <OgreConfigFile.h>
+
+#include "CCollisionObject.h"
+#include "CCollisionShape.h"
+#include "COgreConverter.h"
+#include "CPhysicsWorld.h"
 
 namespace Cinkes
 {
@@ -80,10 +88,38 @@ namespace Cinkes
 			CreateCamera();
 		}
 
+		bool AddObject(const std::shared_ptr<CCollisionObject>& a_Cinkes, 
+						const std::string& a_MeshName = "cube.mesh", const std::string& a_MaterialName = "Ogre/Compositor/OldMovie")
+		{
+			for (auto& m_Converter : m_Converters)
+			{
+				if (a_Cinkes == m_Converter->m_Cinkes) { return false; }
+			}
+			Ogre::Entity* entity = m_SceneManager->createEntity(a_MeshName);
+			entity->setMaterialName(a_MaterialName);
+			auto node = m_SceneManager->getRootSceneNode()->createChildSceneNode();
+			node->attachObject(entity);
+			std::shared_ptr<COgreConverter> temp = std::make_shared<COgreConverter>(a_Cinkes, entity);
+			m_Converters.push_back(temp);
+			m_PhysicsWorld->AddRigidBody(std::static_pointer_cast<CRigidBody>(a_Cinkes));
+			return true;
+		}
+
+		void Convert()
+		{
+			for (auto& current : m_Converters)
+			{
+				current->m_Ogre->getParentSceneNode()->setPosition(current->ConvertPosition());
+				current->m_Ogre->getParentSceneNode()->setOrientation(current->ConvertQuaternion());
+			}
+		}
+
 
 		bool m_Go = true;
 		SceneManager* m_SceneManager = nullptr;
 		RTShader::ShaderGenerator* m_ShaderGenerator = nullptr;
+		std::vector<std::shared_ptr<COgreConverter>> m_Converters;
+		CPhysicsWorld* m_PhysicsWorld;
 	};
 
 }

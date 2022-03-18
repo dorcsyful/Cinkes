@@ -173,6 +173,14 @@
     <ClInclude Include="CSpring.h" />
     <ClInclude Include="CSpringForceGenerator.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CinkesCollision\CinkesCollision.vcxproj">
+      <Project>{eb1704ed-e28a-46cd-9402-f0da1d92989d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\CinkesMath\CinkesMath.vcxproj">
+      <Project>{3b27a253-a4c5-4d98-90e4-40f39fc5a7f7}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

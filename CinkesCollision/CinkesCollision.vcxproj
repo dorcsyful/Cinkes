@@ -62,6 +62,11 @@
     <ClCompile Include="CTriangleShape.cpp" />
     <ClCompile Include="CVertex.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CinkesMath\CinkesMath.vcxproj">
+      <Project>{3b27a253-a4c5-4d98-90e4-40f39fc5a7f7}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

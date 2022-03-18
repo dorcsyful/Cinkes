@@ -1,33 +1,32 @@
-
-#include <iostream>
-#include <OgreApplicationContext.h>
-
-#include <OgreRoot.h>
-#include <OgreEntity.h>
-#include <OgreRenderWindow.h>
-#include <windows.h>
-
+#include "CVector3.h"
+#include "CBoxShape.h"
 #include "CinkesApp.h"
-
+#include "CPhysicsWorld.h"
+#include <windows.h>
 int main()
 {
     using namespace Cinkes;
-    bool go = true;
-    Cinkes::CinkesApp app;
-    app.initApp();
+	std::unique_ptr<CinkesApp> app = std::make_unique<CinkesApp>();
+    app->initApp();
 
-    Entity* mesh = app.m_SceneManager->createEntity("cube.mesh");
-    SceneNode* ogreNode = app.m_SceneManager->getRootSceneNode()->createChildSceneNode();
-    ogreNode->attachObject(mesh);
-    mesh->setMaterialName("Ogre/Compositor/OldMovie");
-    std::cout << std::endl << app.m_Go << std::endl;
+    std::unique_ptr<CPhysicsWorld> physicsWorld = std::make_unique<CPhysicsWorld>();
+    app->m_PhysicsWorld = physicsWorld.get();
+    std::shared_ptr<CBoxShape> shape = std::make_shared<CBoxShape>();
+    shape->SetDimensions(CVector3(10, 10, 10));
+    std::shared_ptr<CRigidBody> rigidBody = std::make_shared<CRigidBody>();
+    rigidBody->SetCollisionShape(shape);
 
-    while(app.m_Go)
+    app->AddObject(rigidBody);
+
+    while(app->m_Go)
     {
-        app.getRoot()->renderOneFrame();
+        //rigidBody->AddForce(CVector3(10, 0, 0));
+        physicsWorld->Update(1);
+        app->Convert();
         Sleep(100);
+        app->getRoot()->renderOneFrame();
 
     }
-    app.closeApp();
+    app->closeApp();
     return 0;
 }
