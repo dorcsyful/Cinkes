@@ -61,7 +61,10 @@ Cinkes::CRigidBody& Cinkes::CRigidBody::operator=(const CRigidBody& a_Rhs)
 
 void Cinkes::CRigidBody::SetMass(CScalar a_Rhs)
 {
-	m_InverseMass = 1/a_Rhs;
+    if (a_Rhs > 0) {
+        m_InverseMass = 1 / a_Rhs;
+    }
+    else { m_InverseMass = 0; }
 	m_Mass = a_Rhs;
 }
 
@@ -128,6 +131,7 @@ void Cinkes::CRigidBody::SetInverseInertiaTensorWorld()
 
 void Cinkes::CRigidBody::Integrate(CScalar a_T)
 {
+    if (m_InverseMass < static_cast<CScalar>(0.001)) { return; }
 	m_LastFrameAcceleration = m_Acceleration;
 	m_LastFrameAcceleration += m_Force * m_InverseMass;
 

@@ -4,6 +4,8 @@
 #include <utility>
 #include <vector>
 
+#include "CMat3x3.h"
+
 namespace Cinkes
 {
 	enum class ECONTACT_TYPE
@@ -33,9 +35,13 @@ namespace Cinkes
 		CScalar m_PenetrationDepth{};
 		ECONTACT_TYPE m_Type = ECONTACT_TYPE::CONTACT_EDGE_EDGE;
 		std::vector<CVector3> m_ContactPoints;
-		CScalar m_Friction{};
-		CScalar m_Restitution{};
+		CScalar m_Friction;
+		CScalar m_Restitution;
 		CScalar m_DesiredVelocity;
+		CVector3 m_ContactVelocity;
+		CMat3x3 m_ContactToWorld;
+		float m_DeltaVelocity;
+		CVector3 m_RelativeContactPosition[2];
 	};
 }
 

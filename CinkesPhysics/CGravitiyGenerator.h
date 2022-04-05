@@ -10,9 +10,9 @@ namespace Cinkes
 	public:
 		CGravityGenerator() { m_Type = EGENERATOR_TYPE::TYPE_GRAVITY; }
 		void UpdateForce(void* a_Body) override {
-			if (m_Enabled)
+			auto body = static_cast<CRigidBody*>(a_Body);
+			if (m_Enabled && body->GetMass() > static_cast<CScalar>(0.001))
 			{
-				auto body = static_cast<CRigidBody*>(a_Body);
 				body->AddForce(m_Gravity * body->GetMass());
 			}
 		}
