@@ -4,9 +4,6 @@
 #include <OgreRoot.h>
 #include <OgreEntity.h>
 #include <OgreRenderWindow.h>
-#include <OgreConfigFile.h>
-
-#include <OgreConfigFile.h>
 
 #include "CCollisionObject.h"
 #include "CCollisionShape.h"
@@ -15,13 +12,15 @@
 
 namespace Cinkes
 {
+	class CRigidBody;
+	class CPhysicsWorld;
 	using namespace Ogre;
 	using namespace OgreBites;
 
 	class CinkesApp : public ApplicationContext, public InputListener
 	{
 	public:
-		CinkesApp() = default;
+		CinkesApp();
 
 		bool keyPressed(const KeyboardEvent& a_Event) override
 		{
@@ -49,9 +48,9 @@ namespace Cinkes
 		void CreateBasicLights() const
 		{
 			Light* light = m_SceneManager->createLight("MainLight");
-			SceneNode* lightNode = m_SceneManager->getRootSceneNode()->createChildSceneNode();
-			lightNode->setPosition(20, 200, 50);
-			lightNode->attachObject(light);
+			SceneNode* light_node = m_SceneManager->getRootSceneNode()->createChildSceneNode();
+			light_node->setPosition(20, 200, 50);
+			light_node->attachObject(light);
 
 			Light* l = m_SceneManager->createLight();
 			l->setType(Light::LT_DIRECTIONAL);
@@ -64,14 +63,14 @@ namespace Cinkes
 
 		void CreateCamera() const
 		{
-			SceneNode* camNode = m_SceneManager->getRootSceneNode()->createChildSceneNode();
-			camNode->setPosition(0, 0, 300);
-			camNode->lookAt(Vector3(0, 0, -1), Node::TS_PARENT);
+			SceneNode* cam_node = m_SceneManager->getRootSceneNode()->createChildSceneNode();
+			cam_node->setPosition(0, 0, 300);
+			cam_node->lookAt(Vector3(0, 0, -1), Node::TS_PARENT);
 			// create the camera
 			Camera* cam = m_SceneManager->createCamera("MainCamera");
 			cam->setNearClipDistance(5); // specific to this sample
 			cam->setAutoAspectRatio(true);
-			camNode->attachObject(cam);
+			cam_node->attachObject(cam);
 			// and tell it to render into the main window
 			getRenderWindow()->addViewport(cam);
 		}
@@ -88,8 +87,8 @@ namespace Cinkes
 			CreateCamera();
 		}
 
-		bool AddObject(const std::shared_ptr<CCollisionObject>& a_Cinkes, 
-						const std::string& a_MeshName = "cube.mesh", const std::string& a_MaterialName = "Ogre/Compositor/OldMovie")
+		bool AddObject(const std::shared_ptr<CCollisionObject>& a_Cinkes,
+			const std::string& a_MeshName = "cube.mesh", const std::string& a_MaterialName = "Ogre/Compositor/OldMovie")
 		{
 			for (auto& m_Converter : m_Converters)
 			{
@@ -105,7 +104,7 @@ namespace Cinkes
 			return true;
 		}
 
-		void Convert()
+		void Convert() const
 		{
 			for (auto& current : m_Converters)
 			{
@@ -119,7 +118,7 @@ namespace Cinkes
 		SceneManager* m_SceneManager = nullptr;
 		RTShader::ShaderGenerator* m_ShaderGenerator = nullptr;
 		std::vector<std::shared_ptr<COgreConverter>> m_Converters;
-		CPhysicsWorld* m_PhysicsWorld;
+		CPhysicsWorld* m_PhysicsWorld = nullptr;
 	};
 
 }
