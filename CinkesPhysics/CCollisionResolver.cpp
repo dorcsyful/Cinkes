@@ -1,14 +1,12 @@
 #include "CCollisionResolver.h"
 
-#include <cassert>
-
 #include "CCollisionObject.h"
 #include "CUtils.h"
 #include "CVector3.h"
 #include "CContactInfo.h"
 #include "CRigidBody.h"
 
-bool Cinkes::CCollisionResolver::Resolve(std::vector<CContactInfo*>& a_Info, CScalar a_T)
+bool Cinkes::CCollisionResolver::Resolve(std::vector<std::shared_ptr<CContactInfo>>& a_Info, CScalar a_T)
 {
 		StepOne(a_Info, a_T);
 		StepTwo(a_Info, a_T);
@@ -49,28 +47,28 @@ Cinkes::CMat3x3 Cinkes::CCollisionResolver::CalculateContactBasis(const CContact
 	return contactToWorld;
 }
 
-void Cinkes::CCollisionResolver::StepOne(std::vector<CContactInfo*>& a_Info, CScalar a_T)
+void Cinkes::CCollisionResolver::StepOne(std::vector<std::shared_ptr<CContactInfo>>& a_Info, CScalar a_T)
 {
 	for (auto current : a_Info)
 	{
-		current->m_ContactToWorld = CalculateContactBasis(current);
+		current->m_ContactToWorld = CalculateContactBasis(current.get());
 		current->m_RelativeContactPosition[0] = current->m_ContactPoints[0] - current->m_First->GetTransform().getOrigin();
 		if (current->m_Second)
 		{
 			current->m_RelativeContactPosition[1] = current->m_ContactPoints[0] - current->m_Second->GetTransform().getOrigin();
 		}
-		current->m_ContactVelocity = CalculateLocalVelocity(0, a_T, current);
+		current->m_ContactVelocity = CalculateLocalVelocity(0, a_T, current.get());
 		if (current->m_Second)
 		{
-			current->m_ContactVelocity -= CalculateLocalVelocity(1, a_T, current);
+			current->m_ContactVelocity -= CalculateLocalVelocity(1, a_T, current.get());
 		}
 
-		CalculateDeltaVelocity(a_T, current);
+		CalculateDeltaVelocity(a_T, current.get());
 		current->m_DesiredVelocity = current->m_DeltaVelocity;
 	}
 }
 
-void Cinkes::CCollisionResolver::StepTwo(std::vector<CContactInfo*>& a_Info, CScalar a_T)
+void Cinkes::CCollisionResolver::StepTwo(std::vector<std::shared_ptr<CContactInfo>>& a_Info, CScalar a_T)
 {
 	int iterationsUsed = 0;
 
@@ -86,7 +84,7 @@ void Cinkes::CCollisionResolver::StepTwo(std::vector<CContactInfo*>& a_Info, CSc
 			{
 				maxPenetration = element->m_PenetrationDepth;
 			}
-			ApplyPositionChange(linearChange, angularChange, maxPenetration,element);
+			ApplyPositionChange(linearChange, angularChange, maxPenetration,element.get());
 			
 			CCollisionObject* temp[2] = { element->m_First.get(), element->m_Second.get() };
 			for (unsigned b = 0; b < 2; b++)
@@ -111,7 +109,7 @@ void Cinkes::CCollisionResolver::StepTwo(std::vector<CContactInfo*>& a_Info, CSc
 	}
 }
 
-void Cinkes::CCollisionResolver::StepThree(std::vector<CContactInfo*>& a_Info, CScalar a_T)
+void Cinkes::CCollisionResolver::StepThree(std::vector<std::shared_ptr<CContactInfo>>& a_Info, CScalar a_T)
 {
 	CVector3 velocitychange[2];
 	CVector3 rotationchange[2];
@@ -153,8 +151,8 @@ void Cinkes::CCollisionResolver::StepThree(std::vector<CContactInfo*>& a_Info, C
 						// with the second body in a contact.
 						a_Info[i]->m_ContactVelocity +=
 							a_Info[i]->m_ContactToWorld.TransformTranspose(deltavelocity)
-							* (b ? -1 : 1);
-						CalculateDeltaVelocity(a_T, a_Info[i]);
+							* static_cast<CScalar>(b ? -1 : 1);
+						CalculateDeltaVelocity(a_T, a_Info[i].get());
 					}
 				}
 			}
@@ -302,7 +300,7 @@ void Cinkes::CCollisionResolver::ApplyVelocityChange(CContactInfo* a_Info, CVect
 	if (temp[1]) { inverseInertiaTensor[1] = temp[1]->GetInverseInertiaTensor(); }
 
 	CVector3 impulseContact;
-	if(a_Info->m_Friction == static_cast<CScalar>(0))
+	if(a_Info->m_Friction <= static_cast<CScalar>(0.001))
 	{
 		impulseContact = FrictionlessImpulse(inverseInertiaTensor, a_Info->m_DesiredVelocity,a_Info);
 	}

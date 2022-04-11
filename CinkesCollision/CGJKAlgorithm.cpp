@@ -26,7 +26,6 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
     	B = a_Object2->GetCollisionShape()->Support(next * (-1));
     	support = (A + a_Object1->GetTransform().getOrigin()) - (B + a_Object2->GetTransform().getOrigin());
 
-        std::cout << support.Length() << std::endl;
     	if(support.Dot(next) <= 0)
         {
             a_Simplex = simplex;

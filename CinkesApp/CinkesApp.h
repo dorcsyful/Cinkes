@@ -20,7 +20,7 @@ namespace Cinkes
 	class CinkesApp : public ApplicationContext, public InputListener
 	{
 	public:
-		CinkesApp();
+		CinkesApp() = default;
 
 		bool keyPressed(const KeyboardEvent& a_Event) override
 		{
@@ -98,6 +98,7 @@ namespace Cinkes
 			entity->setMaterialName(a_MaterialName);
 			auto node = m_SceneManager->getRootSceneNode()->createChildSceneNode();
 			node->attachObject(entity);
+			node->scale(0.5, 0.5, 0.5);
 			std::shared_ptr<COgreConverter> temp = std::make_shared<COgreConverter>(a_Cinkes, entity);
 			m_Converters.push_back(temp);
 			m_PhysicsWorld->AddRigidBody(std::static_pointer_cast<CRigidBody>(a_Cinkes));

@@ -21,11 +21,11 @@ namespace Cinkes
 		CCollisionResolver& operator=(CCollisionResolver&& a_Rhs) noexcept = delete;
 		CCollisionResolver& operator=(const CCollisionResolver& a_Rhs) = delete;
 
-		bool Resolve(std::vector<CContactInfo*>& a_Info, CScalar a_T);
+		bool Resolve(std::vector<std::shared_ptr<CContactInfo>>& a_Info, CScalar a_T);
 		CMat3x3 CalculateContactBasis(const CContactInfo* a_Info);
-		void StepOne(std::vector<CContactInfo*>& a_Info, CScalar a_T);
-		void StepTwo(std::vector<CContactInfo*>& a_Info, CScalar a_T);
-		void StepThree(std::vector<CContactInfo*>& a_Info, CScalar a_T);
+		void StepOne(std::vector<std::shared_ptr<CContactInfo>>& a_Info, CScalar a_T);
+		void StepTwo(std::vector<std::shared_ptr<CContactInfo>>& a_Info, CScalar a_T);
+		void StepThree(std::vector<std::shared_ptr<CContactInfo>>& a_Info, CScalar a_T);
 
 		CVector3 ConvertToRelative(CCollisionObject* a_Object, const CVector3& a_Position);
 		CVector3 ConvertToWorld(CCollisionObject* a_Object, const CVector3& a_Position);

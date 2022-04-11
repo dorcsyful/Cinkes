@@ -1,4 +1,6 @@
 #pragma once
+#pragma once
+#include "CCollisionResolver.h"
 #include "CCollisionWorld.h"
 #include "CForceGeneratorRegistry.h"
 namespace Cinkes
@@ -11,6 +13,7 @@ namespace Cinkes
 	public:
 		CPhysicsWorld() {
 			m_FGenerators = std::make_shared<CForceGeneratorRegistry>(this);
+			m_Resolver = std::make_shared<CCollisionResolver>();
 		}
 		~CPhysicsWorld() = default;
 		void Update(CScalar a_T);
@@ -31,6 +34,7 @@ namespace Cinkes
 		std::shared_ptr<CForceGeneratorRegistry> m_FGenerators;
 		std::vector<std::shared_ptr<CSprings>> m_Springs;
 		std::vector<std::shared_ptr<CRigidBody>> m_RigidBodies;
+		std::shared_ptr<CCollisionResolver> m_Resolver;
 	};
 
 

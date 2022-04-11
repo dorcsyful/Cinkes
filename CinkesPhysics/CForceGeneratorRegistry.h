@@ -12,8 +12,8 @@ namespace Cinkes
 	class CForceGeneratorRegistry
 	{
 	public:
-		CForceGeneratorRegistry(CPhysicsWorld* a_PhysicsWorld = nullptr)  {
-			m_PhysicsWorld = a_PhysicsWorld;
+		CForceGeneratorRegistry(CPhysicsWorld* a_PhysicsWorld = nullptr) : m_PhysicsWorld(a_PhysicsWorld)
+		{
 			m_ForceGenerators.push_back(std::make_shared<CGravityGenerator>());
 		}
 		~CForceGeneratorRegistry() {

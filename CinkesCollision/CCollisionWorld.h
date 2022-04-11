@@ -56,7 +56,7 @@ namespace Cinkes
 		void RunCollision(CScalar a_T);
 		//}
 
-	private:
+	protected:
 		//Subgroup: Class members
 		bool m_ShouldUpdate;
 

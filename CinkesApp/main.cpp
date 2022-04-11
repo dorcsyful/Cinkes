@@ -12,20 +12,27 @@ int main()
 
     std::unique_ptr<CPhysicsWorld> physics_world = std::make_unique<CPhysicsWorld>();
     app->m_PhysicsWorld = physics_world.get();
+
     std::shared_ptr<CBoxShape> shape = std::make_shared<CBoxShape>();
-    shape->SetDimensions(CVector3(1, 1, 1));
+    shape->SetDimensions(CVector3(50, 50, 50));
     std::shared_ptr<CRigidBody> rigidBody = std::make_shared<CRigidBody>();
     rigidBody->SetCollisionShape(shape);
+    //app->AddObject(rigidBody);
 
+    rigidBody = std::make_shared<CRigidBody>();
+    rigidBody->SetCollisionShape(shape);
+    rigidBody->GetTransform().setOrigin(CVector3(0, -50, 0));
     app->AddObject(rigidBody);
+
+    physics_world->GetGeneratorRegistry()->GetGeneratorByType(EGENERATOR_TYPE::TYPE_GRAVITY)->RemoveObjectByValue(rigidBody.get());
 
     while (app->m_Go)
     {
-        //rigidBody->AddForce(CVector3(10, 0, 0));
-        physics_world->Update(1);
-        app->Convert();
-        Sleep(100);
         app->getRoot()->renderOneFrame();
+
+        physics_world->Update(0.6);
+        app->Convert();
+        Sleep(1000);
 
     }
     app->closeApp();
