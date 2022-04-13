@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "CVector3.h"
 #include "CBoxShape.h"
 #include "CinkesApp.h"
@@ -17,14 +19,14 @@ int main()
     shape->SetDimensions(CVector3(50, 50, 50));
     std::shared_ptr<CRigidBody> rigidBody = std::make_shared<CRigidBody>();
     rigidBody->SetCollisionShape(shape);
-    //app->AddObject(rigidBody);
+    rigidBody->GetTransform().setOrigin(CVector3(0, 60, 0));
+    app->AddObject(rigidBody);
 
     rigidBody = std::make_shared<CRigidBody>();
     rigidBody->SetCollisionShape(shape);
-    rigidBody->GetTransform().setOrigin(CVector3(0, -50, 0));
-    app->AddObject(rigidBody);
-
-    physics_world->GetGeneratorRegistry()->GetGeneratorByType(EGENERATOR_TYPE::TYPE_GRAVITY)->RemoveObjectByValue(rigidBody.get());
+    rigidBody->GetTransform().setOrigin(CVector3(0, -60, 0));
+    app->AddObject(rigidBody, "cube.mesh", "Ogre/Skin");
+	physics_world->GetGeneratorRegistry()->GetGeneratorByType(EGENERATOR_TYPE::TYPE_GRAVITY)->RemoveObjectByValue(rigidBody.get());
 
     while (app->m_Go)
     {

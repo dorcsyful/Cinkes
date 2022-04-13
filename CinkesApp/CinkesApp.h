@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <OgreApplicationContext.h>
 
 #include <OgreRoot.h>
@@ -90,15 +91,16 @@ namespace Cinkes
 		bool AddObject(const std::shared_ptr<CCollisionObject>& a_Cinkes,
 			const std::string& a_MeshName = "cube.mesh", const std::string& a_MaterialName = "Ogre/Compositor/OldMovie")
 		{
-			for (auto& m_Converter : m_Converters)
+			for (auto& converter : m_Converters)
 			{
-				if (a_Cinkes == m_Converter->m_Cinkes) { return false; }
+				if (a_Cinkes == converter->m_Cinkes) { return false; }
 			}
 			Ogre::Entity* entity = m_SceneManager->createEntity(a_MeshName);
 			entity->setMaterialName(a_MaterialName);
 			auto node = m_SceneManager->getRootSceneNode()->createChildSceneNode();
 			node->attachObject(entity);
-			node->scale(0.5, 0.5, 0.5);
+			auto aabb = entity->getBoundingBox();
+
 			std::shared_ptr<COgreConverter> temp = std::make_shared<COgreConverter>(a_Cinkes, entity);
 			m_Converters.push_back(temp);
 			m_PhysicsWorld->AddRigidBody(std::static_pointer_cast<CRigidBody>(a_Cinkes));

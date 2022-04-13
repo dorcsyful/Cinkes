@@ -5,22 +5,15 @@
 #include <memory>
 #include <utility>
 
-Cinkes::CCollisionObject::CCollisionObject()
+Cinkes::CCollisionObject::CCollisionObject() : m_HasContact(nullptr), m_Moveable(false), m_Type(EOBJECT_TYPE::TYPE_COLLISION)
 {
 	m_Shape = nullptr;
 	m_Transform = CTransform();
-	m_Moveable = false;
-	m_Type = EOBJECT_TYPE::TYPE_COLLISION;
-	m_HasContact = nullptr;
 }
 
-Cinkes::CCollisionObject::CCollisionObject(const CTransform& a_Transform, std::shared_ptr<CCollisionShape> a_Shape)
+Cinkes::CCollisionObject::CCollisionObject(const CTransform& a_Transform, std::shared_ptr<CCollisionShape> a_Shape) :
+	m_HasContact(nullptr), m_Shape(std::move(a_Shape)), m_Transform(a_Transform), m_Moveable(false), m_Type(EOBJECT_TYPE::TYPE_COLLISION)
 {
-	m_Transform = a_Transform;
-	m_Shape = std::move(a_Shape);
-	m_Moveable = false;
-	m_Type = EOBJECT_TYPE::TYPE_COLLISION;
-	m_HasContact = nullptr;
 }
 
 Cinkes::CCollisionObject::~CCollisionObject()
@@ -28,22 +21,15 @@ Cinkes::CCollisionObject::~CCollisionObject()
 	m_Shape = nullptr;
 }
 
-Cinkes::CCollisionObject::CCollisionObject(const CCollisionObject& a_Rhs)
+Cinkes::CCollisionObject::CCollisionObject(const CCollisionObject& a_Rhs) : m_HasContact(nullptr), m_Shape(a_Rhs.m_Shape), m_Transform(a_Rhs.m_Transform),
+                                                                            m_Moveable(false),
+                                                                            m_Type(EOBJECT_TYPE::TYPE_COLLISION)
 {
-	m_Transform = a_Rhs.m_Transform;
-	m_Shape = a_Rhs.m_Shape;
-	m_Moveable = false;
-	m_Type = EOBJECT_TYPE::TYPE_COLLISION;
-	m_HasContact = nullptr;
 }
 
-Cinkes::CCollisionObject::CCollisionObject(CCollisionObject&& a_Rhs) noexcept 
+Cinkes::CCollisionObject::CCollisionObject(CCollisionObject&& a_Rhs) noexcept : m_HasContact(nullptr), m_Shape(a_Rhs.m_Shape), m_Transform(a_Rhs.m_Transform),
+	m_Moveable(false), m_Type(EOBJECT_TYPE::TYPE_COLLISION)
 {
-	m_Transform = a_Rhs.m_Transform;
-	m_Shape = a_Rhs.m_Shape;
-	m_Moveable = false;
-	m_Type = EOBJECT_TYPE::TYPE_COLLISION;
-	m_HasContact = nullptr;
 }
 
 

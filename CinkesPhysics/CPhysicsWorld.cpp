@@ -15,7 +15,9 @@ void Cinkes::CPhysicsWorld::Update(CScalar a_T)
 		element->Integrate(a_T);
 	}
 	RunCollision(a_T);
-	m_Resolver->Resolve(m_Contacts, a_T);
+	if (!m_Contacts.empty()) {
+		m_Resolver->Resolve(m_Contacts, a_T);
+	}
 }
 
 bool Cinkes::CPhysicsWorld::RemoveSpringByIndex(int a_Index, bool a_Delete)

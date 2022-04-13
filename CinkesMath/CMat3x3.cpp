@@ -306,7 +306,7 @@ CMat3x3 CMat3x3::GetInverse()
 {
 	CMat3x3 temp = (*this);
 	CScalar determinant = temp.Determinant();
-	if(determinant == 0 )
+	if(determinant > static_cast<CScalar>(- 0.0001) && determinant < static_cast<CScalar>(0.0001))
 	{
 		return GetIdentity();
 	}
@@ -466,4 +466,32 @@ void Cinkes::CMat3x3::SetFromAxisAngle(const CVector3& a_Axis, CScalar a_Angle)
 	m_Rows[2][1] = xyt + xsin;
 	m_Rows[2][2] = t * a_Axis.getZ() * a_Axis.getZ() + cos;
 	
+}
+
+void CMat3x3::SetFromQuaternion(const CQuaternion& a_Quaternion)
+{
+	CScalar sqw = a_Quaternion.getW() * a_Quaternion.getW();
+	CScalar sqx = a_Quaternion.getX() * a_Quaternion.getX();
+	CScalar sqy = a_Quaternion.getY() * a_Quaternion.getY();
+	CScalar sqz = a_Quaternion.getZ() * a_Quaternion.getZ();
+
+	// invs (inverse square length) is only required if quaternion is not already normalised
+	CScalar invs = 1 / (sqx + sqy + sqz + sqw);
+	m_Rows[0][0] = (sqx - sqy - sqz + sqw) * invs; // since sqw + sqx + sqy + sqz =1/invs*invs
+	m_Rows[1][1] = (-sqx + sqy - sqz + sqw) * invs;
+	m_Rows[2][2] = (-sqx - sqy + sqz + sqw) * invs;
+
+	CScalar tmp1 = a_Quaternion.getX() * a_Quaternion.getY();
+	CScalar tmp2 = a_Quaternion.getZ() * a_Quaternion.getW();
+	m_Rows[1][0] = static_cast<CScalar>(2.0) * (tmp1 + tmp2) * invs;
+	m_Rows[0][1] = static_cast<CScalar>(2.0) * (tmp1 - tmp2) * invs;
+
+	tmp1 = a_Quaternion.getX() * a_Quaternion.getZ();
+	tmp2 = a_Quaternion.getY() * a_Quaternion.getW();
+	m_Rows[2][0] = static_cast<CScalar>(2.0) * (tmp1 - tmp2) * invs;
+	m_Rows[0][2] = static_cast<CScalar>(2.0) * (tmp1 + tmp2) * invs;
+	tmp1 = a_Quaternion.getY() * a_Quaternion.getZ();
+	tmp2 = a_Quaternion.getX() * a_Quaternion.getW();
+	m_Rows[2][1] = static_cast<CScalar>(2.0) * (tmp1 + tmp2) * invs;
+	m_Rows[1][2] = static_cast<CScalar>(2.0) * (tmp1 - tmp2) * invs;
 }

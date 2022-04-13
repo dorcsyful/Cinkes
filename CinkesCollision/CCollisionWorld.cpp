@@ -7,13 +7,13 @@
 #include "CEPA.h"
 #include "CGJKAlgorithm.h"
 
-Cinkes::CCollisionWorld::CCollisionWorld()
+Cinkes::CCollisionWorld::CCollisionWorld() : m_ShouldUpdate(false)
 {
 	m_BVH = std::make_unique<CBVH>(m_Objects);
 	m_GJK = std::make_unique<CGJKAlgorithm>();
 	m_CEPA = std::make_unique<CEPA>();
 	m_ContactPointCalculator = std::make_unique<CContactPointCalculator>();
-	m_ShouldUpdate = false;
+
 	m_Boxes = std::make_unique<BoxBoxCollisionAlgorithms>();
 }
 

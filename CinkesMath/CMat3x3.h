@@ -72,6 +72,7 @@ namespace Cinkes
 		void GetEuler(CScalar& a_Yaw, CScalar& a_Pitch, CScalar& a_Roll);
 		CMat3x3 Abs();
 		void SetFromAxisAngle(const CVector3& a_Axis, CScalar a_Angle);
+		void SetFromQuaternion(const CQuaternion& a_Quaternion);
 		//}
 	private:
 		//Subgroup: Matrix Elements {

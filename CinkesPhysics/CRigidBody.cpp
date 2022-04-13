@@ -1,3 +1,4 @@
+// ReSharper disable CppClangTidyCppcoreguidelinesPreferMemberInitializer
 #include "CRigidBody.h"
 
 #include "CQuaternion.h"
@@ -135,19 +136,21 @@ void Cinkes::CRigidBody::Integrate(CScalar a_T)
 	m_LastFrameAcceleration = m_Acceleration;
 	m_LastFrameAcceleration += m_Force * m_InverseMass;
 
-	CVector3 angularAcceleration = m_InverseIntertiaTensor * m_Torque;
+	
 
-	m_Velocity += m_LastFrameAcceleration * a_T;
+    m_Velocity += m_LastFrameAcceleration * a_T;
 	m_AngularVelocity += m_AngularAcceleration * a_T;
 
 	m_Velocity *= CUtils::Pow(m_LinearDamping, a_T);
 	m_AngularVelocity *= CUtils::Pow(m_AngularDamping, a_T);
 
-	CQuaternion q = m_Transform.getQuaternion() + CVector3(angularAcceleration * a_T);
-	CVector3 p = m_Transform.getOrigin() + m_Velocity * a_T;
 
-    p *= CUtils::Pow(m_LinearDamping, a_T);
-    q *= CUtils::Pow(m_AngularDamping, a_T);
+
+    m_Velocity *= CUtils::Pow(m_LinearDamping, a_T);
+    m_AngularVelocity *= CUtils::Pow(m_AngularDamping, a_T);
+
+	CQuaternion q = m_Transform.getQuaternion() + m_AngularVelocity * a_T;
+	CVector3 p = m_Transform.getOrigin() + m_Velocity * a_T;
 
 	m_Transform = CTransform(CMat3x3(q), p);
 

@@ -12,9 +12,8 @@ namespace Cinkes
 		CBody() { m_Moveable = true; }
 		~CBody() override = default;
 
-		CBody(const CBody& a_Rhs) : CCollisionObject(a_Rhs) {
-			
-		}
+		CBody(CBody&& a_Body) noexcept {}
+		CBody(const CBody& a_Body) {}
 
 		CBody& operator=(CBody&& a_Rhs) noexcept; 
 		CBody& operator=(const CBody& a_Rhs);
