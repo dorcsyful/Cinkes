@@ -81,15 +81,17 @@ void Cinkes::CCollisionWorld::RunCollision(CScalar a_T)
 			bool algorithm = m_GJK->Algorithm(element->m_Objects[i].get(), element->m_Objects[i + 1].get(),simplex);
 			if(algorithm)
 			{
-				std::shared_ptr<CContactInfo> contact = std::make_shared<CContactInfo>();
-				contact->m_First = element->m_Objects[i];
-				element->m_Objects[i]->SetHasContact(contact.get());
-				element->m_Objects[i + 1]->SetHasContact(contact.get());
-				contact->m_Second = element->m_Objects[i + 1];
-				m_CEPA->Run(contact, simplex);
-				m_Contacts.push_back(contact);
-				m_Boxes->CalculateCurrent(m_Contacts[m_Contacts.size() - 1].get());
-				//m_ContactPointCalculator->GetPoints(m_Contacts[m_Contacts.size() - 1].get());
+				if (element->m_Objects[i]->GetType() == EOBJECT_TYPE::TYPE_RIGID || element->m_Objects[i + 1]->GetType() == EOBJECT_TYPE::TYPE_RIGID) {
+					std::shared_ptr<CContactInfo> contact = std::make_shared<CContactInfo>();
+					contact->m_First = element->m_Objects[i];
+					element->m_Objects[i]->SetHasContact(contact.get());
+					element->m_Objects[i + 1]->SetHasContact(contact.get());
+					contact->m_Second = element->m_Objects[i + 1];
+					m_CEPA->Run(contact, simplex);
+					m_Contacts.push_back(contact);
+					m_Boxes->CalculateCurrent(m_Contacts[m_Contacts.size() - 1].get());
+					//m_ContactPointCalculator->GetPoints(m_Contacts[m_Contacts.size() - 1].get());
+				}
 			}
 		}
 	}

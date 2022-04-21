@@ -32,8 +32,8 @@ namespace Cinkes
 		CEPA& operator=(CEPA&& a_Rhs) noexcept = delete;
 		CEPA& operator=(const CEPA& a_Rhs) noexcept = delete;
 
-		void Run(std::shared_ptr<CContactInfo> a_Contact, CSimplex& a_Simplex);
-		void Algorithm(std::shared_ptr<CContactInfo> a_Contact, const CSimplex& a_Simplex);
+		void Run(const std::shared_ptr<CContactInfo>& a_Contact, CSimplex& a_Simplex);
+		void Algorithm(const std::shared_ptr<CContactInfo>& a_Contact, const CSimplex& a_Simplex);
 		void BlowUp(CSimplex& a_Simplex, const std::shared_ptr<CContactInfo>& a_Contact);
 		CVector3 CSOSupport(const CContactInfo* a_Contact, const CVector3& a_Dir);
 		CVector3 SmallestAxis(const CVector3& a_Vector3);

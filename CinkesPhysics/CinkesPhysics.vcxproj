@@ -161,6 +161,7 @@
     <ClCompile Include="CPhysicsWorld.cpp" />
     <ClCompile Include="CRigidBody.cpp" />
     <ClCompile Include="CSpringForceGenerator.cpp" />
+    <ClCompile Include="CTestResolver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBody.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="CRigidBody.h" />
     <ClInclude Include="CSpring.h" />
     <ClInclude Include="CSpringForceGenerator.h" />
+    <ClInclude Include="CTestResolver.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CinkesCollision\CinkesCollision.vcxproj">

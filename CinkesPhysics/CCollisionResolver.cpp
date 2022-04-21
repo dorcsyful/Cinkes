@@ -20,12 +20,12 @@ Cinkes::CMat3x3 Cinkes::CCollisionResolver::CalculateContactBasis(const CContact
 	CVector3 tangent[2];
 	if(CUtils::Abs(a_Info->m_Normal.getX()) > CUtils::Abs(a_Info->m_Normal.getY()))
 	{
-		CScalar dist = static_cast<CScalar>(1) / 
+		CScalar scaling = static_cast<CScalar>(1.0) / 
 					CUtils::Sqrt(a_Info->m_Normal.getZ() * a_Info->m_Normal.getZ() + a_Info->m_Normal.getX() * a_Info->m_Normal.getX());
 
-		tangent[0][0] = a_Info->m_Normal.getZ() * dist;
+		tangent[0][0] = a_Info->m_Normal.getZ() * scaling;
 		tangent[0][1] = 0;
-		tangent[0][2] = a_Info->m_Normal.getX() * dist * -1;
+		tangent[0][2] = -a_Info->m_Normal.getX() * scaling;
 
 		tangent[1][0] = a_Info->m_Normal.getY() * tangent[0].getX();
 		tangent[1][1] = a_Info->m_Normal.getZ() * tangent[0].getX() - a_Info->m_Normal.getX() * tangent[0].getZ();
@@ -33,12 +33,12 @@ Cinkes::CMat3x3 Cinkes::CCollisionResolver::CalculateContactBasis(const CContact
 	}
 	else
 	{
-		CScalar dist = static_cast<CScalar>(1) /
+		CScalar scaling = static_cast<CScalar>(1) /
 			CUtils::Sqrt(a_Info->m_Normal.getZ() * a_Info->m_Normal.getZ() + a_Info->m_Normal.getY() * a_Info->m_Normal.getY());
 
 		tangent[0][0] = 0;
-		tangent[0][1] = a_Info->m_Normal.getZ() * dist * -1;
-		tangent[0][2] = a_Info->m_Normal.getY() * dist;
+		tangent[0][1] = a_Info->m_Normal.getZ() * scaling * -1;
+		tangent[0][2] = a_Info->m_Normal.getY() * scaling;
 
 		tangent[1][0] = a_Info->m_Normal.getY() * tangent[0].getZ() - a_Info->m_Normal.getZ() * tangent[0].getY();
 		tangent[1][1] = a_Info->m_Normal.getX() * tangent[0].getZ() * -1;
@@ -55,12 +55,11 @@ void Cinkes::CCollisionResolver::StepOne(const std::vector<std::shared_ptr<CCont
 	{
 		current->m_ContactToWorld = CalculateContactBasis(current.get());
 		current->m_RelativeContactPosition[0] = current->m_ContactPoints[0] - current->m_First->GetTransform().getOrigin();
-		if (current->m_Second)
-		{
-			current->m_RelativeContactPosition[1] = current->m_ContactPoints[0] - current->m_Second->GetTransform().getOrigin();
+		current->m_RelativeContactPosition[1] = current->m_ContactPoints[0] - current->m_Second->GetTransform().getOrigin();
+		if (current->m_First->GetType() == EOBJECT_TYPE::TYPE_RIGID) {
+			current->m_ContactVelocity = CalculateLocalVelocity(0, a_T, current.get());
 		}
-		current->m_ContactVelocity = CalculateLocalVelocity(0, a_T, current.get());
-		if (current->m_Second)
+		if (current->m_Second->GetType() == EOBJECT_TYPE::TYPE_RIGID)
 		{
 			current->m_ContactVelocity -= CalculateLocalVelocity(1, a_T, current.get());
 		}
@@ -72,14 +71,14 @@ void Cinkes::CCollisionResolver::StepOne(const std::vector<std::shared_ptr<CCont
 void Cinkes::CCollisionResolver::StepTwo(const std::vector<std::shared_ptr<CContactInfo>>& a_Info, CScalar a_T) const
 {
 	int iterations_used = 0;
-	CScalar max_penetration = 0.0001;
 	CVector3 linear_change[2];
 	CVector3 angular_change[2];
 	size_t i = 0;
 	size_t index = a_Info.size();
-	CVector3 delta_position;
 	while(iterations_used < 8)
 	{
+		CScalar max_penetration = static_cast<CScalar>(0.0001);
+		index = a_Info.size();
 		for(i = 0; i < a_Info.size(); i++)
 		{
 			if(a_Info[i]->m_PenetrationDepth > max_penetration)
@@ -101,12 +100,10 @@ void Cinkes::CCollisionResolver::StepTwo(const std::vector<std::shared_ptr<CCont
 				{
 					CContactInfo A = *a_Info[i];
 					CContactInfo B = *a_Info[index];
-					CCollisionObject* object_from_A = A[b];
-					CCollisionObject* object_from_B = B[d];
 					if(A[b] == B[d])
 					{
-						delta_position = linear_change[d] + angular_change[d].Cross(a_Info[i]->m_RelativeContactPosition[b]);
-						a_Info[i]->m_PenetrationDepth = delta_position.Dot(a_Info[i]->m_Normal) * CUtils::Sgn(1,b);
+						CVector3 delta_position = linear_change[d] + angular_change[d].Cross(a_Info[i]->m_RelativeContactPosition[b]);
+						a_Info[i]->m_PenetrationDepth = delta_position.Dot(a_Info[i]->m_Normal) * (b ? 1 : -1);
 					}
 				}
 			}
@@ -169,38 +166,24 @@ void Cinkes::CCollisionResolver::StepThree(std::vector<std::shared_ptr<CContactI
 
 Cinkes::CVector3 Cinkes::CCollisionResolver::ConvertToRelative(CCollisionObject* a_Object, const CVector3& a_Position) const
 {
-	return  a_Position - a_Object->GetTransform().getOrigin();
+	return  a_Object->GetTransform().Inverse() * a_Position;
 }
 
 Cinkes::CVector3 Cinkes::CCollisionResolver::ConvertToWorld(CCollisionObject* a_Object, const CVector3& a_Position) const
 {
-	return a_Object->GetTransform().getBasis().Transpose() * a_Position;
+	return a_Object->GetTransform() * a_Position;
 }
 
-void Cinkes::CCollisionResolver::MakeOrthoBasis(CVector3* a_X, CVector3* a_Y, CVector3* a_Z) const
-{
-	CVector3 temp = (*a_X).Cross((*a_Y));
-	a_Z->setX(temp.getX());
-	a_Z->setY(temp.getY());
-	a_Z->setZ(temp.getZ());
-
-	if (a_Z->Length2() < static_cast<CScalar>(0.00001)) { return; }
-
-	temp = (*a_Z).Cross((*a_X));
-	a_Y->setX(temp.getX());
-	a_Y->setY(temp.getY());
-	a_Y->setZ(temp.getZ());
-
-	a_Y->Normalize();
-	a_Z->Normalize();
-}
 
 void Cinkes::CCollisionResolver::CalculateDeltaVelocity(CScalar a_T, CContactInfo* a_Info) const
 {
 	CScalar velocityformacceleration = 0;
-
-	velocityformacceleration += std::static_pointer_cast<CRigidBody>(a_Info->m_First)->GetLastFrameAcceleration().Dot(a_Info->m_Normal) * a_T;
-	if(a_Info->m_Second)
+	CContactInfo temp = *a_Info;
+	CCollisionObject* object = temp[0];
+	if (temp[0]->GetType() == EOBJECT_TYPE::TYPE_RIGID) {
+		velocityformacceleration += std::static_pointer_cast<CRigidBody>(a_Info->m_First)->GetLastFrameAcceleration().Dot(a_Info->m_Normal) * a_T;
+	}
+	if(temp[1]->GetType() == EOBJECT_TYPE::TYPE_RIGID)
 	{
 		velocityformacceleration -= std::static_pointer_cast<CRigidBody>(a_Info->m_Second)->GetLastFrameAcceleration().Dot(a_Info->m_Normal) * a_T;
 	}
@@ -225,7 +208,9 @@ Cinkes::CVector3 Cinkes::CCollisionResolver::CalculateLocalVelocity(unsigned a_I
 
 void Cinkes::CCollisionResolver::ApplyPositionChange(CVector3 a_LinearChange[2], CVector3 a_AngularChange[2], CScalar a_Penetration, CContactInfo* a_Info) const
 {
-	CRigidBody* temp[2] = { static_cast<CRigidBody*>(a_Info->m_First.get()),static_cast<CRigidBody*>(a_Info->m_Second.get()) };
+	CRigidBody* temp[2] = { nullptr,nullptr };
+	if (a_Info->m_First->GetType() == EOBJECT_TYPE::TYPE_RIGID) { temp[0] = static_cast<CRigidBody*>(a_Info->m_First.get()); }
+	if (a_Info->m_Second->GetType() == EOBJECT_TYPE::TYPE_RIGID) { temp[1] = static_cast<CRigidBody*>(a_Info->m_Second.get()); }
 	CScalar angularlimit = static_cast<CScalar>(0.2);
 	CScalar angularmove[2];
 	CScalar linearmove[2];
@@ -253,16 +238,17 @@ void Cinkes::CCollisionResolver::ApplyPositionChange(CVector3 a_LinearChange[2],
 	{
 		if(temp[i])
 		{
+			CScalar inverse_intertia = static_cast<CScalar>(1.0) / totalintertia;
 			CScalar sign = (i == 0) ? 1 : -1;
-			angularmove[i] = sign * a_Penetration * (angularintertia[i] / totalintertia);
-			linearmove[i] = sign * a_Penetration * (linearintertia[i] / totalintertia);
+			angularmove[i] = (sign * a_Penetration) * angularintertia[i] * inverse_intertia;
+			linearmove[i] = (sign * a_Penetration) * linearintertia[i] * inverse_intertia;
 
 			CVector3 projection = a_Info->m_RelativeContactPosition[i];
 			CScalar toadd = (a_Info->m_RelativeContactPosition[i] * -1).Dot(a_Info->m_Normal);
 			projection += a_Info->m_Normal * toadd;
 			CScalar maxmagnitude = angularlimit * projection.Length();
 
-			if(angularmove[i] < maxmagnitude * -1)
+			if(angularmove[i] < -maxmagnitude)
 			{
 				CScalar totalmove = angularmove[i] + linearmove[i];
 				angularmove[i] = maxmagnitude * -1;
@@ -282,17 +268,17 @@ void Cinkes::CCollisionResolver::ApplyPositionChange(CVector3 a_LinearChange[2],
 			else
 			{
 				CVector3 tartgetangulardirection = a_Info->m_RelativeContactPosition[i].Cross(a_Info->m_Normal);
-				CMat3x3 tensor = temp[i]->GetInverseInertiaTensor();
+				CMat3x3 tensor = temp[i]->GetInverseInertiaTensorWorld();
 				a_AngularChange[i] = (tensor * tartgetangulardirection) * (angularmove[i] / angularintertia[i]);
 			}
 
 			a_LinearChange[i] = (a_Info->m_Normal) * linearmove[i];
-			CVector3 position = temp[i]->GetTransform().getOrigin();
+			CVector3 position = a_Info->m_Normal * linearmove[i];
 			CQuaternion rotation = temp[i]->GetTransform().getBasis().ToQuaternion();
 			rotation += a_AngularChange[i];
-			position += a_Info->m_Normal * linearmove[i];
+			position += temp[i]->GetTransform().getOrigin();
 			temp[i]->SetTransform(CTransform(rotation, position));
-			//temp[i]->SetInverseInertiaTensorWorld();
+			temp[i]->SetInverseInertiaTensorWorld();
 		}
 	}
 
@@ -300,11 +286,12 @@ void Cinkes::CCollisionResolver::ApplyPositionChange(CVector3 a_LinearChange[2],
 
 void Cinkes::CCollisionResolver::ApplyVelocityChange(CContactInfo* a_Info, CVector3 a_VelocityChange[2], CVector3 a_RotationChange[2]) const
 {
-	CRigidBody* temp[2] = { static_cast<CRigidBody*>(a_Info->m_First.get()),static_cast<CRigidBody*>(a_Info->m_Second.get()) };
-
+	CRigidBody* temp[2] = { nullptr,nullptr };
+	if (a_Info->m_First->GetType() == EOBJECT_TYPE::TYPE_RIGID) { temp[0] = static_cast<CRigidBody*>(a_Info->m_First.get()); }
+	if (a_Info->m_Second->GetType() == EOBJECT_TYPE::TYPE_RIGID) { temp[1] = static_cast<CRigidBody*>(a_Info->m_Second.get()); }
 	CMat3x3 inverseInertiaTensor[2];
-	inverseInertiaTensor[0] = temp[0]->GetInverseInertiaTensor();
-	if (temp[1]) { inverseInertiaTensor[1] = temp[1]->GetInverseInertiaTensor(); }
+	inverseInertiaTensor[0] = temp[0]->GetInverseInertiaTensorWorld();
+	if (temp[1]) { inverseInertiaTensor[1] = temp[1]->GetInverseInertiaTensorWorld(); }
 
 	CVector3 impulseContact;
 	if(a_Info->m_Friction <= static_cast<CScalar>(0.001))
@@ -334,8 +321,9 @@ void Cinkes::CCollisionResolver::ApplyVelocityChange(CContactInfo* a_Info, CVect
 
 Cinkes::CVector3 Cinkes::CCollisionResolver::FrictionlessImpulse(CMat3x3 a_Tensor[2], CScalar a_DesiredVelocity, CContactInfo* a_Info) const
 {
-	CRigidBody* temp[2] = { static_cast<CRigidBody*>(a_Info->m_First.get()),static_cast<CRigidBody*>(a_Info->m_Second.get()) };
-
+	CRigidBody* temp[2] = { nullptr, nullptr };
+	if (a_Info->m_First->GetType() == EOBJECT_TYPE::TYPE_RIGID) { temp[0] = static_cast<CRigidBody*>(a_Info->m_First.get()); }
+	if (a_Info->m_Second->GetType() == EOBJECT_TYPE::TYPE_RIGID) { temp[1] = static_cast<CRigidBody*>(a_Info->m_Second.get()); }
 	CVector3 impulsecontact;
 	CVector3 deltavelocityworld = a_Info->m_RelativeContactPosition[0].Cross(a_Info->m_Normal);
 	deltavelocityworld = a_Tensor[0] * deltavelocityworld;
@@ -363,8 +351,9 @@ Cinkes::CVector3 Cinkes::CCollisionResolver::FrictionlessImpulse(CMat3x3 a_Tenso
 
 Cinkes::CVector3 Cinkes::CCollisionResolver::FrictionImpulse(CMat3x3 a_Tensor[2], CScalar a_DesiredVelocity, CScalar a_Friction, CContactInfo* a_Info) const
 {
-	CRigidBody* temp[2] = { static_cast<CRigidBody*>(a_Info->m_First.get()),static_cast<CRigidBody*>(a_Info->m_Second.get()) };
-
+	CRigidBody* temp[2] = { nullptr, nullptr };
+	if (a_Info->m_First->GetType() == EOBJECT_TYPE::TYPE_RIGID) { temp[0] = static_cast<CRigidBody*>(a_Info->m_First.get()); }
+	if (a_Info->m_Second->GetType() == EOBJECT_TYPE::TYPE_RIGID) { temp[1] = static_cast<CRigidBody*>(a_Info->m_Second.get()); }
 	CVector3 impulseContact;
 	CScalar inverseMass = temp[0]->GetInverseMass();
 

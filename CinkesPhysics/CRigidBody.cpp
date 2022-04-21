@@ -1,6 +1,8 @@
 // ReSharper disable CppClangTidyCppcoreguidelinesPreferMemberInitializer
 #include "CRigidBody.h"
 
+#include <iostream>
+
 #include "CQuaternion.h"
 #include "CUtils.h"
 
@@ -133,26 +135,18 @@ void Cinkes::CRigidBody::SetInverseInertiaTensorWorld()
 void Cinkes::CRigidBody::Integrate(CScalar a_T)
 {
     if (m_InverseMass < static_cast<CScalar>(0.001)) { return; }
-	m_LastFrameAcceleration = m_Acceleration;
-	m_LastFrameAcceleration += m_Force * m_InverseMass;
+    m_Velocity += m_Force * a_T * m_InverseMass;
+	m_AngularVelocity += m_InverseIntertiaTensorWorld * m_Torque * a_T;
 
-	
+	m_Velocity *= m_LinearDamping;
+	m_AngularVelocity *= m_AngularDamping;
 
-    m_Velocity += m_LastFrameAcceleration * a_T;
-	m_AngularVelocity += m_AngularAcceleration * a_T;
-
-	m_Velocity *= CUtils::Pow(m_LinearDamping, a_T);
-	m_AngularVelocity *= CUtils::Pow(m_AngularDamping, a_T);
-
-
-
-    m_Velocity *= CUtils::Pow(m_LinearDamping, a_T);
-    m_AngularVelocity *= CUtils::Pow(m_AngularDamping, a_T);
-
-	CQuaternion q = m_Transform.getQuaternion() + m_AngularVelocity * a_T;
+    CQuaternion q;/* = m_Transform.getQuaternion() + m_Transform.getBasis() * (m_AngularVelocity * a_T * CScalar(0.5));
+    q.Normalize();*/
 	CVector3 p = m_Transform.getOrigin() + m_Velocity * a_T;
-
-	m_Transform = CTransform(CMat3x3(q), p);
-
+    
+	//m_Transform = CTransform(CMat3x3(q), p);
+    std::cout << "Velocity: " << m_Velocity.getY() << std::endl;
+    SetInverseInertiaTensorWorld();
 	ClearForces();
 }

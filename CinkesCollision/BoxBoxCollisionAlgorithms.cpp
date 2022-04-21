@@ -174,7 +174,7 @@ unsigned Cinkes::BoxBoxCollisionAlgorithms::BoxAndBox(const CCollisionObject& a_
 
     // We can fill the contact.
 
-    a_Data->m_PenetrationDepth = pen;
+    //a_Data->m_PenetrationDepth = pen;
     a_Data->m_Normal = axis;
     a_Data->m_ContactPoints.push_back(vertex);
     return 1;
@@ -204,7 +204,7 @@ void Cinkes::BoxBoxCollisionAlgorithms::FillPointFaceBoxBox(const CCollisionObje
 
     // Create the contact data
     a_Data->m_Normal = normal;
-    a_Data->m_PenetrationDepth = a_Pentration;
+    //a_Data->m_PenetrationDepth = a_Pentration;
     a_Data->m_ContactPoints.push_back(a_Two.GetTransform() * vertex);
 }
 

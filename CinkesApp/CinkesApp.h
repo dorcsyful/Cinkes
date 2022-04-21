@@ -7,7 +7,6 @@
 #include <OgreRenderWindow.h>
 
 #include "CCollisionObject.h"
-#include "CCollisionShape.h"
 #include "COgreConverter.h"
 #include "CPhysicsWorld.h"
 
@@ -99,11 +98,12 @@ namespace Cinkes
 			entity->setMaterialName(a_MaterialName);
 			auto node = m_SceneManager->getRootSceneNode()->createChildSceneNode();
 			node->attachObject(entity);
-			auto aabb = entity->getBoundingBox();
 
 			std::shared_ptr<COgreConverter> temp = std::make_shared<COgreConverter>(a_Cinkes, entity);
 			m_Converters.push_back(temp);
-			m_PhysicsWorld->AddRigidBody(std::static_pointer_cast<CRigidBody>(a_Cinkes));
+			if (a_Cinkes->GetType() == EOBJECT_TYPE::TYPE_RIGID) { m_PhysicsWorld->AddRigidBody(std::dynamic_pointer_cast<CRigidBody>(a_Cinkes)); }
+			else { m_PhysicsWorld->AddObject(a_Cinkes); }
+			
 			return true;
 		}
 

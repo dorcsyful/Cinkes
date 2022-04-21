@@ -9,7 +9,7 @@
 #include "../CinkesMath/CUtils.h"
 #include "CSimplex.h"
 
-void Cinkes::CEPA::Run(std::shared_ptr<CContactInfo> a_Contact, CSimplex& a_Simplex)
+void Cinkes::CEPA::Run(const std::shared_ptr<CContactInfo>& a_Contact, CSimplex& a_Simplex)
 {
 	while(a_Simplex.Size() < 4)
 	{
@@ -18,7 +18,7 @@ void Cinkes::CEPA::Run(std::shared_ptr<CContactInfo> a_Contact, CSimplex& a_Simp
 	Algorithm(a_Contact, a_Simplex);
 }
 
-void Cinkes::CEPA::Algorithm(std::shared_ptr<CContactInfo> a_Contact, const CSimplex& a_Simplex)
+void Cinkes::CEPA::Algorithm(const std::shared_ptr<CContactInfo>& a_Contact, const CSimplex& a_Simplex)
 {
 	//the tetrahedron from GJK, the faces contain every triangle that are on it by the vertex indices
 	std::vector<CVector3> polytope = { a_Simplex[0],a_Simplex[1],a_Simplex[2],a_Simplex[3] };

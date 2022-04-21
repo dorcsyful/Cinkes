@@ -29,7 +29,6 @@ namespace Cinkes
 
 		CVector3 ConvertToRelative(CCollisionObject* a_Object, const CVector3& a_Position) const;
 		CVector3 ConvertToWorld(CCollisionObject* a_Object, const CVector3& a_Position) const;
-		void MakeOrthoBasis(CVector3* a_X, CVector3* a_Y, CVector3* a_Z) const;
 		void CalculateDeltaVelocity(CScalar a_T, CContactInfo* a_Info) const;
 		CVector3 CalculateLocalVelocity(unsigned a_Index, CScalar a_T, CContactInfo* a_Info) const;
 		void ApplyPositionChange(CVector3 a_LinearChange[2], CVector3 a_AngularChange[2], CScalar a_Penetration, CContactInfo* a_Info) const;
