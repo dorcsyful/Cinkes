@@ -9,22 +9,22 @@
 
 bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObject* a_Object2, CSimplex& a_Simplex)
 {
-    CVector3 A = a_Object1->GetCollisionShape()->Support(CVector3(1, 0, 0));
-    CVector3 B = a_Object2->GetCollisionShape()->Support(CVector3(-1, 0, 0));
-    CVector3 support = (A + a_Object1->GetTransform().getOrigin()) - (B + a_Object2->GetTransform().getOrigin());
+    CVector3 A = a_Object1->GetCollisionShape()->Support(CVector3(1, 0, 0)) + a_Object1->GetTransform().getOrigin();
+    CVector3 B = a_Object2->GetCollisionShape()->Support(CVector3(-1, 0, 0)) + a_Object2->GetTransform().getOrigin();
+    CVector3 support = A - B;
 
     CSimplex simplex;
     simplex.Push_Front(support);
     simplex.Push_FrontA(A);
     simplex.Push_FrontB(B);
-    CVector3 next = support * (-1);
+    CVector3 next = support * -1;
 
     while(true)
     {
         next.Normalize();
-    	A = a_Object1->GetCollisionShape()->Support(next);
-    	B = a_Object2->GetCollisionShape()->Support(next * (-1));
-    	support = (A + a_Object1->GetTransform().getOrigin()) - (B + a_Object2->GetTransform().getOrigin());
+    	A = a_Object1->GetCollisionShape()->Support(next) + a_Object1->GetTransform().getOrigin();
+    	B = a_Object2->GetCollisionShape()->Support(next * -1) + a_Object2->GetTransform().getOrigin();
+    	support = A - B;
 
     	if(support.Dot(next) <= 0)
         {
@@ -61,7 +61,7 @@ bool Cinkes::CGJKAlgorithm::Line(CSimplex& a_Simplex, CVector3& a_Direction)
     CVector3 a = a_Simplex[0];
     CVector3 b = a_Simplex[1];
     CVector3 ab = b - a;
-    CVector3 ao = a * (-1);
+    CVector3 ao = a * -1;
 
 	if(SameDirection(ab, ao))
     {
@@ -85,7 +85,7 @@ bool Cinkes::CGJKAlgorithm::Triangle(CSimplex& a_Simplex, CVector3& a_Direction)
     CVector3 c = a_Simplex[2];
     CVector3 ab = b - a;
     CVector3 ac = c - a;
-    CVector3 ao = a * (-1);
+    CVector3 ao = a * -1;
     CVector3 abc = ab.Cross(ac);
 
     if(SameDirection(abc.Cross(ac),ao))
@@ -125,7 +125,7 @@ bool Cinkes::CGJKAlgorithm::Triangle(CSimplex& a_Simplex, CVector3& a_Direction)
                 a_Simplex.SetAllA({ a_Simplex.getPointA(0),a_Simplex.getPointA(2), a_Simplex.getPointA(1) });
                 a_Simplex.SetAllB({ a_Simplex.getPointB(0),a_Simplex.getPointB(2), a_Simplex.getPointB(1) });
                 a_Simplex = { a,c,b };
-                a_Direction = abc * (-1);
+                a_Direction = abc * -1;
             }
         }
     }
@@ -141,7 +141,7 @@ bool Cinkes::CGJKAlgorithm::Tetrahedron(CSimplex& a_Simplex, CVector3& a_Directi
     CVector3 ab = b - a;
     CVector3 ac = c - a;
     CVector3 ad = d - a;
-    CVector3 ao = a * (-1);
+    CVector3 ao = a * -1;
     CVector3 abc = ab.Cross(ac);
     CVector3 acd = ac.Cross(ad);
     CVector3 adb = ad.Cross(ab);

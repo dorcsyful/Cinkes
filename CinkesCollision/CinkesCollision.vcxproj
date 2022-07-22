@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BoxBoxCollisionAlgorithms.h" />
     <ClInclude Include="CBoxShape.h" />
     <ClInclude Include="CBVH.h" />
     <ClInclude Include="CCapsuleShape.h" />
@@ -36,13 +35,15 @@
     <ClInclude Include="CEPA.h" />
     <ClInclude Include="CGJKAlgorithm.h" />
     <ClInclude Include="CContactInfo.h" />
+    <ClInclude Include="CHullHullAlgorithm.h" />
+    <ClInclude Include="CLine.h" />
+    <ClInclude Include="CPlane.h" />
+    <ClInclude Include="CRaycast.h" />
     <ClInclude Include="CSimplex.h" />
     <ClInclude Include="CSphereShape.h" />
     <ClInclude Include="CTriangleShape.h" />
-    <ClInclude Include="CVertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BoxBoxCollisionAlgorithms.cpp" />
     <ClCompile Include="CBoxShape.cpp" />
     <ClCompile Include="CBVH.cpp" />
     <ClCompile Include="CCapsuleShape.cpp" />
@@ -57,6 +58,9 @@
     <ClCompile Include="CCylinder.cpp" />
     <ClCompile Include="CEPA.cpp" />
     <ClCompile Include="CGJKAlgorithm.cpp" />
+    <ClCompile Include="CHullHullAlgorithm.cpp" />
+    <ClCompile Include="CLine.cpp" />
+    <ClCompile Include="CRaycast.cpp" />
     <ClCompile Include="CSimplex.cpp" />
     <ClCompile Include="CSphereShape.cpp" />
     <ClCompile Include="CTriangleShape.cpp" />

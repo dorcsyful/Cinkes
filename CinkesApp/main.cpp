@@ -21,7 +21,7 @@ int main()
     std::shared_ptr<CRigidBody> rigidBody = std::make_shared<CRigidBody>();
     rigidBody->SetCollisionShape(shape);
     rigidBody->GetTransform().setOrigin(CVector3(0, 60, 0));
-    app->AddObject(rigidBody);
+    app->AddObject(rigidBody, "cube.mesh", "Examples/Robot");
 
     std::shared_ptr<CCollisionObject >collision_object = std::make_shared<CCollisionObject>();
     collision_object->SetCollisionShape(shape);

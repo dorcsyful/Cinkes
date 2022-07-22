@@ -50,12 +50,10 @@ namespace Cinkes
 		CScalar GetAngularDamping() const { return m_AngularDamping; }
 		void SetAngularDamping(CScalar a_Amount) { m_AngularDamping = a_Amount; }
 
-		void SetInertiaTensor(CMat3x3& a_Tensor) { m_InverseIntertiaTensor = a_Tensor.GetInverse(); }
-		void SetInverseInertiaTensor(const CMat3x3& a_Tensor) { m_InverseIntertiaTensor = a_Tensor; }
 		CMat3x3 GetInverseInertiaTensor() const { return m_InverseIntertiaTensor; }
 		CMat3x3 GetInverseInertiaTensor() { return m_InverseIntertiaTensor; }
-		void SetInertiaTensorWorld(CMat3x3& a_Tensor) { m_InverseIntertiaTensorWorld = a_Tensor.GetInverse(); }
 		void SetInverseInertiaTensorWorld();
+		void SetInverseInertiaTensor();
 		CMat3x3 GetInverseInertiaTensorWorld() const { return m_InverseIntertiaTensorWorld; }
 		CMat3x3 GetInverseInertiaTensorWorld() { return m_InverseIntertiaTensorWorld; }
 

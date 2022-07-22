@@ -26,7 +26,7 @@ std::vector<Cinkes::CVector3> Cinkes::CBoxShape::SupportPointsForContact(const C
 	vertices[5] = CVector3(a_Position.getOrigin().getX() + m_Dimensions.getX(), a_Position.getOrigin().getY() + m_Dimensions.getY(), a_Position.getOrigin().getZ() - m_Dimensions.getZ());
 	vertices[6] = CVector3(a_Position.getOrigin().getX() + m_Dimensions.getX(), a_Position.getOrigin().getY() - m_Dimensions.getY(), a_Position.getOrigin().getZ() + m_Dimensions.getZ());
 	vertices[7] = CVector3(a_Position.getOrigin().getX() + m_Dimensions.getX(), a_Position.getOrigin().getY() - m_Dimensions.getY(), a_Position.getOrigin().getZ() - m_Dimensions.getZ());
-	float dots[8];
+	CScalar dots[8];
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -42,7 +42,27 @@ std::vector<Cinkes::CVector3> Cinkes::CBoxShape::SupportPointsForContact(const C
 		}
 	}
 
+
 	return returns;
+}
+
+Cinkes::CLine Cinkes::CBoxShape::GetEdge(int a_Axis, const CVector3& a_Direction)
+{
+	int signX = CUtils::Sgn(a_Direction.getX(),1);
+	int signY = CUtils::Sgn(a_Direction.getY(), 1);
+	int signZ = CUtils::Sgn(a_Direction.getZ(), 1);
+
+	CVector3 start = CVector3(signX * m_Dimensions[0], signY * m_Dimensions[1], signZ * m_Dimensions[2]);
+	CVector3 end = start;
+
+	switch (a_Axis)
+	{
+	case 0:  end[0] = -end[0]; break;
+	case 1:  end[1] = -end[1]; break;
+	default: end[2] = -end[2]; break;
+	}
+
+	return CLine(start, end);
 }
 
 void Cinkes::CBoxShape::CreateAABB(CVector3& a_Min, CVector3& a_Max)
@@ -77,4 +97,18 @@ void Cinkes::CBoxShape::CreateAABB(CVector3& a_Min, CVector3& a_Max)
 		a_Min[2] = -1;
 		a_Max[2] = 1;
 	}
+}
+
+Cinkes::CMat3x3 Cinkes::CBoxShape::CalculateInertiaTensor(CScalar a_Mass)
+{
+
+	CScalar lx = CScalar(2.) * (m_Dimensions[0]);
+	CScalar ly = CScalar(2.) * (m_Dimensions[1]);
+	CScalar lz = CScalar(2.) * (m_Dimensions[2]);
+	CMat3x3 inertia;
+	inertia[0][0] = a_Mass / (CScalar(12.0)) * (ly * ly + lz * lz);
+	inertia[1][1] = a_Mass / (CScalar(12.0)) * (lx * lx + lz * lz);
+	inertia[2][2] = a_Mass / (CScalar(12.0)) * (lx * lx + ly * ly);
+
+	return inertia;
 }

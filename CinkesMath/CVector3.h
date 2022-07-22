@@ -68,8 +68,11 @@ namespace Cinkes {
 		CVector3 Dot3(const CVector3& a_V0, const CVector3& a_V1, const CVector3& a_V2);
 		CVector3 Cross(const CVector3& a_Rhs);
 		CVector3 Cross(const CVector3& a_Rhs) const;
+		static CVector3 Cross(const CVector3& a_Lhs, const CVector3& a_Rhs) { return a_Lhs.Cross(a_Rhs); }
+		static CScalar Dot(const CVector3& a_Lhs, const CVector3& a_Rhs) { return a_Lhs.Dot(a_Rhs); }
 		CVector3 Lerp(const CVector3& a_Other, CScalar a_T);
 		static CVector3 Abs(const CVector3& a_Value) { return CVector3(abs(a_Value[0]),abs(a_Value[1]),abs(a_Value[2])); }
+		bool IsZero() { return Length2() < 0.001 ? true : false; }
 
 	private:
 		CScalar m_Values[3];

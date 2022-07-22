@@ -43,6 +43,7 @@ namespace Cinkes
 		//}
 
 		// Subgroup: Other {
+		CScalar MultiplicationValues(const CVector3& a_Vector3, int a_Column) const;
 		CVector3 getRow(unsigned a_Row);
 		CVector3 getRow(unsigned a_Row) const;
 		CVector3 getColumn(unsigned a_Column);
@@ -73,6 +74,7 @@ namespace Cinkes
 		CMat3x3 Abs();
 		void SetFromAxisAngle(const CVector3& a_Axis, CScalar a_Angle);
 		void SetFromQuaternion(const CQuaternion& a_Quaternion);
+		CMat3x3 Scale(const CVector3& a_V);
 		//}
 	private:
 		//Subgroup: Matrix Elements {

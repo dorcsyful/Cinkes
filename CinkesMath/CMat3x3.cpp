@@ -162,24 +162,10 @@ void Cinkes::CMat3x3::operator-=(const CMat3x3& a_Rhs)
 
 Cinkes::CMat3x3 Cinkes::CMat3x3::operator*(const CMat3x3& a_Rhs)
 {
-	CMat3x3 matrix;
-	CMat3x3 other = a_Rhs;
-	CVector3 column1 = other.getColumn(0);
-	CVector3 column2 = other.getColumn(1);
-	CVector3 column3 = other.getColumn(2);
-	matrix[0][0] = m_Rows[0][0] * column1[0] + m_Rows[0][1] * column1[1] + m_Rows[0][2] * column1[2];
-	matrix[0][1] = m_Rows[0][0] * column2[0] + m_Rows[0][1] * column2[1] + m_Rows[0][2] * column2[2];
-	matrix[0][2] = m_Rows[0][0] * column3[0] + m_Rows[0][1] * column3[1] + m_Rows[0][2] * column3[2];
-
-	matrix[1][0] = m_Rows[1][0] * column1[0] + m_Rows[1][1] * column1[1] + m_Rows[1][2] * column1[2];
-	matrix[1][1] = m_Rows[1][0] * column2[0] + m_Rows[1][1] * column2[1] + m_Rows[1][2] * column2[2];
-	matrix[1][2] = m_Rows[1][0] * column3[0] + m_Rows[1][1] * column3[1] + m_Rows[1][2] * column3[2];
-
-	matrix[2][0] = m_Rows[2][0] * column1[0] + m_Rows[2][1] * column1[1] + m_Rows[2][2] * column1[2];
-	matrix[2][1] = m_Rows[2][0] * column2[0] + m_Rows[2][1] * column2[1] + m_Rows[2][2] * column2[2];
-	matrix[2][2] = m_Rows[2][0] * column3[0] + m_Rows[2][1] * column3[1] + m_Rows[2][2] * column3[2];
-
-	return matrix;
+	return CMat3x3(
+		a_Rhs.MultiplicationValues(m_Rows[0],0), a_Rhs.MultiplicationValues(m_Rows[0],1), a_Rhs.MultiplicationValues(m_Rows[0],2),
+		a_Rhs.MultiplicationValues(m_Rows[1],0), a_Rhs.MultiplicationValues(m_Rows[1],1), a_Rhs.MultiplicationValues(m_Rows[1],2),
+		a_Rhs.MultiplicationValues(m_Rows[2],0), a_Rhs.MultiplicationValues(m_Rows[2],1), a_Rhs.MultiplicationValues(m_Rows[2],2));
 }
 
 void Cinkes::CMat3x3::operator*=(const CMat3x3& a_Rhs)
@@ -246,6 +232,11 @@ CVector3 Cinkes::CMat3x3::getRow(unsigned a_Row) const
 	return m_Rows[a_Row];
 }
 
+
+CScalar Cinkes::CMat3x3::MultiplicationValues(const CVector3& a_Vector3, int a_Column) const
+{
+	return m_Rows[0][a_Column] * a_Vector3.getX() + m_Rows[1][a_Column] * a_Vector3.getY() + m_Rows[2][a_Column] * a_Vector3.getZ();
+}
 
 CVector3 CMat3x3::getRow(unsigned a_Row)
 {
@@ -335,9 +326,9 @@ CMat3x3 CMat3x3::GetInverse()
 CVector3 Cinkes::CMat3x3::TransformTranspose(const CVector3& a_Vector)
 {
 	return CVector3(
-		a_Vector.getX() * m_Rows[0][0] + a_Vector.getY() * m_Rows[0][1] + a_Vector.getZ() * m_Rows[2][2],
-		a_Vector.getX() * m_Rows[1][0] + a_Vector.getY() * m_Rows[1][1] + a_Vector.getZ() * m_Rows[2][2],
-		a_Vector.getX() * m_Rows[2][0] + a_Vector.getY() * m_Rows[2][1] + a_Vector.getZ() * m_Rows[2][2]);
+		a_Vector.getX() * m_Rows[0][0] + a_Vector.getY() * m_Rows[1][0] + a_Vector.getZ() * m_Rows[2][0],
+		a_Vector.getX() * m_Rows[0][1] + a_Vector.getY() * m_Rows[1][1] + a_Vector.getZ() * m_Rows[2][1],
+		a_Vector.getX() * m_Rows[0][2] + a_Vector.getY() * m_Rows[1][2] + a_Vector.getZ() * m_Rows[2][2]);
 }
 
 CMat3x3 CMat3x3::GetIdentity()
@@ -494,4 +485,12 @@ void CMat3x3::SetFromQuaternion(const CQuaternion& a_Quaternion)
 	tmp2 = a_Quaternion.getX() * a_Quaternion.getW();
 	m_Rows[2][1] = static_cast<CScalar>(2.0) * (tmp1 + tmp2) * invs;
 	m_Rows[1][2] = static_cast<CScalar>(2.0) * (tmp1 - tmp2) * invs;
+}
+
+CMat3x3 CMat3x3::Scale(const CVector3& a_V)
+{
+	return CMat3x3(
+		m_Rows[0][0] * a_V[0], m_Rows[0][1] * a_V[1], m_Rows[0][2] * a_V[2],
+		m_Rows[1][0] * a_V[0], m_Rows[1][1] * a_V[1], m_Rows[1][2] * a_V[2],
+		m_Rows[2][0] * a_V[0], m_Rows[2][1] * a_V[1], m_Rows[2][2] * a_V[2]);
 }

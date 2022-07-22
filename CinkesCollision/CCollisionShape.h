@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 
+#include "CMat3x3.h"
 #include "../CinkesMath/CVector3.h"
 
 namespace Cinkes
@@ -42,6 +43,8 @@ namespace Cinkes
 		virtual CVector3 Support(const CVector3& a_V) = 0;
 		virtual void CreateAABB(CVector3& a_Min, CVector3& a_Max) = 0;
 		virtual std::vector<CVector3> SupportPointsForContact(const CVector3& a_Direction, const CTransform& a_Position) = 0;
+		virtual CMat3x3 CalculateInertiaTensor(CScalar a_Mass) = 0;
+
 		//}
 
 	protected:

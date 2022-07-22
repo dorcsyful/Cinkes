@@ -49,7 +49,7 @@ namespace Cinkes
 		{
 			Light* light = m_SceneManager->createLight("MainLight");
 			SceneNode* light_node = m_SceneManager->getRootSceneNode()->createChildSceneNode();
-			light_node->setPosition(20, 200, 50);
+			light_node->setPosition(20, 0, -300);
 			light_node->attachObject(light);
 
 			Light* l = m_SceneManager->createLight();
@@ -57,7 +57,7 @@ namespace Cinkes
 			l->setDiffuseColour(ColourValue::White);
 			l->setSpecularColour(ColourValue(0.4f, 0.4f, 0.4f));
 			SceneNode* ln = m_SceneManager->getRootSceneNode()->createChildSceneNode();
-			ln->setDirection(Vector3(0.0, -0.1f, 0.0).normalisedCopy());
+			ln->setDirection(Vector3(0.0, -0.f, -1.0).normalisedCopy());
 			ln->attachObject(l);
 		}
 

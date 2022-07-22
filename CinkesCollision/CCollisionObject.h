@@ -32,7 +32,7 @@ namespace Cinkes
 		//}
 
 		//Subgroup: Shapes {
-		void SetCollisionShape(const std::shared_ptr<CCollisionShape>& a_Shape);
+		virtual void SetCollisionShape(const std::shared_ptr<CCollisionShape>& a_Shape);
 		std::shared_ptr<CCollisionShape> GetCollisionShape() const;
 		//}
 
@@ -48,6 +48,7 @@ namespace Cinkes
 		bool GetHasContact() const { return m_HasContact; }
 		EOBJECT_TYPE GetType() const { return m_Type; }
 		EOBJECT_TYPE GetType() { return m_Type; }
+
 		//}
 
 		bool m_AABBDirty = false;

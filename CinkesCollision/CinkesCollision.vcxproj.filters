@@ -19,11 +19,11 @@
     <Filter Include="Source Files\Shapes">
       <UniqueIdentifier>{5b81be93-48fb-4f40-b95f-3f2340925ed8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Algorithms">
-      <UniqueIdentifier>{f113b65c-8cce-4890-a5cf-202cf925cf71}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Algorithms">
       <UniqueIdentifier>{cf85888f-115c-4b0f-95a2-4a6cd66015ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Algorithms">
+      <UniqueIdentifier>{f113b65c-8cce-4890-a5cf-202cf925cf71}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -66,9 +66,6 @@
     <ClInclude Include="CCylinder.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="CSimplex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CContactInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -81,14 +78,23 @@
     <ClInclude Include="CEPA.h">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="BoxBoxCollisionAlgorithms.h">
-      <Filter>Header Files\Algorithms</Filter>
-    </ClInclude>
     <ClInclude Include="CTriangleShape.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="CVertex.h">
+    <ClInclude Include="CPlane.h">
       <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CSimplex.h">
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CLine.h">
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CHullHullAlgorithm.h">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="CRaycast.h">
+      <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -146,8 +152,14 @@
     <ClCompile Include="CTriangleShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BoxBoxCollisionAlgorithms.cpp">
-      <Filter>Source Files\Algorithms</Filter>
+    <ClCompile Include="CRaycast.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CLine.cpp">
+      <Filter>Source Files\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="CHullHullAlgorithm.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
