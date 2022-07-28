@@ -24,7 +24,6 @@ namespace Cinkes {
 		void SetRadius(CScalar a_Radius) { m_Radius = a_Radius; }
 		CVector3 Support(const CVector3& a_V) override { return a_V * m_Radius; }
 		void CreateAABB(CVector3& a_Min, CVector3& a_Max) override;
-		std::vector<CVector3> SupportPointsForContact(const CVector3& a_Direction, const CTransform& a_Position) override;
 		//}
 
     private:

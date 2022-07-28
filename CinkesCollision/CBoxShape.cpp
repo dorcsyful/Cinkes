@@ -13,39 +13,6 @@ Cinkes::CVector3 Cinkes::CBoxShape::Support(const CVector3& a_V)
 	return CVector3(temp1, temp2, temp3);
 }
 
-std::vector<Cinkes::CVector3> Cinkes::CBoxShape::SupportPointsForContact(const CVector3& a_Direction, const CTransform& a_Position)
-{
-	CVector3 dir = /*a_Position.getBasis() * */a_Direction;
-	std::vector<CVector3> returns;
-	CVector3 vertices[8];
-	vertices[0] = CVector3(a_Position.getOrigin().getX() - m_Dimensions.getX(), a_Position.getOrigin().getY() - m_Dimensions.getY(), a_Position.getOrigin().getZ() - m_Dimensions.getZ());
-	vertices[1] = CVector3(a_Position.getOrigin().getX() - m_Dimensions.getX(), a_Position.getOrigin().getY() - m_Dimensions.getY(), a_Position.getOrigin().getZ() + m_Dimensions.getZ());
-	vertices[2] = CVector3(a_Position.getOrigin().getX() - m_Dimensions.getX(), a_Position.getOrigin().getY() + m_Dimensions.getY(), a_Position.getOrigin().getZ() + m_Dimensions.getZ());
-	vertices[3] = CVector3(a_Position.getOrigin().getX() - m_Dimensions.getX(), a_Position.getOrigin().getY() + m_Dimensions.getY(), a_Position.getOrigin().getZ() - m_Dimensions.getZ());
-	vertices[4] = CVector3(a_Position.getOrigin().getX() + m_Dimensions.getX(), a_Position.getOrigin().getY() + m_Dimensions.getY(), a_Position.getOrigin().getZ() + m_Dimensions.getZ());
-	vertices[5] = CVector3(a_Position.getOrigin().getX() + m_Dimensions.getX(), a_Position.getOrigin().getY() + m_Dimensions.getY(), a_Position.getOrigin().getZ() - m_Dimensions.getZ());
-	vertices[6] = CVector3(a_Position.getOrigin().getX() + m_Dimensions.getX(), a_Position.getOrigin().getY() - m_Dimensions.getY(), a_Position.getOrigin().getZ() + m_Dimensions.getZ());
-	vertices[7] = CVector3(a_Position.getOrigin().getX() + m_Dimensions.getX(), a_Position.getOrigin().getY() - m_Dimensions.getY(), a_Position.getOrigin().getZ() - m_Dimensions.getZ());
-	CScalar dots[8];
-
-	for (int i = 0; i < 8; i++)
-	{
-		dots[i] = dir.Dot(vertices[i]);
-	}
-	CScalar max = *std::max_element(dots, dots+7);
-	for (int i = 0; i < 8; i++)
-	{
-		CScalar base = max - dots[i];
-		if(base < static_cast<CScalar>(0.01) && base > - static_cast<CScalar>(0.01))
-		{
-			returns.push_back(vertices[i]);
-		}
-	}
-
-
-	return returns;
-}
-
 Cinkes::CLine Cinkes::CBoxShape::GetEdge(int a_Axis, const CVector3& a_Direction)
 {
 	int signX = CUtils::Sgn(a_Direction.getX(),1);

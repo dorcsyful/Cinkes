@@ -5,6 +5,7 @@
 
 #include "CCollisionShape.h"
 #include "CVertex.h"
+#include "CPoint.h"
 
 namespace Cinkes
 {
@@ -26,10 +27,9 @@ namespace Cinkes
 		//Subgroup: Other {
 		void BuildHull(const std::vector<float>& a_Vertices, const std::vector<unsigned int>& a_Indices, const std::vector<int>& a_Triangles);
 		CVector3 Support(const CVector3& a_V) override;
-		std::vector<CVector3> SupportPointsForContact(const CVector3& a_Direction, const CTransform& a_Position) override;
 		//}
 	private:
-		std::map<unsigned int, std::shared_ptr<CVertex>> m_Vertices;
+		std::map<unsigned int, std::shared_ptr<CPoint>> m_Vertices;
 		ESHAPE_TYPE m_Type = ESHAPE_TYPE::SHAPE_CONVEX_HULL;
 
 	};

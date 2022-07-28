@@ -28,7 +28,6 @@ namespace Cinkes
 		bool RemoveVertexByIndex(int a_Index);
 		bool RemoveVertexByValue(const CVector3& a_Vertex);
 		bool AddMultipleVertices(std::vector<CVector3> a_Array);
-		std::vector<CVector3> SupportPointsForContact(const CVector3& a_Direction, const CTransform& a_Position) override;
 		//}
 
 	private:
