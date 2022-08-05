@@ -14,7 +14,6 @@ Cinkes::CCollisionWorld::CCollisionWorld() : m_ShouldUpdate(false)
 	m_CEPA = std::make_unique<CEPA>();
 	m_ContactPointCalculator = std::make_unique<CContactPointCalculator>();
 
-	m_Boxes = std::make_unique<BoxBoxCollisionAlgorithms>();
 }
 
 
@@ -89,8 +88,7 @@ void Cinkes::CCollisionWorld::RunCollision(CScalar a_T)
 					contact->m_Second = element->m_Objects[i + 1];
 					m_CEPA->Run(contact, simplex);
 					m_Contacts.push_back(contact);
-					m_Boxes->CalculateCurrent(m_Contacts[m_Contacts.size() - 1].get());
-					//m_ContactPointCalculator->GetPoints(m_Contacts[m_Contacts.size() - 1].get());
+					m_ContactPointCalculator->GetPoints(m_Contacts[m_Contacts.size() - 1].get());
 				}
 			}
 		}

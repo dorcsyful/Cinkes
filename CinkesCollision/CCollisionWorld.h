@@ -6,7 +6,6 @@
 #include "CEPA.h"
 #include "CScalar.h"
 #include "CContactPointCalculator.h"
-#include "BoxBoxCollisionAlgorithms.h"
 
 namespace Cinkes
 {
@@ -67,7 +66,6 @@ namespace Cinkes
 		std::unique_ptr<CGJKAlgorithm> m_GJK;
 		std::unique_ptr<CEPA> m_CEPA;
 		std::unique_ptr<CContactPointCalculator> m_ContactPointCalculator;
-		std::unique_ptr<BoxBoxCollisionAlgorithms> m_Boxes;
 		//}
 	};
 

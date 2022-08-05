@@ -3,7 +3,7 @@
 #include <memory>
 #include "../CinkesMath/CVector3.h"
 #include <vector>
-
+#include "CSimplex.h"
 #include "CMat3x3.h"
 
 namespace Cinkes
@@ -21,6 +21,7 @@ namespace Cinkes
 	struct CTriangle {
 	public:
 		CVector3 m_Values[3];
+		CTriangle() = default;
 		CTriangle(CVector3 a_X, CVector3 a_Y, CVector3 a_Z) {
 			m_Values[0] = a_X;
 			m_Values[1] = a_Y;
@@ -44,6 +45,7 @@ namespace Cinkes
 
 	struct CContactInfo
 	{
+		CContactInfo(void) = default;
 		CCollisionObject* operator[](const unsigned int a_Rhs)
 		{
 			assert(a_Rhs == 0 || a_Rhs == 1);

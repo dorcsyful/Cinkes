@@ -90,9 +90,6 @@
     <ClInclude Include="CLine.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="CHullHullAlgorithm.h">
-      <Filter>Header Files\Algorithms</Filter>
-    </ClInclude>
     <ClInclude Include="CRaycast.h">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
@@ -131,9 +128,6 @@
     <ClCompile Include="CBoxShape.cpp">
       <Filter>Source Files\Shapes</Filter>
     </ClCompile>
-    <ClCompile Include="CVertex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CSimplex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -155,14 +149,8 @@
     <ClCompile Include="CTriangleShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CRaycast.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CLine.cpp">
       <Filter>Source Files\Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="CHullHullAlgorithm.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CPoint.cpp">
       <Filter>Source Files</Filter>

@@ -35,7 +35,6 @@
     <ClInclude Include="CEPA.h" />
     <ClInclude Include="CGJKAlgorithm.h" />
     <ClInclude Include="CContactInfo.h" />
-    <ClInclude Include="CHullHullAlgorithm.h" />
     <ClInclude Include="CLine.h" />
     <ClInclude Include="CPlane.h" />
     <ClInclude Include="CPoint.h" />
@@ -59,14 +58,11 @@
     <ClCompile Include="CCylinder.cpp" />
     <ClCompile Include="CEPA.cpp" />
     <ClCompile Include="CGJKAlgorithm.cpp" />
-    <ClCompile Include="CHullHullAlgorithm.cpp" />
     <ClCompile Include="CLine.cpp" />
     <ClCompile Include="CPoint.cpp" />
-    <ClCompile Include="CRaycast.cpp" />
     <ClCompile Include="CSimplex.cpp" />
     <ClCompile Include="CSphereShape.cpp" />
     <ClCompile Include="CTriangleShape.cpp" />
-    <ClCompile Include="CVertex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CinkesMath\CinkesMath.vcxproj">
