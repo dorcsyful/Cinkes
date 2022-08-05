@@ -25,7 +25,7 @@ namespace Cinkes
 
 
 	private:
-		CVector3 GetBaryCentric(const CVector3& a_Distance, const std::vector<CVector3>& a_Triangle);
+		CVector3 GetBaryCentric(const CVector3& a_Distance, const CTriangle& a_Triangle);
 
 	};
 }

@@ -1,20 +1,6 @@
-#include "pch.h"
 #include "CConvexHull.h"
-
-#include <map>
-#include <algorithm>
-
-#include "../CinkesMath/CTransform.h"
-
-
-Cinkes::CConvexHull::~CConvexHull()
-{
-	for (int i = static_cast<int>(m_Vertices.size()) - 1; i >= 0; i--)
-	{
-		m_Vertices[i] = nullptr;
-	}
-}
-
+#include "CVector3.h"
+#include <cassert>
 Cinkes::CConvexHull::CConvexHull(const CConvexHull& a_Rhs)
 {
 	m_Vertices = a_Rhs.m_Vertices;
@@ -37,8 +23,17 @@ Cinkes::CConvexHull& Cinkes::CConvexHull::operator=(const CConvexHull& a_Rhs)
 	return *this;
 }
 
-void Cinkes::CConvexHull::BuildHull(const std::vector<float>& a_Vertices, const std::vector<unsigned int>& a_Indices, 
-									const std::vector<int>& a_Triangles)
+Cinkes::CVector3 Cinkes::CConvexHull::Support(const CVector3& a_V)
 {
-
+	int index = -1;
+	CScalar largest = -INFINITY;
+	for (int i = 0; i < m_Vertices.size(); i++) {
+		CScalar temp = a_V.Dot(m_Vertices[i].coords);
+		if (temp > largest) {
+			largest = temp;
+			index = i;
+		}
+	}
+	assert(index != -1, "Index is wrong in support point calculation");
+	return m_Vertices[index].coords;
 }

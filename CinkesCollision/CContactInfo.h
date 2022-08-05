@@ -18,6 +18,21 @@ namespace Cinkes
 		CONTACT_EDGE_EDGE
 	};
 
+	struct CTriangle {
+	public:
+		CVector3 m_Values[3];
+		CTriangle(CVector3 a_X, CVector3 a_Y, CVector3 a_Z) {
+			m_Values[0] = a_X;
+			m_Values[1] = a_Y;
+			m_Values[2] = a_Z;
+		}
+		CVector3 operator[](int a_Rhs) {
+			return m_Values[a_Rhs];
+		}
+		CVector3 operator[](int a_Rhs) const {
+			return m_Values[a_Rhs];
+		}
+	};
 
 
 	class CCollisionObject;
@@ -47,8 +62,10 @@ namespace Cinkes
 		std::shared_ptr<CCollisionObject> m_Second;
 		CVector3 m_Normal;
 		CScalar m_PenetrationDepth{};
-		ECONTACT_TYPE m_Type = ECONTACT_TYPE::CONTACT_EDGE_EDGE;
+		ECONTACT_TYPE m_Type = ECONTACT_TYPE::CONTACT_NO_CONTACT;
 		std::vector<CVector3> m_ContactPoints;
+		CVector3 m_PenetrationPoint;
+		CTriangle m_Triangle[3]; //[0] -> main triangle [1] -> polytopeA [2] -> polytopeB
 		CScalar m_Friction{};
 		CScalar m_Restitution{};
 		CScalar m_DesiredVelocity{};
@@ -56,6 +73,7 @@ namespace Cinkes
 		CMat3x3 m_ContactToWorld;
 		float m_DeltaVelocity{};
 		CVector3 m_RelativeContactPosition[2];
+		CSimplex m_Simplex;
 	};
 }
 
