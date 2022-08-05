@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "CppUnitTest.h"
 #include "../CinkesMath/CUtils.h"
 #include "../CinkesMath/CQuaternion.h"

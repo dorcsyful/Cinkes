@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CinkesMath", "CinkesMath\CinkesMath.vcxproj", "{3B27A253-A4C5-4D98-90E4-40F39FC5A7F7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CUnitTest", "CUnitTest\CUnitTest.vcxproj", "{6A7EF73E-BEE1-4CE2-93A2-727B92B7DB64}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A5E53787-D5B7-4922-93C3-9482A22ACF79} = {A5E53787-D5B7-4922-93C3-9482A22ACF79}
+		{EB1704ED-E28A-46CD-9402-F0DA1D92989D} = {EB1704ED-E28A-46CD-9402-F0DA1D92989D}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CinkesCollision", "CinkesCollision\CinkesCollision.vcxproj", "{EB1704ED-E28A-46CD-9402-F0DA1D92989D}"
 	ProjectSection(ProjectDependencies) = postProject
