@@ -13,56 +13,33 @@ Cinkes::CVector3 Cinkes::CBoxShape::Support(const CVector3& a_V)
 	return CVector3(temp1, temp2, temp3);
 }
 
-Cinkes::CLine Cinkes::CBoxShape::GetEdge(int a_Axis, const CVector3& a_Direction)
+void Cinkes::CBoxShape::CreateAABB(const CMat3x3& a_Rotation, CVector3& a_Min, CVector3& a_Max)
 {
-	int signX = CUtils::Sgn(a_Direction.getX(),1);
-	int signY = CUtils::Sgn(a_Direction.getY(), 1);
-	int signZ = CUtils::Sgn(a_Direction.getZ(), 1);
+	CVector3 temp_min, temp_max;
+	temp_min[0] = -m_Dimensions[0];
+	temp_max[0] =  m_Dimensions[0];
+	temp_min[1] = -m_Dimensions[1];
+	temp_max[1] =  m_Dimensions[1];
+	temp_min[2] = -m_Dimensions[2];
+	temp_max[2] =  m_Dimensions[2];
 
-	CVector3 start = CVector3(signX * m_Dimensions[0], signY * m_Dimensions[1], signZ * m_Dimensions[2]);
-	CVector3 end = start;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++)
+		{
+			CScalar a = a_Rotation[i][j] * temp_min[j];
+			CScalar b = a_Rotation[i][j] * temp_max[j];
+			if (a < b)
 
-	switch (a_Axis)
-	{
-	case 0:  end[0] = -end[0]; break;
-	case 1:  end[1] = -end[1]; break;
-	default: end[2] = -end[2]; break;
-	}
-
-	return CLine(start, end);
-}
-
-void Cinkes::CBoxShape::CreateAABB(CVector3& a_Min, CVector3& a_Max)
-{
-	if(m_Dimensions[0] > static_cast<CScalar>(1))
-	{
-		a_Min[0] = m_Dimensions[0] * static_cast<CScalar>(-0.5);
-		a_Max[0] = m_Dimensions[0] * static_cast<CScalar>(0.5);
-	}
-	else
-	{
-		a_Min[0] = -1;
-		a_Max[0] = 1;
-	}
-	if(m_Dimensions[1] > static_cast<CScalar>(1))
-	{
-		a_Min[1] = m_Dimensions[1] * static_cast<CScalar>(-0.5);
-		a_Max[1] = m_Dimensions[1] * static_cast<CScalar>(0.5);
-	}
-	else
-	{
-		a_Min[1] = -1;
-		a_Max[1] = 1;
-	}
-	if (m_Dimensions[2] > static_cast<CScalar>(1))
-	{
-		a_Min[2] = m_Dimensions[2] * static_cast<CScalar>(-0.5);
-		a_Max[2] = m_Dimensions[2] * static_cast<CScalar>(0.5);
-	}
-	else
-	{
-		a_Min[2] = -1;
-		a_Max[2] = 1;
+			{
+				a_Min[i] += a;
+				a_Max[i] += b;
+			}
+			else
+			{
+				a_Min[i] += b;
+				a_Max[i] += a;
+			}
+		}
 	}
 }
 

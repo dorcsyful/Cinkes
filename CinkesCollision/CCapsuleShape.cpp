@@ -12,7 +12,7 @@ Cinkes::CVector3 Cinkes::CCapsuleShape::Support(const CVector3& a_V)
     return segment + (dir * m_Radius);
 }
 
-void Cinkes::CCapsuleShape::CreateAABB(CVector3& a_Min, CVector3& a_Max)
+void Cinkes::CCapsuleShape::CreateAABB(const CMat3x3& a_Rotation, CVector3& a_Min, CVector3& a_Max)
 {
     a_Min = CVector3(m_Radius * (-1), m_Radius * (-1), m_Height * (-1) - m_Radius);
     a_Max = CVector3(m_Radius, m_Height, m_Height + m_Radius);

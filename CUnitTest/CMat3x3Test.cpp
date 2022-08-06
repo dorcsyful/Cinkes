@@ -29,7 +29,6 @@ namespace UnitTest
 {
 	TEST_CLASS(CMat3x3Test)
 	{
-	public:
 
 		TEST_METHOD(EmptyConsturctor) {
 			const CMat3x3 matrix = CMat3x3();

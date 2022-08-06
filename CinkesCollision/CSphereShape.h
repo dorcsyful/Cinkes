@@ -23,7 +23,7 @@ namespace Cinkes {
 		void GetRadius(CScalar& a_Radius) const { a_Radius = m_Radius; }
 		void SetRadius(CScalar a_Radius) { m_Radius = a_Radius; }
 		CVector3 Support(const CVector3& a_V) override { return a_V * m_Radius; }
-		void CreateAABB(CVector3& a_Min, CVector3& a_Max) override;
+		void CreateAABB(const CMat3x3& a_Rotation, CVector3& a_Min, CVector3& a_Max) override;
 		//}
 
     private:

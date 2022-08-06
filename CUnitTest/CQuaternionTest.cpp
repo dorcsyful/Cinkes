@@ -9,7 +9,6 @@ namespace UnitTest
 {
 	TEST_CLASS(CQuaternionTest)
 	{
-	public:
 
 		TEST_METHOD(EmptyConsturctor)
 		{

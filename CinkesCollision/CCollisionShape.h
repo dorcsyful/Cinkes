@@ -41,7 +41,7 @@ namespace Cinkes
 		//Subgroup: Other {
 		ESHAPE_TYPE GetType() const { return m_Type; }
 		virtual CVector3 Support(const CVector3& a_V) = 0;
-		virtual void CreateAABB(CVector3& a_Min, CVector3& a_Max) = 0;
+		virtual void CreateAABB(const CMat3x3& a_Rotation,CVector3& a_Min, CVector3& a_Max) = 0;
 		virtual CMat3x3 CalculateInertiaTensor(CScalar a_Mass) = 0;
 
 		//}

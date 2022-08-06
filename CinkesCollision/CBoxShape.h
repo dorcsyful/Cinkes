@@ -5,6 +5,7 @@
 #include "../CinkesMath/CVector3.h"
 #include "CLine.h"
 #include "CConvexHull.h"
+#include <cassert>
 
 namespace Cinkes
 {
@@ -15,9 +16,11 @@ namespace Cinkes
 		//Subgroup: Constructors {
 		CBoxShape() {m_Type = ESHAPE_TYPE::SHAPE_BOX; }
 		CBoxShape(CVector3 a_Dimensions) {
+			assert(a_Dimensions[0] != 0 && a_Dimensions[1] != 0 && a_Dimensions[2] != 0);
 			m_Dimensions = a_Dimensions;
 		}
 		CBoxShape(const CScalar a_X, const CScalar a_Y, const CScalar a_Z) { 
+			assert(a_X != 0 && a_Y != 0 && a_Z != 0);
 			m_Dimensions = CVector3(a_X, a_Y, a_Z);
 		}
 		~CBoxShape() override = default;
@@ -44,16 +47,17 @@ namespace Cinkes
 		};
 
 		void SetDimensions(const CVector3& a_Dimensions) { 
+			assert(a_Dimensions[0] != 0 && a_Dimensions[1] != 0 && a_Dimensions[2] != 0);
 			m_Dimensions = a_Dimensions; 
 		};
 		void SetDimensions(const CScalar& a_X, const CScalar& a_Y, const CScalar& a_Z) { 
+			assert(a_X != 0 && a_Y != 0 && a_Z != 0);
 			m_Dimensions = CVector3(a_X, a_Y, a_Z); 
 			 
 		};
 
 		CVector3 Support(const CVector3& a_V);
-		CLine GetEdge(int a_Axis, const CVector3& a_Direction);
-		void CreateAABB(CVector3& a_Min, CVector3& a_Max);
+		void CreateAABB(const CMat3x3& a_Rotation, CVector3& a_Min, CVector3& a_Max) override;
 		CMat3x3 CalculateInertiaTensor(CScalar a_Mass);
 	private:
 		CVector3 m_Dimensions;

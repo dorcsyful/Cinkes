@@ -18,7 +18,7 @@ std::shared_ptr<Cinkes::CAABB> Cinkes::CBVH::CreateAABB(const std::shared_ptr<CC
 	a_Object->SetHasContact(nullptr);
 	std::shared_ptr<CAABB> temp = std::make_shared<CAABB>();
 	CVector3 min, max;
-	a_Object->GetCollisionShape()->CreateAABB(min, max);
+	a_Object->GetCollisionShape()->CreateAABB(a_Object.get()->GetTransform().getBasis(), min, max);
 	max += a_Object->GetTransform().getOrigin();
 	min += a_Object->GetTransform().getOrigin();
 	temp->m_Max[0] = static_cast<int>(max[0]);

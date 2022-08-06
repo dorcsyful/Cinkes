@@ -224,7 +224,9 @@ float CVector3::operator[](unsigned a_Rhs) const
 
 bool Cinkes::CVector3::operator==(const CVector3& a_Rhs) const
 {
-	return m_Values[0] == a_Rhs.m_Values[0] && m_Values[1] == a_Rhs.m_Values[1] && m_Values[2] == a_Rhs.m_Values[2];
+	return (m_Values[0] - a_Rhs.m_Values[0] < CEPSILON) && 
+			(m_Values[1] - a_Rhs.m_Values[1] < CEPSILON) &&
+			(m_Values[2] - a_Rhs.m_Values[2] < CEPSILON);
 }
 
 bool Cinkes::CVector3::operator!=(const CVector3& a_Rhs) const

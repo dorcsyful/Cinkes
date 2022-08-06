@@ -30,8 +30,6 @@ namespace UnitTest
 {
 	TEST_CLASS(CTransformTest)
 	{
-	public:
-
 		TEST_METHOD(EmptyConsturctor) {
 			CTransform example = CTransform();
 

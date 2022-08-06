@@ -24,7 +24,7 @@ Cinkes::CVector3 Cinkes::CCylinder::Support(const CVector3& a_V)
     return segment + disc;
 }
 
-void Cinkes::CCylinder::CreateAABB(CVector3& a_Min, CVector3& a_Max)
+void Cinkes::CCylinder::CreateAABB(const CMat3x3& a_Rotation, CVector3& a_Min, CVector3& a_Max)
 {
     a_Min = CVector3(m_Radius * (-1), m_Radius * (-1), m_Height * (-1));
     a_Max = CVector3(m_Radius, m_Height, m_Height);

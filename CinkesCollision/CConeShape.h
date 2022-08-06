@@ -40,7 +40,7 @@ namespace Cinkes
 
         //Subgroup: Other {
         CVector3 Support(const CVector3& a_V) override;
-        void CreateAABB(CVector3& a_Min, CVector3& a_Max) override;
+        void CreateAABB(const CMat3x3& a_Rotation, CVector3& a_Min, CVector3& a_Max) override;
         //}
 
     private:

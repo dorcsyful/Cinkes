@@ -7,9 +7,7 @@ using namespace Cinkes;
 namespace UnitTest
 {
 	TEST_CLASS(CVector3Test)
-	{
-	public:
-		
+	{		
 		TEST_METHOD(EmptyConsturctor)
 		{
 			CVector3 example = CVector3();
