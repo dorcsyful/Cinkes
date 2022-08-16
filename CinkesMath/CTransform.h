@@ -13,6 +13,8 @@ namespace Cinkes
 		CTransform();
 		~CTransform() = default;
 		CTransform(const CMat3x3& a_Basis, const CVector3& a_Origin);
+		CTransform(const CMat3x3& a_Basis);
+		CTransform(const CVector3& a_Origin);
 		CTransform(const CTransform& a_Rhs);
 		CTransform(CTransform&& a_Rhs) noexcept;
 		CTransform& operator=(CTransform&& a_Rhs) noexcept;

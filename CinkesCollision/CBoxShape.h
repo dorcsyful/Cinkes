@@ -16,12 +16,10 @@ namespace Cinkes
 		//Subgroup: Constructors {
 		CBoxShape() {m_Type = ESHAPE_TYPE::SHAPE_BOX; }
 		CBoxShape(CVector3 a_Dimensions) {
-			assert(a_Dimensions[0] != 0 && a_Dimensions[1] != 0 && a_Dimensions[2] != 0);
-			m_Dimensions = a_Dimensions;
+			SetDimensions(a_Dimensions);
 		}
 		CBoxShape(const CScalar a_X, const CScalar a_Y, const CScalar a_Z) { 
-			assert(a_X != 0 && a_Y != 0 && a_Z != 0);
-			m_Dimensions = CVector3(a_X, a_Y, a_Z);
+			SetDimensions(a_X,a_Y,a_Z);
 		}
 		~CBoxShape() override = default;
 		CBoxShape(const CBoxShape& a_Rhs) = default;
@@ -47,8 +45,7 @@ namespace Cinkes
 		};
 
 		void SetDimensions(const CVector3& a_Dimensions) { 
-			assert(a_Dimensions[0] != 0 && a_Dimensions[1] != 0 && a_Dimensions[2] != 0);
-			m_Dimensions = a_Dimensions; 
+			SetDimensions(a_Dimensions[0], a_Dimensions[1], a_Dimensions[2]);
 		};
 		void SetDimensions(const CScalar& a_X, const CScalar& a_Y, const CScalar& a_Z) { 
 			assert(a_X != 0 && a_Y != 0 && a_Z != 0);

@@ -17,6 +17,18 @@ Cinkes::CTransform::CTransform(const CMat3x3& a_Basis, const CVector3& a_Origin)
 	m_Origin = a_Origin;
 }
 
+Cinkes::CTransform::CTransform(const CMat3x3& a_Basis)
+{
+	m_Basis = a_Basis;
+	m_Origin = CVector3();
+}
+
+Cinkes::CTransform::CTransform(const CVector3& a_Origin)
+{
+	m_Basis = CMat3x3();
+	m_Origin = a_Origin;
+}
+
 Cinkes::CTransform::CTransform(const CTransform& a_Rhs)
 {
 	m_Basis = a_Rhs.getBasis();

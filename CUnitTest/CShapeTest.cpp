@@ -43,9 +43,8 @@ namespace UnitTest {
 			CVector3 min, max;
 			object.get()->SetCollisionShape(shape);
 			object.get()->GetCollisionShape().get()->CreateAABB(object.get()->GetTransform().getBasis(), min, max);
-			Assert::AreEqual(CVector3(-1, -0.2, -13), min);
-			Assert::AreEqual(CVector3(1, 0.2, 13), max);
-
+			Assert::IsTrue(CVector3(-1, -0.2, -13) == min);
+			Assert::IsTrue(CVector3(1, 0.2, 13) == max);
 		}
 	};
 }

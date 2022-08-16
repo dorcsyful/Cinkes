@@ -9,6 +9,6 @@
 #define CScalar float
 #endif
 
-#define CEPSILON std::numeric_limits<float>::epsilon()
+#define CEPSILON std::numeric_limits<float>::epsilon() * 100
 
  

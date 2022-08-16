@@ -60,7 +60,6 @@ namespace Cinkes {
 		bool operator!=(const CVector3& a_Rhs) const;
 		
 		CScalar Length2();
-		CScalar Length2() const;
 		CScalar Length();
 		void Normalize();
 		CScalar Dot(const CVector3& a_Rhs);
@@ -72,6 +71,7 @@ namespace Cinkes {
 		static CScalar Dot(const CVector3& a_Lhs, const CVector3& a_Rhs) { return a_Lhs.Dot(a_Rhs); }
 		CVector3 Lerp(const CVector3& a_Other, CScalar a_T);
 		static CVector3 Abs(const CVector3& a_Value) { return CVector3(abs(a_Value[0]),abs(a_Value[1]),abs(a_Value[2])); }
+		static CVector3 Normalize(CVector3 a_Vector) { a_Vector.Normalize(); return a_Vector; }
 		bool IsZero() { return Length2() < 0.001 ? true : false; }
 
 	private:

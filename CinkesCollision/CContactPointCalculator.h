@@ -1,6 +1,6 @@
 #pragma once
 #include "CContactInfo.h"
-
+#include "CVector3.h"
 namespace Cinkes
 {
 	class CSimplex;
@@ -25,7 +25,8 @@ namespace Cinkes
 
 
 	private:
-		CVector3 GetBaryCentric(const CVector3& a_Distance, const CTriangle& a_Triangle);
-
+		CVector3 GetBaryCentric(const CVector3& a_Point, const CTriangle& a_Triangle);
+		CVector3 ProjectToTriangle(CScalar a_Distance, const CTriangle& a_Triangle);
+		CScalar Clip(CScalar a_Original, CScalar a_Lower, CScalar a_Upper); //Because what the fuck std
 	};
 }

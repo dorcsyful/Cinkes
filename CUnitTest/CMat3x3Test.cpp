@@ -42,18 +42,18 @@ namespace UnitTest
 		{
 			CMat3x3  matrix = CMat3x3(CVector3(1, 2, 3), CVector3(5, 6, 7), CVector3(8, 9, 10));
 
-			Assert::AreEqual(matrix[0], CVector3(1, 2, 3));
-			Assert::AreEqual(matrix[1], CVector3(5, 6, 7));
-			Assert::AreEqual(matrix[2], CVector3(8, 9, 10));
+			Assert::IsTrue(matrix[0] == CVector3(1, 2, 3));
+			Assert::IsTrue(matrix[1] == CVector3(5, 6, 7));
+			Assert::IsTrue(matrix[2] == CVector3(8, 9, 10));
 		}
 
 		TEST_METHOD(ConstructorWithAllValues)
 		{
 			CMat3x3  matrix = CMat3x3(1, 2, 3, 5, 6, 7, 8, 9, 10);
 
-			Assert::AreEqual(matrix[0], CVector3(1, 2, 3));
-			Assert::AreEqual(matrix[1], CVector3(5, 6, 7));
-			Assert::AreEqual(matrix[2], CVector3(8, 9, 10));
+			Assert::IsTrue(matrix[0] == CVector3(1, 2, 3));
+			Assert::IsTrue(matrix[1] == CVector3(5, 6, 7));
+			Assert::IsTrue(matrix[2] == CVector3(8, 9, 10));
 		}
 
 		TEST_METHOD(CopyConstructor)
@@ -61,9 +61,9 @@ namespace UnitTest
 			CMat3x3  toCopy = CMat3x3(1, 2, 3, 5, 6, 7, 8, 9, 10);
 			CMat3x3 matrix = CMat3x3(toCopy);
 
-			Assert::AreEqual(matrix[0], CVector3(1, 2, 3));
-			Assert::AreEqual(matrix[1], CVector3(5, 6, 7));
-			Assert::AreEqual(matrix[2], CVector3(8, 9, 10));
+			Assert::IsTrue(matrix[0] == CVector3(1, 2, 3));
+			Assert::IsTrue(matrix[1] == CVector3(5, 6, 7));
+			Assert::IsTrue(matrix[2] == CVector3(8, 9, 10));
 		}
 
 		TEST_METHOD(OperatorEqual)
@@ -87,9 +87,9 @@ namespace UnitTest
 			CMat3x3  toCopy = CMat3x3(1, 2, 3, 5, 6, 7, 8, 9, 10);
 			CMat3x3 matrix = toCopy;
 
-			Assert::AreEqual(matrix[0], CVector3(1, 2, 3));
-			Assert::AreEqual(matrix[1], CVector3(5, 6, 7));
-			Assert::AreEqual(matrix[2], CVector3(8, 9, 10));
+			Assert::IsTrue(matrix[0] == CVector3(1, 2, 3));
+			Assert::IsTrue(matrix[1] == CVector3(5, 6, 7));
+			Assert::IsTrue(matrix[2] == CVector3(8, 9, 10));
 		}
 
 		TEST_METHOD(OperatorAddEqualScalar)
@@ -97,9 +97,9 @@ namespace UnitTest
 			CMat3x3  matrix = CMat3x3(1, 2, 3, 5, 6, 7, 8, 9, 10);
 			matrix += CScalar(2);
 
-			Assert::AreEqual(matrix[0], CVector3(3, 4, 5));
-			Assert::AreEqual(matrix[1], CVector3(7, 8, 9));
-			Assert::AreEqual(matrix[2], CVector3(10, 11, 12));
+			Assert::IsTrue(matrix[0] == CVector3(3, 4, 5));
+			Assert::IsTrue(matrix[1] == CVector3(7, 8, 9));
+			Assert::IsTrue(matrix[2] == CVector3(10, 11, 12));
 		}
 
 		TEST_METHOD(OperatorAddScalar)
@@ -108,9 +108,9 @@ namespace UnitTest
 			CScalar scalarToAdd = 2;
 			CMat3x3 matrix = toAdd + CScalar(2);
 
-			Assert::AreEqual(matrix[0], CVector3(3, 4, 5));
-			Assert::AreEqual(matrix[1], CVector3(7, 8, 9));
-			Assert::AreEqual(matrix[2], CVector3(10, 11, 12));
+			Assert::IsTrue(matrix[0] == CVector3(3, 4, 5));
+			Assert::IsTrue(matrix[1] == CVector3(7, 8, 9));
+			Assert::IsTrue(matrix[2] == CVector3(10, 11, 12));
 		}
 
 		TEST_METHOD(OperatorSubstranctEqualScalar)
@@ -118,9 +118,9 @@ namespace UnitTest
 			CMat3x3 matrix = CMat3x3(3, 4, 5, 7, 8, 9, 10, 11, 12);
 			matrix -= CScalar(2);
 
-			Assert::AreEqual(matrix[0], CVector3(1, 2, 3));
-			Assert::AreEqual(matrix[1], CVector3(5, 6, 7));
-			Assert::AreEqual(matrix[2], CVector3(8, 9, 10));
+			Assert::IsTrue(matrix[0] == CVector3(1, 2, 3));
+			Assert::IsTrue(matrix[1] == CVector3(5, 6, 7));
+			Assert::IsTrue(matrix[2] == CVector3(8, 9, 10));
 		}
 
 		TEST_METHOD(OperatorSubstranctScalar)
@@ -128,9 +128,9 @@ namespace UnitTest
 			CMat3x3 matrix = CMat3x3(3, 4, 5, 7, 8, 9, 10, 11, 12);
 			matrix -= CScalar(2);
 
-			Assert::AreEqual(matrix[0], CVector3(1, 2, 3));
-			Assert::AreEqual(matrix[1], CVector3(5, 6, 7));
-			Assert::AreEqual(matrix[2], CVector3(8, 9, 10));
+			Assert::IsTrue(matrix[0] == CVector3(1, 2, 3));
+			Assert::IsTrue(matrix[1] == CVector3(5, 6, 7));
+			Assert::IsTrue(matrix[2] == CVector3(8, 9, 10));
 		}
 
 		TEST_METHOD(OperatorAddEqualMatrix)
@@ -160,7 +160,7 @@ namespace UnitTest
 
 			CMat3x3 examplpe = base - toSubstract;
 
-			Assert::AreEqual(examplpe, CMat3x3(-4, -4, -4, -4, -4, -4, -4, -4, -4));
+			Assert::IsTrue(examplpe == CMat3x3(-4, -4, -4, -4, -4, -4, -4, -4, -4));
 		}
 
 		TEST_METHOD(OperatorSubstractEqualMatrix)
@@ -170,7 +170,7 @@ namespace UnitTest
 
 			example -= toSubstract;
 
-			Assert::AreEqual(example, CMat3x3(4, 4, 4, 4, 4, 4, 4, 4, 4));
+			Assert::IsTrue(example == CMat3x3(4, 4, 4, 4, 4, 4, 4, 4, 4));
 		}
 
 		TEST_METHOD(OperatorMultiplyMatrix)
@@ -185,7 +185,7 @@ namespace UnitTest
 			CMat3x3 result = first * second;
 
 
-			Assert::AreEqual(result, CMat3x3(84, 90, 96, 201, 216, 231, 318, 342, 366));
+			Assert::IsTrue(result == CMat3x3(84, 90, 96, 201, 216, 231, 318, 342, 366));
 		}
 
 		TEST_METHOD(OperatorMultiplyEqualMatrix)
@@ -196,7 +196,7 @@ namespace UnitTest
 			first *= second;
 
 
-			Assert::AreEqual(first, CMat3x3(84, 90, 96, 201, 216, 231, 318, 342, 366));
+			Assert::IsTrue(first == CMat3x3(84, 90, 96, 201, 216, 231, 318, 342, 366));
 		}
 
 		TEST_METHOD(OperatorMultiplyVector)
@@ -213,7 +213,7 @@ namespace UnitTest
 			CMat3x3 matrix = CMat3x3(2, 7, 3, 1, 5, 8, 0, 4, 1);
 			CMat3x3 multiplied = matrix * 2;
 
-			Assert::AreEqual(multiplied, CMat3x3(4, 14, 6, 2, 10, 16, 0, 8, 2));
+			Assert::IsTrue(multiplied == CMat3x3(4, 14, 6, 2, 10, 16, 0, 8, 2));
 		}
 
 		TEST_METHOD(OperatorMultiplyEqualScalar)
@@ -221,7 +221,7 @@ namespace UnitTest
 			CMat3x3 matrix = CMat3x3(2, 7, 3, 1, 5, 8, 0, 4, 1);
 			matrix *= 2;
 
-			Assert::AreEqual(matrix, CMat3x3(4, 14, 6, 2, 10, 16, 0, 8, 2));
+			Assert::IsTrue(matrix == CMat3x3(4, 14, 6, 2, 10, 16, 0, 8, 2));
 		}
 
 		TEST_METHOD(OperatorBracket)
@@ -242,13 +242,13 @@ namespace UnitTest
 		{
 			CMat3x3 example = CMat3x3(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
-			Assert::AreEqual(example.getRow(0), CVector3(1, 2, 3));
-			Assert::AreEqual(example.getRow(1), CVector3(4, 5, 6));
-			Assert::AreEqual(example.getRow(2), CVector3(7, 8, 9));
+			Assert::IsTrue(example.getRow(0) == CVector3(1, 2, 3));
+			Assert::IsTrue(example.getRow(1) == CVector3(4, 5, 6));
+			Assert::IsTrue(example.getRow(2) == CVector3(7, 8, 9));
 
-			Assert::AreEqual(example.getColumn(0), CVector3(1, 4, 7));
-			Assert::AreEqual(example.getColumn(1), CVector3(2, 5, 8));
-			Assert::AreEqual(example.getColumn(2), CVector3(3, 6, 9));
+			Assert::IsTrue(example.getColumn(0) == CVector3(1, 4, 7));
+			Assert::IsTrue(example.getColumn(1) == CVector3(2, 5, 8));
+			Assert::IsTrue(example.getColumn(2) == CVector3(3, 6, 9));
 		}
 
 		TEST_METHOD(TransposeMatrix)
@@ -256,7 +256,7 @@ namespace UnitTest
 			CMat3x3 base = CMat3x3(1, 2, 3, 4, 5, 6, 7, 8, 9);
 			CMat3x3 transposed = base.Transpose();
 
-			Assert::AreEqual(transposed, CMat3x3(1, 4, 7, 2, 5, 8, 3, 6, 9));
+			Assert::IsTrue(transposed == CMat3x3(1, 4, 7, 2, 5, 8, 3, 6, 9));
 		}
 
 		TEST_METHOD(InverseMatrix)
@@ -264,7 +264,7 @@ namespace UnitTest
 			CMat3x3 base = CMat3x3(1,2,3,0,1,4,5,6,0);
 			CMat3x3 inversed = base.GetInverse();
 
-			Assert::AreEqual(inversed, CMat3x3(-24, 18, 5, 20, -15, -4, -5, 4, 1));
+			Assert::IsTrue(inversed == CMat3x3(-24, 18, 5, 20, -15, -4, -5, 4, 1));
 		}
 
 		TEST_METHOD(Identity)

@@ -21,11 +21,13 @@ namespace Cinkes
 	struct CTriangle {
 	public:
 		CVector3 m_Values[3];
+		CVector3 m_Normal;
 		CTriangle() = default;
-		CTriangle(CVector3 a_X, CVector3 a_Y, CVector3 a_Z) {
+		CTriangle(CVector3 a_X, CVector3 a_Y, CVector3 a_Z, CVector3 a_Normal = CVector3(0, 1, 0)) {
 			m_Values[0] = a_X;
 			m_Values[1] = a_Y;
 			m_Values[2] = a_Z;
+			m_Normal = a_Normal;
 		}
 		CVector3 operator[](int a_Rhs) {
 			return m_Values[a_Rhs];
@@ -66,7 +68,6 @@ namespace Cinkes
 		CScalar m_PenetrationDepth{};
 		ECONTACT_TYPE m_Type = ECONTACT_TYPE::CONTACT_NO_CONTACT;
 		std::vector<CVector3> m_ContactPoints;
-		CVector3 m_PenetrationPoint;
 		CTriangle m_Triangle[3]; //[0] -> main triangle [1] -> polytopeA [2] -> polytopeB
 		CScalar m_Friction{};
 		CScalar m_Restitution{};

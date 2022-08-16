@@ -16,6 +16,12 @@ Cinkes::CCollisionObject::CCollisionObject(const CTransform& a_Transform, std::s
 {
 }
 
+
+Cinkes::CCollisionObject::CCollisionObject(const CVector3& a_Position, std::shared_ptr<CCollisionShape> a_Shape) :
+	m_HasContact(nullptr), m_Shape(std::move(a_Shape)), m_Transform(CTransform(a_Position)), m_Moveable(false), m_Type(EOBJECT_TYPE::TYPE_COLLISION)
+{
+}
+
 Cinkes::CCollisionObject::~CCollisionObject()
 {
 	m_Shape = nullptr;

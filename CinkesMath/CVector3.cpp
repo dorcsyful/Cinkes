@@ -1,5 +1,6 @@
 #include "CVector3.h"
 #include <cmath>
+#include "CUtils.h"
 using namespace Cinkes;
 
 CVector3::CVector3() : m_Values{0,0,0}
@@ -224,9 +225,9 @@ float CVector3::operator[](unsigned a_Rhs) const
 
 bool Cinkes::CVector3::operator==(const CVector3& a_Rhs) const
 {
-	return (m_Values[0] - a_Rhs.m_Values[0] < CEPSILON) && 
-			(m_Values[1] - a_Rhs.m_Values[1] < CEPSILON) &&
-			(m_Values[2] - a_Rhs.m_Values[2] < CEPSILON);
+	return (CUtils::Abs(m_Values[0] - a_Rhs.m_Values[0]) < CEPSILON) && 
+			(CUtils::Abs(m_Values[1] - a_Rhs.m_Values[1]) < CEPSILON) &&
+			(CUtils::Abs(m_Values[2] - a_Rhs.m_Values[2]) < CEPSILON);
 }
 
 bool Cinkes::CVector3::operator!=(const CVector3& a_Rhs) const
@@ -235,11 +236,6 @@ bool Cinkes::CVector3::operator!=(const CVector3& a_Rhs) const
 }
 
 CScalar Cinkes::CVector3::Length2()
-{
-	return CScalar(m_Values[0] * m_Values[0] + m_Values[1] * m_Values[1] + m_Values[2] * m_Values[2]);
-}
-
-CScalar Cinkes::CVector3::Length2() const
 {
 	return CScalar(m_Values[0] * m_Values[0] + m_Values[1] * m_Values[1] + m_Values[2] * m_Values[2]);
 }

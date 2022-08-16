@@ -9,9 +9,10 @@
 
 bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObject* a_Object2, CSimplex& a_Simplex)
 {
-    CVector3 A = a_Object1->GetCollisionShape()->Support(CVector3(1, 0, 0)) + a_Object1->GetTransform().getOrigin();
-    CVector3 B = a_Object2->GetCollisionShape()->Support(CVector3(-1, 0, 0)) + a_Object2->GetTransform().getOrigin();
-    CVector3 support = A - B;
+    CVector3 A = a_Object1->GetTransform().getBasis() * (a_Object1->GetCollisionShape()->Support(a_Object1->GetTransform().getBasis().GetInverse() * CVector3(1,0,0)));
+    CVector3 B = a_Object2->GetTransform().getBasis() * (a_Object2->GetCollisionShape()->Support(a_Object2->GetTransform().getBasis().GetInverse() * CVector3(-1,0,0)));
+    CVector3 support = (A + a_Object1->GetTransform().getOrigin()) -
+        (B + a_Object2->GetTransform().getOrigin());
 
     CSimplex simplex;
     simplex.Push_Front(support);
@@ -22,9 +23,10 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
     while(true)
     {
         next.Normalize();
-    	A = a_Object1->GetCollisionShape()->Support(next) + a_Object1->GetTransform().getOrigin();
-    	B = a_Object2->GetCollisionShape()->Support(next * -1) + a_Object2->GetTransform().getOrigin();
-    	support = A - B;
+        CVector3 A = a_Object1->GetTransform().getBasis() * (a_Object1->GetCollisionShape()->Support(a_Object1->GetTransform().getBasis().GetInverse() * next));
+        CVector3 B = a_Object2->GetTransform().getBasis() * (a_Object2->GetCollisionShape()->Support(a_Object2->GetTransform().getBasis().GetInverse() * (next * -1)));
+        CVector3 support = (A + a_Object1->GetTransform().getOrigin()) -
+            (B + a_Object2->GetTransform().getOrigin());
 
     	if(support.Dot(next) <= 0)
         {

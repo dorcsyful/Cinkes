@@ -20,6 +20,7 @@ namespace Cinkes
 		//Subgroup: Constructors {
 		CCollisionObject();
 		explicit CCollisionObject(const CTransform& a_Transform, std::shared_ptr<CCollisionShape> a_Shape = nullptr);
+		explicit CCollisionObject(const CVector3& a_Position, std::shared_ptr<CCollisionShape> a_Shape = nullptr);
 		virtual ~CCollisionObject();
 		CCollisionObject(const CCollisionObject& a_Rhs);
 		CCollisionObject(CCollisionObject&& a_Rhs) noexcept; 

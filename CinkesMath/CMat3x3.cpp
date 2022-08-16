@@ -320,6 +320,7 @@ CMat3x3 CMat3x3::GetInverse()
 	CMat3x3 inverse = calculatedMinors * (1 / determinant);
 
 
+	//return inverse;
 	return inverse;
 }
 

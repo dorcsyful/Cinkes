@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CCollisionAlgorithmTest.cpp" />
     <ClCompile Include="CMat3x3Test.cpp" />
     <ClCompile Include="CQuaternionTest.cpp" />
     <ClCompile Include="CShapeTest.cpp" />

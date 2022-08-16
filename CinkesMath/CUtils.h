@@ -21,7 +21,7 @@ namespace Cinkes
 		static CScalar Atan(CScalar a_Value) { return std::atan(a_Value); }
 		static CScalar Atan2(CScalar a_First, CScalar a_Second) { std::atan2(a_First, a_Second); }
 		static CScalar Sqrt(CScalar a_Value) { return sqrt(a_Value); }
-		static CScalar Abs(CScalar a_Value) { return abs(a_Value); }
+		static CScalar Abs(CScalar a_Value) { return std::abs(a_Value); }
 		static CScalar Deg2Rad(CScalar a_Degrees) { return a_Degrees / 57.2957795; }
 		static CScalar Rad2Deg(CScalar a_Radians) { return a_Radians * 57.2957795; }
 		static CScalar Sgn(CScalar a_Magnitude, CScalar a_Number) { return std::copysign(a_Magnitude, a_Number); }
@@ -35,7 +35,7 @@ namespace Cinkes
 		static CScalar Atan(CScalar a_Value) { return std::atanf(a_Value); }
 		static CScalar Atan2(CScalar a_First, CScalar a_Second) { return std::atan2f(a_First, a_Second); }
 		static CScalar Sqrt(CScalar a_Value) { return sqrtf(a_Value); }
-		static CScalar Abs(CScalar a_Value) { return fabs(a_Value); }
+		static CScalar Abs(CScalar a_Value) { return std::fabs(a_Value); }
 		static CScalar Deg2Rad(CScalar a_Degrees) { return a_Degrees / 57.2957795f; }
 		static CScalar Rad2Deg(CScalar a_Radians) { return a_Radians * 57.2957795f; }
 		static CScalar Sgn(CScalar a_Magnitude, CScalar a_Number) { return std::copysignf(a_Magnitude, a_Number); }
