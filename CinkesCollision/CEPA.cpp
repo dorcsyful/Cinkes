@@ -43,25 +43,13 @@ void Cinkes::CEPA::Algorithm(const std::shared_ptr<CContactInfo>& a_Contact, con
 	{
 		minNormal = normals[minFace].m_Normal;
 		minDistance = normals[minFace].m_Distance;
-		//CVector3 A, B, support;
-		//CMat3x3 inverse = a_Contact.get()->m_First->GetTransform().getBasis().GetInverse();
-		//CVector3 local = CVector3::Normalize(inverse * minNormal);
-		//CVector3 test = a_Contact.get()->m_First->GetCollisionShape()->Support(local);
-		//A = inverse * test
-		//	+ a_Contact.get()->m_First->GetTransform().getOrigin();
-		//local = CVector3::Normalize(a_Contact.get()->m_First->GetTransform().getBasis().GetInverse() * (minNormal * -1));
-		//B = a_Contact.get()->m_First->GetTransform().getBasis() * a_Contact.get()->m_First->GetCollisionShape()->Support(local) 
-		//	+ a_Contact.get()->m_First->GetTransform().getOrigin();
-
-		//support = A - B;
-
 
 		CVector3 A = a_Contact.get()->m_First.get()->GetTransform().getBasis() * 
-			(a_Contact->m_First->GetCollisionShape()->Support(a_Contact.get()->m_First->GetTransform().getBasis().GetInverse() * 
+			(a_Contact->m_First->GetCollisionShape()->Support(a_Contact.get()->m_First->GetTransform().getBasis().Transpose() * 
 				minNormal));
 		CVector3 B = a_Contact.get()->m_Second.get()->GetTransform().getBasis() * 
-			(a_Contact->m_Second->GetCollisionShape()->Support(a_Contact.get()->m_Second->GetTransform().getBasis().GetInverse() * 
-				minNormal * (-1)));
+			(a_Contact->m_Second->GetCollisionShape()->Support(a_Contact.get()->m_Second->GetTransform().getBasis().Transpose() * 
+				(minNormal * (-1))));
 		CVector3 support = (A + a_Contact->m_First->GetTransform().getOrigin()) -
 			(B + a_Contact->m_Second->GetTransform().getOrigin());
 
@@ -178,8 +166,8 @@ Cinkes::CVector3 Cinkes::CEPA::CSOSupport(const CContactInfo* a_Contact, const C
 {
 	CVector3 dir = a_Dir;
 	dir.Normalize();
-	CVector3 localA = a_Contact->m_First->GetTransform().getBasis().GetInverse() * dir;
-	CVector3 localB = a_Contact->m_Second->GetTransform().getBasis().GetInverse() * dir;
+	CVector3 localA = a_Contact->m_First->GetTransform().getBasis().Transpose() * dir;
+	CVector3 localB = a_Contact->m_Second->GetTransform().getBasis().Transpose() * dir;
 
 	CVector3 supportA = a_Contact->m_First->GetCollisionShape()->Support(localA);
 	CVector3 supportB = a_Contact->m_Second->GetCollisionShape()->Support(localB);
