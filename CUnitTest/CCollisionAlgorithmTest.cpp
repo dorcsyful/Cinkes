@@ -93,9 +93,9 @@ namespace UnitTest {
 			CGJKAlgorithm gjk;
 			CEPA epa;
 			CContactPointCalculator contact;
-			CTransform transform = CTransform(CMat3x3(0.7071068, -0.7071068, 0.0000000,
+			CTransform transform = CTransform(CMat3x3(/*0.7071068, -0.7071068, 0.0000000,
 				0.7071068, 0.7071068, 0.0000000,
-				0.0000000, 0.0000000, 1.0000000), CVector3(5, 13, 2));
+				0.0000000, 0.0000000, 1.0000000*/), CVector3(5, 13, 2));
 			std::shared_ptr<CBoxShape> shape1 = std::make_shared<CBoxShape>(5, 5, 5);
 			std::shared_ptr<CBoxShape> shape2 = std::make_shared<CBoxShape>(5, 5, 5);
 			std::shared_ptr<CCollisionObject> object1 = std::make_shared<CCollisionObject>(CVector3(5, 7, 2), shape1);
@@ -110,8 +110,12 @@ namespace UnitTest {
 			epa.Algorithm(info, simplex);
 			contact.GetPoints(info.get());
 			CVector3 test = info.get()->m_ContactPoints[0];
-			CVector3 expected = CVector3(5, 7.24, 2);
-			Assert::IsTrue(test == expected);
+			CVector3 expected = CVector3(5, 4.93, 2);
+
+			const wchar_t* pwcsName = L"";
+
+
+			Assert::AreEqual(expected,test,pwcsName);
 		}
 	};
 }

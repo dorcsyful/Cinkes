@@ -9,24 +9,31 @@
 
 bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObject* a_Object2, CSimplex& a_Simplex)
 {
-    CVector3 A = a_Object1->GetTransform().getBasis() * (a_Object1->GetCollisionShape()->Support(a_Object1->GetTransform().getBasis().Transpose() * CVector3(1,0,0)));
-    CVector3 B = a_Object2->GetTransform().getBasis() * (a_Object2->GetCollisionShape()->Support(a_Object2->GetTransform().getBasis().Transpose() * CVector3(-1,0,0)));
-    CVector3 support = (A + a_Object1->GetTransform().getOrigin()) -
-        (B + a_Object2->GetTransform().getOrigin());
+    CVector3 next = CVector3(1, 0, 0);
+    CVector3 A = a_Object1->GetTransform().getBasis() *
+        (a_Object1->GetCollisionShape()->Support(a_Object1->GetTransform().getBasis().Transpose() * next))
+        + a_Object1->GetTransform().getOrigin();
+    CVector3 B = a_Object2->GetTransform().getBasis() *
+        (a_Object2->GetCollisionShape()->Support(a_Object2->GetTransform().getBasis().Transpose() * (next * -1)))
+        + a_Object2->GetTransform().getOrigin();
+    CVector3 support = A - B;
 
     CSimplex simplex;
     simplex.Push_Front(support);
     simplex.Push_FrontA(A);
     simplex.Push_FrontB(B);
-    CVector3 next = support * -1;
+    next = support * -1;
 
     while(true)
     {
         next.Normalize();
-        CVector3 A = a_Object1->GetTransform().getBasis() * (a_Object1->GetCollisionShape()->Support(a_Object1->GetTransform().getBasis().Transpose() * next));
-        CVector3 B = a_Object2->GetTransform().getBasis() * (a_Object2->GetCollisionShape()->Support(a_Object2->GetTransform().getBasis().Transpose() * (next * -1)));
-        CVector3 support = (A + a_Object1->GetTransform().getOrigin()) -
-            (B + a_Object2->GetTransform().getOrigin());
+        A = a_Object1->GetTransform().getBasis() * 
+            (a_Object1->GetCollisionShape()->Support(a_Object1->GetTransform().getBasis().Transpose() * next))
+            + a_Object1->GetTransform().getOrigin();
+        B = a_Object2->GetTransform().getBasis() * 
+            (a_Object2->GetCollisionShape()->Support(a_Object2->GetTransform().getBasis().Transpose() * (next * -1)))
+            + a_Object2->GetTransform().getOrigin();
+        support = A - B;
 
     	if(support.Dot(next) <= 0)
         {

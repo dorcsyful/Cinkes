@@ -44,15 +44,13 @@ void Cinkes::CEPA::Algorithm(const std::shared_ptr<CContactInfo>& a_Contact, con
 		minNormal = normals[minFace].m_Normal;
 		minDistance = normals[minFace].m_Distance;
 
-		CVector3 A = a_Contact.get()->m_First.get()->GetTransform().getBasis() * 
-			(a_Contact->m_First->GetCollisionShape()->Support(a_Contact.get()->m_First->GetTransform().getBasis().Transpose() * 
-				minNormal));
-		CVector3 B = a_Contact.get()->m_Second.get()->GetTransform().getBasis() * 
-			(a_Contact->m_Second->GetCollisionShape()->Support(a_Contact.get()->m_Second->GetTransform().getBasis().Transpose() * 
-				(minNormal * (-1))));
-		CVector3 support = (A + a_Contact->m_First->GetTransform().getOrigin()) -
-			(B + a_Contact->m_Second->GetTransform().getOrigin());
-
+		CVector3 A = a_Contact->m_First->GetTransform().getBasis() * 
+			(a_Contact->m_First->GetCollisionShape()->Support(a_Contact->m_First->GetTransform().getBasis().Transpose() * minNormal))
+			 + a_Contact->m_First->GetTransform().getOrigin();
+		CVector3 B = a_Contact->m_Second->GetTransform().getBasis() * 
+			(a_Contact->m_Second->GetCollisionShape()->Support(a_Contact->m_Second->GetTransform().getBasis().Transpose() * 
+				(minNormal * (-1)))) + a_Contact->m_Second->GetTransform().getOrigin();
+		CVector3 support = A - B;
 		CScalar distance = minNormal.Dot(support);
 
 		if(CUtils::Abs(distance - minDistance) > static_cast<CScalar>(0.001))
@@ -111,11 +109,12 @@ void Cinkes::CEPA::Algorithm(const std::shared_ptr<CContactInfo>& a_Contact, con
 	}
 	int index = minFace * 3;
 	a_Contact->m_Normal = minNormal;
-	a_Contact.get()->m_Triangle[0] = CTriangle(polytope[faces[minFace]] , polytope[faces[minFace + 1]] , polytope[faces[minFace + 2]]);
-	a_Contact.get()->m_Triangle[1] = CTriangle(polytopeA[faces[minFace]], polytopeA[faces[minFace + 1]], polytopeA[faces[minFace + 2]]);
-	a_Contact.get()->m_Triangle[2] = CTriangle(polytopeB[faces[minFace]], polytopeB[faces[minFace + 1]], polytopeB[faces[minFace + 2]]);
+	a_Contact->m_Triangle[0] = CTriangle(polytope[faces[index]] , polytope[faces[index + 1]] , polytope[faces[index + 2]]);
+	a_Contact->m_Triangle[0].m_Normal = minNormal;
+	a_Contact->m_Triangle[1] = CTriangle(polytopeA[faces[index]], polytopeA[faces[index + 1]], polytopeA[faces[index + 2]]);
+	a_Contact->m_Triangle[2] = CTriangle(polytopeB[faces[index]], polytopeB[faces[index + 1]], polytopeB[faces[index + 2]]);
 	a_Contact->m_PenetrationDepth = minDistance + 0.001f;
-	a_Contact.get()->m_Simplex = a_Simplex;
+	a_Contact->m_Simplex = a_Simplex;
 }
 
 void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, const std::shared_ptr<CContactInfo>& a_Contact)

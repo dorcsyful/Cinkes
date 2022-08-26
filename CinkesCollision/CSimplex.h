@@ -30,22 +30,20 @@ namespace Cinkes
 		CVector3 getPointB(int a_Rhs) { return m_PointsB[a_Rhs]; }
 		CVector3 getPointB(int a_Rhs) const { return m_PointsB[a_Rhs]; }
 
-		CSimplex& SetAllA(const std::initializer_list<CVector3>& a_Rhs)
+		void SetAllA(const std::initializer_list<CVector3>& a_Rhs)
 		{
 			for (auto i = a_Rhs.begin(); i < a_Rhs.end(); i++)
 			{
 				m_PointsA[std::distance(a_Rhs.begin(), i)] = *i;
 			}
-			return *this;
 		}
 
-		CSimplex& SetAllB(const std::initializer_list<CVector3>& a_Rhs)
+		void SetAllB(const std::initializer_list<CVector3>& a_Rhs)
 		{
 			for (auto i = a_Rhs.begin(); i < a_Rhs.end(); i++)
 			{
 				m_PointsB[std::distance(a_Rhs.begin(), i)] = *i;
 			}
-			return *this;
 		}
 
 		void SetFinishedLocal()
