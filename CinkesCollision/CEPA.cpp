@@ -112,7 +112,9 @@ void Cinkes::CEPA::Algorithm(const std::shared_ptr<CContactInfo>& a_Contact, con
 	a_Contact->m_Triangle[0] = CTriangle(polytope[faces[index]] , polytope[faces[index + 1]] , polytope[faces[index + 2]]);
 	a_Contact->m_Triangle[0].m_Normal = minNormal;
 	a_Contact->m_Triangle[1] = CTriangle(polytopeA[faces[index]], polytopeA[faces[index + 1]], polytopeA[faces[index + 2]]);
+	a_Contact->m_Triangle[1].m_Normal = minNormal;
 	a_Contact->m_Triangle[2] = CTriangle(polytopeB[faces[index]], polytopeB[faces[index + 1]], polytopeB[faces[index + 2]]);
+	a_Contact->m_Triangle[2].m_Normal = minNormal * -1;
 	a_Contact->m_PenetrationDepth = minDistance + 0.001f;
 	a_Contact->m_Simplex = a_Simplex;
 }
@@ -229,7 +231,7 @@ std::pair<std::vector<Cinkes::CFaceData>, size_t> Cinkes::CEPA::GetFaceNormals(c
 		}
 	}
 
-	return std::pair<std::vector<CFaceData>, CScalar>(normals,minTriangle);
+	return std::pair<std::vector<CFaceData>, size_t>(normals,minTriangle);
 }
 
 void Cinkes::CEPA::AddUniqueEdge(std::vector<std::pair<size_t, size_t>>& a_Edges, const std::vector<size_t>& a_Faces, size_t a_A, size_t a_B)

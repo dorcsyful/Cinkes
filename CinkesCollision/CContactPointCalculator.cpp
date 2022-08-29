@@ -18,14 +18,14 @@ void Cinkes::CContactPointCalculator::RunForAllContacts(std::vector<CContactInfo
 void Cinkes::CContactPointCalculator::GetPoints(CContactInfo* a_Contact)
 {
 
-    CVector3 barycentric = ProjectToTriangle(a_Contact->m_PenetrationDepth, a_Contact->m_Triangle[1]);
-    //CVector3 barycentric = GetBaryCentric(projected, a_Contact->m_Triangle[1]);
-    CVector3 relatives[2];
+    CVector3 barycentric = ProjectToTriangle(a_Contact->m_PenetrationDepth, a_Contact->m_Triangle[0]);
+    CVector3 relatives[3];
     CTriangle triangleA = a_Contact->m_Triangle[1];
     CTriangle triangleB = a_Contact->m_Triangle[2];
     relatives[0] = triangleA[0] * barycentric[0] + triangleA[1] * barycentric[1] + triangleA[2] * barycentric[2];
     relatives[1] = triangleB[0] * barycentric[0] + triangleB[1] * barycentric[1] + triangleB[2] * barycentric[2];
-    a_Contact->m_ContactPoints.push_back(a_Contact->m_First->GetTransform().getBasis() * relatives[0] + a_Contact->m_First->GetTransform().getOrigin());
+    CVector3 intersection = a_Contact->m_First->GetTransform().getBasis() * relatives[0];
+    a_Contact->m_ContactPoints.push_back(intersection);
 }
 
 Cinkes::CVector3 Cinkes::CContactPointCalculator::GetBaryCentric(const CVector3& a_Point, const CTriangle& a_Triangle)
@@ -67,7 +67,7 @@ Cinkes::CVector3 Cinkes::CContactPointCalculator::ProjectToTriangle(CScalar a_Di
     // n=u×v
     CVector3 n = u.Cross(v);
     // w=P?P1
-    CVector3 w = CVector3(0,0,0) - a;
+    CVector3 w = CVector3(0, 0, 0) - a;
     // Barycentric coordinates of the projection P?of P onto T:
     // ?=[(u×w)?n]/n?
     CScalar gamma = u.Cross(w).Dot(n) / n.Dot(n);
@@ -87,7 +87,7 @@ Cinkes::CVector3 Cinkes::CContactPointCalculator::ProjectToTriangle(CScalar a_Di
         t = a.Dot(u);
         if ((gamma < 0.0) && (t > 0.0))
         {
-            beta =  std::min(static_cast<CScalar>(1.0), t / u.Length2());
+            beta = std::min(static_cast<CScalar>(1.0), t / u.Length2());
             alpha = 1.0 - beta;
             gamma = 0.0;
         }
@@ -133,6 +133,6 @@ Cinkes::CVector3 Cinkes::CContactPointCalculator::ProjectToTriangle(CScalar a_Di
         }
     }
 
-     return CVector3(alpha, beta, gamma);
+    return CVector3(alpha, beta, gamma);
 }
 
