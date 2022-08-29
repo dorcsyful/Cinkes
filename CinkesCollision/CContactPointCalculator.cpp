@@ -22,10 +22,14 @@ void Cinkes::CContactPointCalculator::GetPoints(CContactInfo* a_Contact)
     CVector3 relatives[3];
     CTriangle triangleA = a_Contact->m_Triangle[1];
     CTriangle triangleB = a_Contact->m_Triangle[2];
+    CTriangle triangleC = a_Contact->m_Triangle[0];
     relatives[0] = triangleA[0] * barycentric[0] + triangleA[1] * barycentric[1] + triangleA[2] * barycentric[2];
     relatives[1] = triangleB[0] * barycentric[0] + triangleB[1] * barycentric[1] + triangleB[2] * barycentric[2];
-    CVector3 intersection = a_Contact->m_First->GetTransform().getBasis() * relatives[0];
-    a_Contact->m_ContactPoints.push_back(intersection);
+    CVector3 point_a = a_Contact->m_First->GetTransform().getBasis() * relatives[0];
+    CVector3 point_b = a_Contact->m_First->GetTransform().getBasis() * relatives[1];
+    a_Contact->m_ContactPoints.push_back(point_a);
+    a_Contact->m_RelativeContactPosition[0].push_back(point_a);
+    a_Contact->m_RelativeContactPosition[1].push_back(point_b);
 }
 
 Cinkes::CVector3 Cinkes::CContactPointCalculator::GetBaryCentric(const CVector3& a_Point, const CTriangle& a_Triangle)

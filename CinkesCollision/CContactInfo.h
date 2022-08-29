@@ -75,7 +75,7 @@ namespace Cinkes
 		CVector3 m_ContactVelocity;
 		CMat3x3 m_ContactToWorld;
 		float m_DeltaVelocity{};
-		CVector3 m_RelativeContactPosition[2];
+		std::vector<CVector3> m_RelativeContactPosition[2];
 		CSimplex m_Simplex;
 	};
 }
