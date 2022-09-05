@@ -27,7 +27,7 @@ using namespace Cinkes;
 
 namespace UnitTest {
 
-	TEST_CLASS(CAlgorithmTest) {
+	TEST_CLASS(CCollisionAlgorithmTest) {
 		TEST_METHOD(GJKBoolFalse)
 		{
 			CGJKAlgorithm gjk;
@@ -110,7 +110,7 @@ namespace UnitTest {
 			epa.Algorithm(info, simplex);
 			contact.GetPoints(info.get());
 			CVector3 test = info.get()->m_ContactPoints[0];
-			CVector3 expected = CVector3(5, 8, 2);
+			CVector3 expected = CVector3(5, 12, 2);
 
 			const wchar_t* pwcsName = L"";
 

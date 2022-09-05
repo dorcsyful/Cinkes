@@ -9,7 +9,7 @@
 #include "../CinkesMath/CUtils.h"
 #include "CSimplex.h"
 
-void Cinkes::CEPA::Run(const std::shared_ptr<CContactInfo>& a_Contact, CSimplex& a_Simplex)
+void Cinkes::CEPA::Run(CContactInfo* a_Contact, CSimplex& a_Simplex)
 {
 	while(a_Simplex.Size() < 4)
 	{
@@ -18,7 +18,7 @@ void Cinkes::CEPA::Run(const std::shared_ptr<CContactInfo>& a_Contact, CSimplex&
 	Algorithm(a_Contact, a_Simplex);
 }
 
-void Cinkes::CEPA::Algorithm(const std::shared_ptr<CContactInfo>& a_Contact, const CSimplex& a_Simplex)
+void Cinkes::CEPA::Algorithm(CContactInfo* a_Contact, const CSimplex& a_Simplex)
 {
 	//the tetrahedron from GJK, the faces contain every triangle that are on it by the vertex indices
 	std::vector<CVector3> polytope = { a_Simplex[0],a_Simplex[1],a_Simplex[2],a_Simplex[3] };
@@ -119,7 +119,7 @@ void Cinkes::CEPA::Algorithm(const std::shared_ptr<CContactInfo>& a_Contact, con
 	a_Contact->m_Simplex = a_Simplex;
 }
 
-void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, const std::shared_ptr<CContactInfo>& a_Contact)
+void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, CContactInfo* a_Contact)
 {
 	CVector3 d = a_Simplex[1] - a_Simplex[0];
 	CVector3 axis = SmallestAxis(d);
@@ -141,7 +141,7 @@ void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, const std::shared_ptr<CContactInf
 
 		for(unsigned i = 0; i < 6; i++)
 		{
-			a_Simplex[a_Simplex.Size() - 1] = (CSOSupport(a_Contact.get(), vector));    // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
+			a_Simplex[a_Simplex.Size() - 1] = (CSOSupport(a_Contact, vector));    // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
 			if (a_Simplex[2].Length2() > epsilon2) { break; }
 			vector = rotation * vector;
 		}
@@ -153,12 +153,12 @@ void Cinkes::CEPA::BlowUp(CSimplex& a_Simplex, const std::shared_ptr<CContactInf
 		CVector3 v1 = a_Simplex[1] - a_Simplex[0];
 		CVector3 v2 = a_Simplex[2] - a_Simplex[0];
 		vector = v1.Cross(v2);
-		a_Simplex[a_Simplex.Size() - 1] = CSOSupport(a_Contact.get(), vector);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
+		a_Simplex[a_Simplex.Size() - 1] = CSOSupport(a_Contact, vector);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
 
 		if(a_Simplex[3].Length2() < epsilon2)
 		{
 			vector *= -1;
-			CSOSupport(a_Contact.get(), vector);
+			CSOSupport(a_Contact, vector);
 		}
 	}
 }

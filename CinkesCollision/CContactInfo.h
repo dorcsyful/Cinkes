@@ -47,7 +47,9 @@ namespace Cinkes
 
 	struct CContactInfo
 	{
-		CContactInfo(void) = default;
+		CContactInfo(void) {
+			m_MarkedForRemove = false;
+		}
 		CCollisionObject* operator[](const unsigned int a_Rhs)
 		{
 			assert(a_Rhs == 0 || a_Rhs == 1);
@@ -77,6 +79,7 @@ namespace Cinkes
 		float m_DeltaVelocity{};
 		std::vector<CVector3> m_RelativeContactPosition[2];
 		CSimplex m_Simplex;
+		bool m_MarkedForRemove;
 	};
 }
 

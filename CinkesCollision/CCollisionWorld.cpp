@@ -71,27 +71,63 @@ bool Cinkes::CCollisionWorld::RemoveObjectByIndex(int a_Index)
 
 void Cinkes::CCollisionWorld::RunCollision(CScalar a_T)
 {
-	m_Contacts.clear();
+	for (size_t i = m_Contacts.size() - 1; i >= 0; i--) {
+		if (!UpdateManifold(m_Contacts[i].get())) {
+			m_Contacts.erase(std::find(m_Contacts.begin(), m_Contacts.end(), m_Contacts[i]));
+		}
+	}
+
 	m_BVH->Update();
 	for (auto& element : m_BVH->m_Contacts)
 	{
 		for (unsigned i = 0; i < element->m_Objects.size() - 1; i++) {
 			CSimplex simplex;
 			bool algorithm = m_GJK->Algorithm(element->m_Objects[i].get(), element->m_Objects[i + 1].get(),simplex);
-			if(algorithm)
+			if(algorithm && !IsPersistent(element->m_Objects[i].get(), element->m_Objects[i + 1].get()))
 			{
-				if (element->m_Objects[i]->GetType() == EOBJECT_TYPE::TYPE_RIGID || element->m_Objects[i + 1]->GetType() == EOBJECT_TYPE::TYPE_RIGID) {
-					std::shared_ptr<CContactInfo> contact = std::make_shared<CContactInfo>();
-					contact->m_First = element->m_Objects[i];
-					element->m_Objects[i]->SetHasContact(contact.get());
-					element->m_Objects[i + 1]->SetHasContact(contact.get());
-					contact->m_Second = element->m_Objects[i + 1];
-					m_CEPA->Run(contact, simplex);
-					m_Contacts.push_back(contact);
-					m_ContactPointCalculator->GetPoints(m_Contacts[m_Contacts.size() - 1].get());
-				}
+				std::shared_ptr<CContactInfo> contact = std::make_shared<CContactInfo>();
+				contact->m_First = element->m_Objects[i];
+				element->m_Objects[i]->SetHasContact(contact.get());
+				element->m_Objects[i + 1]->SetHasContact(contact.get());
+				contact->m_Second = element->m_Objects[i + 1];
+				m_CEPA->Run(contact.get(), simplex);
+				m_Contacts.push_back(contact);
+				m_ContactPointCalculator->GetPoints(m_Contacts[m_Contacts.size() - 1].get());
 			}
 		}
 	}
 	m_BVH->m_Contacts.clear();
+}
+
+bool Cinkes::CCollisionWorld::IsPersistent(CCollisionObject* a_ObjectA, CCollisionObject* a_ObjectB)
+{
+	for (auto& current : m_Contacts) {
+		if (current->m_First.get() == a_ObjectA || current->m_Second.get() == a_ObjectA) {
+			if (current->m_First.get() == a_ObjectB || current->m_Second.get() == a_ObjectB) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool Cinkes::CCollisionWorld::UpdateManifold(CContactInfo* a_Contact)
+{
+	CSimplex simplex;
+	bool algorithm = m_GJK->Algorithm(a_Contact->m_First.get(), a_Contact->m_Second.get(), simplex);
+	if (algorithm) {
+		m_CEPA->Run(a_Contact, simplex);
+		m_ContactPointCalculator->GetPoints(a_Contact);
+	}
+	size_t last = a_Contact->m_RelativeContactPosition[0].size();
+	CVector3 value = a_Contact->m_RelativeContactPosition[0].back();
+	for (size_t i = 0; i < last; i++) {
+		if ((a_Contact->m_RelativeContactPosition[0][i] - value).Length() < 0.001) {
+			a_Contact->m_RelativeContactPosition[0][i] = value;
+			a_Contact->m_RelativeContactPosition[1][i] = a_Contact->m_RelativeContactPosition[1].back();
+			a_Contact->m_RelativeContactPosition[0].erase(a_Contact->m_RelativeContactPosition[0].end() - 1);
+			a_Contact->m_RelativeContactPosition[1].erase(a_Contact->m_RelativeContactPosition[1].end() - 1);
+			break;
+		}
+	}
 }

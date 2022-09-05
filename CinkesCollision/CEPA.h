@@ -32,9 +32,9 @@ namespace Cinkes
 		CEPA& operator=(CEPA&& a_Rhs) noexcept = delete;
 		CEPA& operator=(const CEPA& a_Rhs) noexcept = delete;
 
-		void Run(const std::shared_ptr<CContactInfo>& a_Contact, CSimplex& a_Simplex);
-		void Algorithm(const std::shared_ptr<CContactInfo>& a_Contact, const CSimplex& a_Simplex);
-		void BlowUp(CSimplex& a_Simplex, const std::shared_ptr<CContactInfo>& a_Contact);
+		void Run(CContactInfo* a_Contact, CSimplex& a_Simplex);
+		void Algorithm(CContactInfo* a_Contact, const CSimplex& a_Simplex);
+		void BlowUp(CSimplex& a_Simplex, CContactInfo* a_Contact);
 		CVector3 CSOSupport(const CContactInfo* a_Contact, const CVector3& a_Dir);
 		CVector3 SmallestAxis(const CVector3& a_Vector3);
 		std::pair<std::vector<CFaceData>, size_t> GetFaceNormals(const std::vector<CVector3>& a_Polytope, const std::vector<size_t>& a_Faces);
