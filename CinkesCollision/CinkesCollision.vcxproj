@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CBoxBoxCollision.h" />
     <ClInclude Include="CBoxShape.h" />
     <ClInclude Include="CBVH.h" />
     <ClInclude Include="CCapsuleShape.h" />
@@ -44,6 +45,7 @@
     <ClInclude Include="CTriangleShape.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CBoxBoxCollision.cpp" />
     <ClCompile Include="CBoxShape.cpp" />
     <ClCompile Include="CBVH.cpp" />
     <ClCompile Include="CCapsuleShape.cpp" />

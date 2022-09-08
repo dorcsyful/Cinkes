@@ -7,6 +7,7 @@
 #include <CGJKAlgorithm.h>
 #include <CEPA.h>
 #include <CUtils.h>
+#include "CBoxBoxCollision.h"
 namespace Microsoft {
 	namespace VisualStudio {
 		namespace CppUnitTestFramework {
@@ -64,7 +65,7 @@ namespace UnitTest {
 			info->m_First = object1;
 			info->m_Second = object2;
 
-			epa.Algorithm(info, simplex);
+			epa.Algorithm(info.get(), simplex);
 
 			Assert::IsTrue(info.get()->m_Normal == CVector3(0, 1, 0) || info.get()->m_Normal == CVector3(0,-1,0));
 		}
@@ -85,14 +86,14 @@ namespace UnitTest {
 			object1->SetHasContact(info.get());
 			object2->SetHasContact(info.get());
 			info->m_Second = object2;
-			epa.Algorithm(info, simplex);
+			epa.Algorithm(info.get(), simplex);
 			CScalar depth = info.get()->m_PenetrationDepth;
 			Assert::AreEqual(6.07f, depth, 0.1f);
 		}
 		TEST_METHOD(ContactPointTest) {
 			CGJKAlgorithm gjk;
 			CEPA epa;
-			CContactPointCalculator contact;
+			CBoxBoxCollision contact;
 			CTransform transform = CTransform(CMat3x3(/*0.7071068, -0.7071068, 0.0000000,
 				0.7071068, 0.7071068, 0.0000000,
 				0.0000000, 0.0000000, 1.0000000*/), CVector3(5, 13, 2));
@@ -107,10 +108,10 @@ namespace UnitTest {
 			object1->SetHasContact(info.get());
 			object2->SetHasContact(info.get());
 			info->m_Second = object2;
-			epa.Algorithm(info, simplex);
-			contact.GetPoints(info.get());
-			CVector3 test = info.get()->m_ContactPoints[0];
-			CVector3 expected = CVector3(5, 12, 2);
+			epa.Run(info.get(), simplex);
+			contact.Run(info.get());
+			CScalar test = info->m_ContactPoints.size();
+			CScalar expected = 4;
 
 			const wchar_t* pwcsName = L"";
 

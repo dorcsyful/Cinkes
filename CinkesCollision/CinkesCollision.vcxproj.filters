@@ -96,6 +96,9 @@
     <ClInclude Include="CPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CBoxBoxCollision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCollisionWorld.cpp">
@@ -153,6 +156,9 @@
       <Filter>Source Files\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="CPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CBoxBoxCollision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

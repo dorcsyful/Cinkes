@@ -71,7 +71,7 @@ bool Cinkes::CCollisionWorld::RemoveObjectByIndex(int a_Index)
 
 void Cinkes::CCollisionWorld::RunCollision(CScalar a_T)
 {
-	for (size_t i = m_Contacts.size() - 1; i >= 0; i--) {
+	for (int i = m_Contacts.size() - 1; i >= 0; i--) {
 		if (!UpdateManifold(m_Contacts[i].get())) {
 			m_Contacts.erase(std::find(m_Contacts.begin(), m_Contacts.end(), m_Contacts[i]));
 		}
@@ -118,16 +118,19 @@ bool Cinkes::CCollisionWorld::UpdateManifold(CContactInfo* a_Contact)
 	if (algorithm) {
 		m_CEPA->Run(a_Contact, simplex);
 		m_ContactPointCalculator->GetPoints(a_Contact);
-	}
-	size_t last = a_Contact->m_RelativeContactPosition[0].size();
-	CVector3 value = a_Contact->m_RelativeContactPosition[0].back();
-	for (size_t i = 0; i < last; i++) {
-		if ((a_Contact->m_RelativeContactPosition[0][i] - value).Length() < 0.001) {
-			a_Contact->m_RelativeContactPosition[0][i] = value;
-			a_Contact->m_RelativeContactPosition[1][i] = a_Contact->m_RelativeContactPosition[1].back();
-			a_Contact->m_RelativeContactPosition[0].erase(a_Contact->m_RelativeContactPosition[0].end() - 1);
-			a_Contact->m_RelativeContactPosition[1].erase(a_Contact->m_RelativeContactPosition[1].end() - 1);
-			break;
+
+		size_t last = a_Contact->m_RelativeContactPosition[0].size();
+		CVector3 value = a_Contact->m_RelativeContactPosition[0].back();
+		for (size_t i = 0; i < last; i++) {
+			if ((a_Contact->m_RelativeContactPosition[0][i] - value).Length() < 0.001) {
+				a_Contact->m_RelativeContactPosition[0][i] = value;
+				a_Contact->m_RelativeContactPosition[1][i] = a_Contact->m_RelativeContactPosition[1].back();
+				a_Contact->m_RelativeContactPosition[0].erase(a_Contact->m_RelativeContactPosition[0].end() - 1);
+				a_Contact->m_RelativeContactPosition[1].erase(a_Contact->m_RelativeContactPosition[1].end() - 1);
+				break;
+			}
 		}
+		return true;
 	}
+	return false;
 }
