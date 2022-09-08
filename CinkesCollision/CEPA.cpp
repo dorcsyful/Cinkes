@@ -11,10 +11,7 @@
 
 void Cinkes::CEPA::Run(CContactInfo* a_Contact, CSimplex& a_Simplex)
 {
-	while(a_Simplex.Size() < 4)
-	{
-		BlowUp(a_Simplex, a_Contact);
-	}
+
 	Algorithm(a_Contact, a_Simplex);
 }
 
