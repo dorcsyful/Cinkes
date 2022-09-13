@@ -5,8 +5,8 @@ namespace Cinkes {
 		CPlane() = default;
 		CPlane(const CVector3& a_Normal, CVector3 a_Point) 
 		{
+			point = a_Point;
 			normal = a_Normal;
-			distance = -(a_Normal.Dot(a_Point));
 		}
 
 		CScalar DistanceToPoint(CVector3 a_Point) const { return normal.Dot(a_Point - point); }
@@ -17,6 +17,5 @@ namespace Cinkes {
 		};
 		CVector3 normal;
 		CVector3 point;
-		CScalar distance = 0; //used in case of infinite planes
 	};
 }

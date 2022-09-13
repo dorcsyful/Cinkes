@@ -30,7 +30,6 @@
     <ClInclude Include="CCompoundPartialShape.h" />
     <ClInclude Include="CConcaveShape.h" />
     <ClInclude Include="CConeShape.h" />
-    <ClInclude Include="CContactPointCalculator.h" />
     <ClInclude Include="CConvexHull.h" />
     <ClInclude Include="CCylinder.h" />
     <ClInclude Include="CEPA.h" />
@@ -54,7 +53,6 @@
     <ClCompile Include="CCompoundShape.cpp" />
     <ClCompile Include="CConcaveShape.cpp" />
     <ClCompile Include="CConeShape.cpp" />
-    <ClCompile Include="CContactPointCalculator.cpp" />
     <ClCompile Include="CConvexHull.cpp" />
     <ClCompile Include="CCylinder.cpp" />
     <ClCompile Include="CEPA.cpp" />

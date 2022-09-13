@@ -1,9 +1,9 @@
 #pragma once
-#pragma once
-#include "CCollisionResolver.h"
-#include "CCollisionWorld.h"
 #include "CForceGeneratorRegistry.h"
 #include "CTestResolver.h"
+#include "CCollisionResolver.h"
+#include "CCollisionWorld.h"
+
 
 namespace Cinkes
 {

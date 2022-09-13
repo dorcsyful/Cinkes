@@ -1,7 +1,6 @@
 #include "CppUnitTest.h"
 #include <memory>
 #include <string>
-#include "CContactPointCalculator.h"
 #include <CVector3.h>
 #include <CBoxShape.h>
 #include <CGJKAlgorithm.h>

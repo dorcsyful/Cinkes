@@ -167,6 +167,8 @@ void Cinkes::CBoxBoxCollision::FindSidePlanes()
 		int temp = 0;
 		temp++;
 	}
+	CPlane face = CPlane(m_Info->m_Normal, top);
+	m_Planes.push_back(face);
 }
 
 void Cinkes::CBoxBoxCollision::Clip()

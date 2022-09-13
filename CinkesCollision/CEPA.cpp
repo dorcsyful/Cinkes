@@ -106,12 +106,7 @@ void Cinkes::CEPA::Algorithm(CContactInfo* a_Contact, const CSimplex& a_Simplex)
 	}
 	int index = minFace * 3;
 	a_Contact->m_Normal = minNormal;
-	a_Contact->m_Triangle[0] = CTriangle(polytope[faces[index]] , polytope[faces[index + 1]] , polytope[faces[index + 2]]);
-	a_Contact->m_Triangle[0].m_Normal = minNormal;
-	a_Contact->m_Triangle[1] = CTriangle(polytopeA[faces[index]], polytopeA[faces[index + 1]], polytopeA[faces[index + 2]]);
-	a_Contact->m_Triangle[1].m_Normal = minNormal;
-	a_Contact->m_Triangle[2] = CTriangle(polytopeB[faces[index]], polytopeB[faces[index + 1]], polytopeB[faces[index + 2]]);
-	a_Contact->m_Triangle[2].m_Normal = minNormal * -1;
+
 	a_Contact->m_PenetrationDepth = minDistance + 0.001f;
 	a_Contact->m_Simplex = a_Simplex;
 }

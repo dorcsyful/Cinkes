@@ -9,8 +9,8 @@ bool Cinkes::CTestResolver::Resolve(const std::vector<std::shared_ptr<CContactIn
 	for (const auto& element : a_Info)
 	{
 
-		CVector3 a_relative_position = element->m_RelativeContactPosition[0][0];
-		CVector3 b_relative_position = element->m_RelativeContactPosition[1][0];
+		CVector3 a_relative_position;
+		CVector3 b_relative_position;
 
 		CVector3 a_angular_velocity = CVector3(0, 0, 0);
 		CVector3 b_angular_velocity = CVector3(0, 0, 0);

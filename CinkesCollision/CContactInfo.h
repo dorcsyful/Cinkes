@@ -47,9 +47,7 @@ namespace Cinkes
 
 	struct CContactInfo
 	{
-		CContactInfo(void) {
-			m_MarkedForRemove = false;
-		}
+		CContactInfo() = default;
 		CCollisionObject* operator[](const unsigned int a_Rhs)
 		{
 			assert(a_Rhs == 0 || a_Rhs == 1);
@@ -63,23 +61,19 @@ namespace Cinkes
 			if (a_Rhs == 0) { return m_First.get(); }
 			return m_Second.get();
 		}
-
+		CVector3 m_RelativeContactPosition[2][4];
 		std::shared_ptr<CCollisionObject> m_First;
 		std::shared_ptr<CCollisionObject> m_Second;
 		CVector3 m_Normal;
 		CScalar m_PenetrationDepth{};
-		ECONTACT_TYPE m_Type = ECONTACT_TYPE::CONTACT_NO_CONTACT;
 		std::vector<CVector3> m_ContactPoints;
-		CTriangle m_Triangle[3]; //[0] -> main triangle [1] -> polytopeA [2] -> polytopeB
 		CScalar m_Friction{};
 		CScalar m_Restitution{};
 		CScalar m_DesiredVelocity{};
 		CVector3 m_ContactVelocity;
 		CMat3x3 m_ContactToWorld;
 		float m_DeltaVelocity{};
-		std::vector<CVector3> m_RelativeContactPosition[2];
 		CSimplex m_Simplex;
-		bool m_MarkedForRemove;
 	};
 }
 

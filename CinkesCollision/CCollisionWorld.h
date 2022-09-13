@@ -5,12 +5,10 @@
 #include "CGJKAlgorithm.h"
 #include "CEPA.h"
 #include "CScalar.h"
-#include "CContactPointCalculator.h"
 
 namespace Cinkes
 {
 	class CRigidBody;
-	class CContactPointCalculator;
 	struct CContactInfo;
 	class CBVH;
 	class CCollisionObject;
@@ -53,12 +51,6 @@ namespace Cinkes
 			a_Broad = m_BVH->m_Contacts;
 		}
 		void RunCollision(CScalar a_T);
-		bool IsPersistent(CCollisionObject* a_ObjectA, CCollisionObject* a_ObjectB);
-		bool IsWithinTolerance(const CVector3& a_Original, const CVector3& a_New, CScalar a_Epsilon) {
-			if ((a_New - a_Original).Length2() > 0.0001) return true;
-			return false;
-		}
-		bool UpdateManifold(CContactInfo * a_Contact);
 		//}
 
 	protected:
@@ -71,7 +63,6 @@ namespace Cinkes
 		std::unique_ptr<CBVH> m_BVH;
 		std::unique_ptr<CGJKAlgorithm> m_GJK;
 		std::unique_ptr<CEPA> m_CEPA;
-		std::unique_ptr<CContactPointCalculator> m_ContactPointCalculator;
 		//}
 	};
 
