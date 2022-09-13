@@ -99,7 +99,7 @@ namespace UnitTest {
 				0.0000000, 0.0000000, 1.0000000*/), CVector3(5, 13, 2));
 			std::shared_ptr<CBoxShape> shape1 = std::make_shared<CBoxShape>(5, 5, 5);
 			std::shared_ptr<CBoxShape> shape2 = std::make_shared<CBoxShape>(5, 5, 5);
-			std::shared_ptr<CCollisionObject> object1 = std::make_shared<CCollisionObject>(CVector3(5, 7, 2), shape1);
+			std::shared_ptr<CCollisionObject> object1 = std::make_shared<CCollisionObject>(CVector3(2.5f, 7, 2), shape1);
 			std::shared_ptr<CCollisionObject> object2 = std::make_shared<CCollisionObject>(transform, shape2);
 			CSimplex simplex;
 			std::shared_ptr<CContactInfo> info = std::make_shared<CContactInfo>();
