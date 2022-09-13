@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "CCollisionShape.h"
-#include "CPoint.h"
 
 namespace Cinkes
 {
@@ -25,12 +24,12 @@ namespace Cinkes
 
 		//Subgroup: Other {
 		CVector3 Support(const CVector3& a_V) override;
-		bool AddSingleVertex(CPoint a_Point, bool a_DelayBuild = false) {}
-		bool AddVerticesAsArray(std::vector<CPoint>& a_Points, bool a_DelayBuild = false) {}
+		bool AddSingleVertex(CVector3 a_Point, bool a_DelayBuild = false) {}
+		bool AddVerticesAsArray(std::vector<CVector3>& a_Points, bool a_DelayBuild = false) {}
 		void BuildHull() {}
 		//}
 	protected:
-		std::vector<CPoint> m_Vertices;
+		std::vector<CVector3> m_Vertices;
 		ESHAPE_TYPE m_Type = ESHAPE_TYPE::SHAPE_CONVEX_HULL;
 
 	};

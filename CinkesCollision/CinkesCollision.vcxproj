@@ -38,7 +38,6 @@
     <ClInclude Include="CContactInfo.h" />
     <ClInclude Include="CLine.h" />
     <ClInclude Include="CPlane.h" />
-    <ClInclude Include="CPoint.h" />
     <ClInclude Include="CRaycast.h" />
     <ClInclude Include="CSimplex.h" />
     <ClInclude Include="CSphereShape.h" />
@@ -61,7 +60,6 @@
     <ClCompile Include="CEPA.cpp" />
     <ClCompile Include="CGJKAlgorithm.cpp" />
     <ClCompile Include="CLine.cpp" />
-    <ClCompile Include="CPoint.cpp" />
     <ClCompile Include="CSimplex.cpp" />
     <ClCompile Include="CSphereShape.cpp" />
     <ClCompile Include="CTriangleShape.cpp" />
