@@ -26,19 +26,7 @@ Cinkes::CBoxBoxCollision::CBoxBoxCollision()
 
 	m_ReferenceBox = std::vector<CVector3>(8);
 	m_IncidentBox = std::vector<CVector3>(8);
-	
-	m_LinesReference.push_back(std::pair<int, int>(0, 1));
-	m_LinesReference.push_back(std::pair<int, int>(0, 3));
-	m_LinesReference.push_back(std::pair<int, int>(1, 2));
-	m_LinesReference.push_back(std::pair<int, int>(1, 6));
-	m_LinesReference.push_back(std::pair<int, int>(2, 4));
-	m_LinesReference.push_back(std::pair<int, int>(3, 2));
-	m_LinesReference.push_back(std::pair<int, int>(4, 5));
-	m_LinesReference.push_back(std::pair<int, int>(5, 7));
-	m_LinesReference.push_back(std::pair<int, int>(5, 3));
-	m_LinesReference.push_back(std::pair<int, int>(6, 7));
-	m_LinesReference.push_back(std::pair<int, int>(6, 4));
-	m_LinesReference.push_back(std::pair<int, int>(7, 0));
+
 
 }
 
@@ -64,18 +52,25 @@ bool Cinkes::CBoxBoxCollision::Run(CContactInfo* a_Info)
 void Cinkes::CBoxBoxCollision::FindReference()
 {
 
-    CVector3 local = m_Info->m_First->GetTransform().getBasis().GetInverse() * m_Info->m_Normal;
-	m_LocalNormal = local;
+    CVector3 local = m_Info->m_Normal;
 	CVector3 position = m_Info->m_First->GetTransform().getOrigin();
 	CVector3 dimensions = static_cast<CBoxShape*>(m_Info->m_First->GetCollisionShape().get())->GetDimensions();
-	m_ReferenceBox[0] = CVector3(position.getX() - dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() - dimensions.getZ());
-	m_ReferenceBox[1] = CVector3(position.getX() - dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() + dimensions.getZ());
-	m_ReferenceBox[2] = CVector3(position.getX() - dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() + dimensions.getZ());
-	m_ReferenceBox[3] = CVector3(position.getX() - dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() - dimensions.getZ());
-	m_ReferenceBox[4] = CVector3(position.getX() + dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() + dimensions.getZ());
-	m_ReferenceBox[5] = CVector3(position.getX() + dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() - dimensions.getZ());
-	m_ReferenceBox[6] = CVector3(position.getX() + dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() + dimensions.getZ());
-	m_ReferenceBox[7] = CVector3(position.getX() + dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() - dimensions.getZ());
+	m_ReferenceBox[0] = m_Info->m_First->GetTransform().getBasis() * 
+		CVector3(position.getX() - dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() - dimensions.getZ());
+	m_ReferenceBox[1] = m_Info->m_First->GetTransform().getBasis() * 
+		CVector3(position.getX() - dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() + dimensions.getZ());
+	m_ReferenceBox[2] = m_Info->m_First->GetTransform().getBasis() * 
+		CVector3(position.getX() - dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() + dimensions.getZ());
+	m_ReferenceBox[3] = m_Info->m_First->GetTransform().getBasis() * 
+		CVector3(position.getX() - dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() - dimensions.getZ());
+	m_ReferenceBox[4] = m_Info->m_First->GetTransform().getBasis() * 
+		CVector3(position.getX() + dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() + dimensions.getZ());
+	m_ReferenceBox[5] = m_Info->m_First->GetTransform().getBasis() * 
+		CVector3(position.getX() + dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() - dimensions.getZ());
+	m_ReferenceBox[6] = m_Info->m_First->GetTransform().getBasis() * 
+		CVector3(position.getX() + dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() + dimensions.getZ());
+	m_ReferenceBox[7] = m_Info->m_First->GetTransform().getBasis() * 
+		CVector3(position.getX() + dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() - dimensions.getZ());
 	CScalar dots[8];
 
 	for (int i = 0; i < 8; i++)
@@ -98,22 +93,29 @@ void Cinkes::CBoxBoxCollision::FindReference()
 void Cinkes::CBoxBoxCollision::FindIncident()
 {
 
-	CVector3 local = m_Info->m_Second->GetTransform().getBasis().GetInverse() * m_Info->m_Normal;
 	CVector3 position = m_Info->m_Second->GetTransform().getOrigin();
 	CVector3 dimensions = static_cast<CBoxShape*>(m_Info->m_Second->GetCollisionShape().get())->GetDimensions();
-	m_IncidentBox[0] = CVector3(position.getX() - dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() - dimensions.getZ());
-	m_IncidentBox[1] = CVector3(position.getX() - dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() + dimensions.getZ());
-	m_IncidentBox[2] = CVector3(position.getX() - dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() + dimensions.getZ());
-	m_IncidentBox[3] = CVector3(position.getX() - dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() - dimensions.getZ());
-	m_IncidentBox[4] = CVector3(position.getX() + dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() + dimensions.getZ());
-	m_IncidentBox[5] = CVector3(position.getX() + dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() - dimensions.getZ());
-	m_IncidentBox[6] = CVector3(position.getX() + dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() + dimensions.getZ());
-	m_IncidentBox[7] = CVector3(position.getX() + dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() - dimensions.getZ());
+	m_IncidentBox[0] = m_Info->m_Second->GetTransform().getBasis() * 
+		CVector3(position.getX() - dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() - dimensions.getZ());
+	m_IncidentBox[1] = m_Info->m_Second->GetTransform().getBasis() * 
+		CVector3(position.getX() - dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() + dimensions.getZ());
+	m_IncidentBox[2] = m_Info->m_Second->GetTransform().getBasis() * 
+		CVector3(position.getX() - dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() + dimensions.getZ());
+	m_IncidentBox[3] = m_Info->m_Second->GetTransform().getBasis() * 
+		CVector3(position.getX() - dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() - dimensions.getZ());
+	m_IncidentBox[4] = m_Info->m_Second->GetTransform().getBasis() * 
+		CVector3(position.getX() + dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() + dimensions.getZ());
+	m_IncidentBox[5] = m_Info->m_Second->GetTransform().getBasis() * 
+		CVector3(position.getX() + dimensions.getX(), position.getY() + dimensions.getY(), position.getZ() - dimensions.getZ());
+	m_IncidentBox[6] = m_Info->m_Second->GetTransform().getBasis() * 
+		CVector3(position.getX() + dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() + dimensions.getZ());
+	m_IncidentBox[7] = m_Info->m_Second->GetTransform().getBasis() * 
+		CVector3(position.getX() + dimensions.getX(), position.getY() - dimensions.getY(), position.getZ() - dimensions.getZ());
 	float dots[8];
 
 	for (int i = 0; i < 8; i++)
 	{
-		dots[i] = local.Dot(m_IncidentBox[i]);
+		dots[i] = (m_Info->m_Normal).Dot(m_IncidentBox[i]);
 	}
 	CScalar max = *std::min_element(dots, dots + 7);
 	for (int i = 0; i < 8; i++)
