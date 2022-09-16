@@ -10,7 +10,7 @@ namespace Cinkes
 	{
 	public:
 		explicit CRigidBody(float a_Mass = 1,
-		                    const CVector3& a_CenterOfMass = CVector3(0,0,0))
+			const CVector3& a_CenterOfMass = CVector3(0, 0, 0))
 		{
 			m_Mass = 1;
 			m_InverseMass = 1 / m_Mass;
@@ -20,14 +20,14 @@ namespace Cinkes
 		}
 
 		CRigidBody(const CTransform& a_Transform, const std::shared_ptr<CCollisionShape>& a_CollisionShape,
-		            CScalar a_Mass,
-		           const CVector3& a_CenterOfMass);
+			CScalar a_Mass,
+			const CVector3& a_CenterOfMass);
 
 
 		CRigidBody(CBody&& a_Rhs, const std::vector<std::shared_ptr<CSpring>>& a_AttachedSprings,
-		           float a_Mass, CVector3 a_CenterOfMass);
+			float a_Mass, CVector3 a_CenterOfMass);
 
-		CRigidBody(const CRigidBody& a_Rhs) : CBody(a_Rhs),m_Mass(a_Rhs.m_Mass), m_InverseMass(1/a_Rhs.m_Mass)
+		CRigidBody(const CRigidBody& a_Rhs) : CBody(a_Rhs), m_Mass(a_Rhs.m_Mass), m_InverseMass(1 / a_Rhs.m_Mass)
 		{
 		}
 
@@ -50,12 +50,12 @@ namespace Cinkes
 		CScalar GetAngularDamping() const { return m_AngularDamping; }
 		void SetAngularDamping(CScalar a_Amount) { m_AngularDamping = a_Amount; }
 
-		CMat3x3 GetInverseInertiaTensor() const { return m_InverseIntertiaTensor; }
-		CMat3x3 GetInverseInertiaTensor() { return m_InverseIntertiaTensor; }
+		CMat3x3 GetInertiaTensorLocal();
+		CMat3x3 GetInverseInertiaTensorLocal();
+		CMat3x3 GetInverseInertiaTensorWorld();
+
 		void SetInverseInertiaTensorWorld();
-		void SetInverseInertiaTensor();
-		CMat3x3 GetInverseInertiaTensorWorld() const { return m_InverseIntertiaTensorWorld; }
-		CMat3x3 GetInverseInertiaTensorWorld() { return m_InverseIntertiaTensorWorld; }
+		void SetInertiaTensorLocal();
 
 		void* GetUserPointer1() { return m_UserPointer1; }
 		void* GetUserPointer1() const { return m_UserPointer1; }
@@ -65,7 +65,7 @@ namespace Cinkes
 		void SetUserPointer2(void* a_Pointer) { m_UserPointer2 = a_Pointer; }
 
 		void AddForce(const CVector3& a_ForceToAdd) { m_Force += a_ForceToAdd; }
-		void AddForceAtPoint(const CVector3& a_ForceToAdd, const CVector3& a_Point) { m_Force += a_ForceToAdd; }
+		void AddForceAtPoint(const CVector3& a_ForceToAdd, const CVector3& a_Point);
 		void AddTorque(const CVector3& a_TorqueToAdd) { m_Torque += a_TorqueToAdd; }
 		CVector3& GetForce() { return m_Force; }
 		CVector3& GetTorque() { return m_Torque; }
@@ -82,20 +82,22 @@ namespace Cinkes
 		CVector3 GetLastFrameAcceleration() { return m_LastFrameAcceleration; }
 		CVector3 GetLastFrameAcceleration() const { return m_LastFrameAcceleration; }
 		void Integrate(CScalar a_T);
+		void IntegratePosition(CScalar a_T);
 
 	private:
 		CScalar m_Mass;
 		CScalar m_InverseMass;
 		CVector3 m_CenterOfMass;
 
-		CMat3x3 m_InverseIntertiaTensor;
-		CMat3x3 m_InverseIntertiaTensorWorld;
+		CMat3x3 m_InertiaTensorLocal;
+		CMat3x3 m_InverseIntertiaTensorLocal; //how much force is needed to rotate the object on each axis
+		CMat3x3 m_InverseIntertiaTensorWorld; //a tensor is a generalized version of a matrix
 
 		CVector3 m_Velocity;
 		CVector3 m_AngularVelocity;
 
-		CScalar m_AngularDamping = 0.995f;
-		CScalar m_LinearDamping = 0.995f;
+		CScalar m_AngularDamping = 1.f;
+		CScalar m_LinearDamping = 1.f;
 
 		CVector3 m_LastFrameAcceleration;
 		CVector3 m_Acceleration;

@@ -11,14 +11,14 @@ void Cinkes::CPhysicsWorld::Update(CScalar a_T)
 	m_FGenerators->UpdateGenerators();
 
 
-	RunCollision(a_T);
-	if (!m_Contacts.empty()) {
-		m_TestResolver->Resolve(m_Contacts, a_T);
-	}
 	for (const auto& element : m_RigidBodies)
 	{
 		element->Integrate(a_T);
 		
+	}
+	RunCollision(a_T);
+	if (!m_Contacts.empty()) {
+		m_TestResolver->Resolve(m_Contacts, a_T);
 	}
 	for (const auto& element : m_RigidBodies)
 	{

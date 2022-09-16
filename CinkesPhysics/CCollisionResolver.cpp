@@ -223,7 +223,7 @@ void Cinkes::CCollisionResolver::ApplyPositionChange(CVector3 a_LinearChange[2],
 	{
 		if(temp[i])
 		{
-			CMat3x3 inverseintertiatensor = temp[i]->GetInverseInertiaTensor();
+			CMat3x3 inverseintertiatensor = temp[i]->GetInverseInertiaTensorWorld();
 			CVector3 angularintertiaworld = a_Info->m_RelativeContactPosition[i][0].Cross(a_Info->m_Normal);
 			angularintertiaworld = inverseintertiatensor * angularintertiaworld;
 			angularintertiaworld = angularintertiaworld.Cross(a_Info->m_RelativeContactPosition[i][0]);

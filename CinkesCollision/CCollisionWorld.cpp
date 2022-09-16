@@ -12,7 +12,7 @@ Cinkes::CCollisionWorld::CCollisionWorld() : m_ShouldUpdate(false)
 	m_BVH = std::make_unique<CBVH>(m_Objects);
 	m_GJK = std::make_unique<CGJKAlgorithm>();
 	m_CEPA = std::make_unique<CEPA>();
-
+	m_SAT = std::make_unique<CBoxBoxCollision>();
 }
 
 
@@ -25,6 +25,7 @@ Cinkes::CCollisionWorld& Cinkes::CCollisionWorld::operator=(const CCollisionWorl
 	m_BVH = std::make_unique<CBVH>(m_Objects);
 	m_GJK = std::make_unique<CGJKAlgorithm>();
 	m_CEPA = std::make_unique<CEPA>();
+	m_SAT = std::make_unique<CBoxBoxCollision>();
 	return *this;
 }
 
@@ -84,7 +85,7 @@ void Cinkes::CCollisionWorld::RunCollision(CScalar a_T)
 				contact->m_Second = element->m_Objects[i + 1];
 				m_CEPA->Run(contact.get(), simplex);
 				m_Contacts.push_back(contact);
-				//m_ContactPointCalculator->GetPoints(m_Contacts[m_Contacts.size() - 1].get());
+				m_SAT->Run(contact.get());
 			}
 		}
 	}

@@ -57,6 +57,7 @@ namespace Cinkes
 		 */
 		CMat3x3 Transpose();
 		CMat3x3 GetInverse();
+		CMat3x3 GetInverse() const { return GetInverse(); };
 		CVector3 TransformTranspose(const CVector3& a_Vector);
 		/*
 		 MemberDescription:

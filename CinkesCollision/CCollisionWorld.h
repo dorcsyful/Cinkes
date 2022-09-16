@@ -5,6 +5,8 @@
 #include "CGJKAlgorithm.h"
 #include "CEPA.h"
 #include "CScalar.h"
+#include "CBoxBoxCollision.h"
+
 
 namespace Cinkes
 {
@@ -63,6 +65,7 @@ namespace Cinkes
 		std::unique_ptr<CBVH> m_BVH;
 		std::unique_ptr<CGJKAlgorithm> m_GJK;
 		std::unique_ptr<CEPA> m_CEPA;
+		std::unique_ptr<CBoxBoxCollision> m_SAT;
 		//}
 	};
 
