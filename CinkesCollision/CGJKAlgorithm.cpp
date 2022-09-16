@@ -20,8 +20,7 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
 
     CSimplex simplex;
     simplex.Push_Front(support);
-    simplex.Push_FrontA(A);
-    simplex.Push_FrontB(B);
+
     next = support * -1;
 
     while(true)
@@ -42,8 +41,7 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
         }
 
         simplex.Push_Front(support);
-        simplex.Push_FrontA(A);
-        simplex.Push_FrontB(B);
+
 
         if(NextSimplex(simplex, next))
         {
@@ -77,8 +75,7 @@ bool Cinkes::CGJKAlgorithm::Line(CSimplex& a_Simplex, CVector3& a_Direction)
         a_Direction = ab.Cross(ao).Cross(ab);
     } else
     {
-        a_Simplex.SetAllA({ a_Simplex.getPointA(0) });
-        a_Simplex.SetAllB({ a_Simplex.getPointB(0) });
+
 	    a_Simplex = { a };
 	    a_Direction = ao;
     }
@@ -101,15 +98,13 @@ bool Cinkes::CGJKAlgorithm::Triangle(CSimplex& a_Simplex, CVector3& a_Direction)
     {
 	    if(SameDirection(ac, ao))
 	    {
-            a_Simplex.SetAllA({ a_Simplex.getPointA(0),a_Simplex.getPointA(2) });
-            a_Simplex.SetAllB({ a_Simplex.getPointB(0),a_Simplex.getPointB(2) });
+
             a_Simplex = { a,c };
             a_Direction = ac.Cross(ao).Cross(ac);
 	    }
         else
         {
-            a_Simplex.SetAllA({ a_Simplex.getPointA(0),a_Simplex.getPointA(1) });
-            a_Simplex.SetAllB({ a_Simplex.getPointB(0),a_Simplex.getPointB(1) });
+
             a_Simplex = { a,b };
             return Line(a_Simplex, a_Direction);
         }
@@ -118,8 +113,7 @@ bool Cinkes::CGJKAlgorithm::Triangle(CSimplex& a_Simplex, CVector3& a_Direction)
     {
         if (SameDirection(ab.Cross(abc), ao))
         {
-            a_Simplex.SetAllA({ a_Simplex.getPointA(0),a_Simplex.getPointA(1) });
-            a_Simplex.SetAllB({ a_Simplex.getPointB(0),a_Simplex.getPointB(1) });
+
             a_Simplex = { a,b };
             return Line(a_Simplex, a_Direction);
         }
@@ -131,8 +125,7 @@ bool Cinkes::CGJKAlgorithm::Triangle(CSimplex& a_Simplex, CVector3& a_Direction)
             }
             else
             {
-                a_Simplex.SetAllA({ a_Simplex.getPointA(0),a_Simplex.getPointA(2), a_Simplex.getPointA(1) });
-                a_Simplex.SetAllB({ a_Simplex.getPointB(0),a_Simplex.getPointB(2), a_Simplex.getPointB(1) });
+
                 a_Simplex = { a,c,b };
                 a_Direction = abc * -1;
             }
@@ -157,22 +150,19 @@ bool Cinkes::CGJKAlgorithm::Tetrahedron(CSimplex& a_Simplex, CVector3& a_Directi
 
     if(SameDirection(abc, ao))
     {
-        a_Simplex.SetAllA({ a_Simplex.getPointA(0),a_Simplex.getPointA(1), a_Simplex.getPointA(2) });
-        a_Simplex.SetAllB({ a_Simplex.getPointB(0),a_Simplex.getPointB(1), a_Simplex.getPointB(2) });
+
         a_Simplex = { a,b,c };
         return Triangle(a_Simplex, a_Direction);
     }
     if(SameDirection(acd, ao))
     {
-        a_Simplex.SetAllA({ a_Simplex.getPointA(0),a_Simplex.getPointA(2), a_Simplex.getPointA(3) });
-        a_Simplex.SetAllB({ a_Simplex.getPointB(0),a_Simplex.getPointB(2), a_Simplex.getPointB(3) });
+
         a_Simplex = { a,c,d };
         return Triangle(a_Simplex, a_Direction);
     }
     if(SameDirection(adb, ao))
     {
-        a_Simplex.SetAllA({ a_Simplex.getPointA(0),a_Simplex.getPointA(3), a_Simplex.getPointA(1) });
-        a_Simplex.SetAllB({ a_Simplex.getPointB(0),a_Simplex.getPointB(3), a_Simplex.getPointB(1) });
+
         a_Simplex = { a,d,b };
         return Triangle(a_Simplex, a_Direction);
     }

@@ -1,5 +1,5 @@
 #pragma once
-#include "CContactInfo.h"
+#include "CInternalContactInfo.h"
 #include "CScalar.h"
 
 namespace Cinkes
@@ -16,7 +16,8 @@ namespace Cinkes
 		CTestResolver& operator=(CTestResolver&& a_Rhs) noexcept = delete;
 		CTestResolver& operator=(const CTestResolver& a_Rhs) = delete;
 
-		bool Resolve(const std::vector<std::shared_ptr<Cinkes::CContactInfo>>& a_Info, CScalar a_T) const;
+		bool Resolve(const std::vector<std::shared_ptr<Cinkes::CInternalContactInfo>>& a_Info, CScalar a_T) const;
+		void SetUp(const std::vector<std::shared_ptr<Cinkes::CInternalContactInfo>>& a_Info, CScalar a_T);
 
 	};
 

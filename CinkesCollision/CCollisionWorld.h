@@ -11,7 +11,7 @@
 namespace Cinkes
 {
 	class CRigidBody;
-	struct CContactInfo;
+	struct CInternalContactInfo;
 	class CBVH;
 	class CCollisionObject;
 	//Group: CCollision
@@ -47,7 +47,7 @@ namespace Cinkes
 		//}
 
 		//Subgroup: Collision test {
-		void getContacts(std::vector<std::shared_ptr<CContactInfo>>& a_Narrow, std::vector<std::shared_ptr<CBroadContactInfo>>& a_Broad) const
+		void getContacts(std::vector<std::shared_ptr<CInternalContactInfo>>& a_Narrow, std::vector<std::shared_ptr<CBroadContactInfo>>& a_Broad) const
 		{
 			a_Narrow = m_Contacts;
 			a_Broad = m_BVH->m_Contacts;
@@ -61,7 +61,7 @@ namespace Cinkes
 
 		std::vector<std::shared_ptr<CCollisionObject>> m_Objects;
 		std::vector<std::shared_ptr<CRigidBody>> m_RigidBodies;
-		std::vector<std::shared_ptr<CContactInfo>> m_Contacts;
+		std::vector<std::shared_ptr<CInternalContactInfo>> m_Contacts;
 		std::unique_ptr<CBVH> m_BVH;
 		std::unique_ptr<CGJKAlgorithm> m_GJK;
 		std::unique_ptr<CEPA> m_CEPA;

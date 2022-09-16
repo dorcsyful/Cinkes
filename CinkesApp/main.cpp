@@ -16,7 +16,7 @@ int main()
     app->m_PhysicsWorld = physics_world.get();
 
     std::shared_ptr<CBoxShape> shape = std::make_shared<CBoxShape>();
-    shape->SetDimensions(CVector3(50, 50, 50));
+    shape->SetDimensions(CVector3(30, 30, 30));
 
     std::shared_ptr<CRigidBody> rigidBody = std::make_shared<CRigidBody>();
     rigidBody->SetCollisionShape(shape);

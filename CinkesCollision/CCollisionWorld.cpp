@@ -78,7 +78,7 @@ void Cinkes::CCollisionWorld::RunCollision(CScalar a_T)
 			bool algorithm = m_GJK->Algorithm(element->m_Objects[i].get(), element->m_Objects[i + 1].get(),simplex);
 			if(algorithm)
 			{
-				std::shared_ptr<CContactInfo> contact = std::make_shared<CContactInfo>();
+				std::shared_ptr<CInternalContactInfo> contact = std::make_shared<CInternalContactInfo>();
 				contact->m_First = element->m_Objects[i];
 				element->m_Objects[i]->SetHasContact(contact.get());
 				element->m_Objects[i + 1]->SetHasContact(contact.get());

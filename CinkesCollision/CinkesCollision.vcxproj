@@ -34,7 +34,7 @@
     <ClInclude Include="CCylinder.h" />
     <ClInclude Include="CEPA.h" />
     <ClInclude Include="CGJKAlgorithm.h" />
-    <ClInclude Include="CContactInfo.h" />
+    <ClInclude Include="CInternalContactInfo.h" />
     <ClInclude Include="CLine.h" />
     <ClInclude Include="CPlane.h" />
     <ClInclude Include="CRaycast.h" />

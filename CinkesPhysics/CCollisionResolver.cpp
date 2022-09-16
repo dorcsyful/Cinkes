@@ -3,11 +3,11 @@
 #include "CCollisionObject.h"
 #include "CUtils.h"
 #include "CVector3.h"
-#include "CContactInfo.h"
+#include "CInternalContactInfo.h"
 #include "CQuaternion.h"
 #include "CRigidBody.h"
 
-bool Cinkes::CCollisionResolver::Resolve(std::vector<std::shared_ptr<CContactInfo>>& a_Info, CScalar a_T) const
+bool Cinkes::CCollisionResolver::Resolve(std::vector<std::shared_ptr<CInternalContactInfo>>& a_Info, CScalar a_T) const
 {
 		StepOne(a_Info, a_T);
 		StepTwo(a_Info, a_T);
@@ -15,7 +15,7 @@ bool Cinkes::CCollisionResolver::Resolve(std::vector<std::shared_ptr<CContactInf
 	return true;
 }
 
-Cinkes::CMat3x3 Cinkes::CCollisionResolver::CalculateContactBasis(const CContactInfo* a_Info) const
+Cinkes::CMat3x3 Cinkes::CCollisionResolver::CalculateContactBasis(const CInternalContactInfo* a_Info) const
 {
 	CVector3 tangent[2];
 	if(CUtils::Abs(a_Info->m_Normal.getX()) > CUtils::Abs(a_Info->m_Normal.getY()))
@@ -49,7 +49,7 @@ Cinkes::CMat3x3 Cinkes::CCollisionResolver::CalculateContactBasis(const CContact
 	return contactToWorld;
 }
 
-void Cinkes::CCollisionResolver::StepOne(const std::vector<std::shared_ptr<CContactInfo>>& a_Info, CScalar a_T) const
+void Cinkes::CCollisionResolver::StepOne(const std::vector<std::shared_ptr<CInternalContactInfo>>& a_Info, CScalar a_T) const
 {
 	for (const auto& current : a_Info)
 	{
@@ -68,7 +68,7 @@ void Cinkes::CCollisionResolver::StepOne(const std::vector<std::shared_ptr<CCont
 	}
 }
 
-void Cinkes::CCollisionResolver::StepTwo(const std::vector<std::shared_ptr<CContactInfo>>& a_Info, CScalar a_T) const
+void Cinkes::CCollisionResolver::StepTwo(const std::vector<std::shared_ptr<CInternalContactInfo>>& a_Info, CScalar a_T) const
 {
 	int iterations_used = 0;
 	CVector3 linear_change[2];
@@ -98,8 +98,8 @@ void Cinkes::CCollisionResolver::StepTwo(const std::vector<std::shared_ptr<CCont
 			{
 				for(unsigned d = 0; d < 2; d++)
 				{
-					CContactInfo A = *a_Info[i];
-					CContactInfo B = *a_Info[index];
+					CInternalContactInfo A = *a_Info[i];
+					CInternalContactInfo B = *a_Info[index];
 					if(A[b] == B[d])
 					{
 						CVector3 delta_position = linear_change[d] + angular_change[d].Cross(a_Info[i]->m_RelativeContactPosition[b][0]);
@@ -113,7 +113,7 @@ void Cinkes::CCollisionResolver::StepTwo(const std::vector<std::shared_ptr<CCont
 	}
 }
 
-void Cinkes::CCollisionResolver::StepThree(std::vector<std::shared_ptr<CContactInfo>>& a_Info, CScalar a_T) const
+void Cinkes::CCollisionResolver::StepThree(std::vector<std::shared_ptr<CInternalContactInfo>>& a_Info, CScalar a_T) const
 {
 	CVector3 velocitychange[2];
 	CVector3 rotationchange[2];
@@ -142,8 +142,8 @@ void Cinkes::CCollisionResolver::StepThree(std::vector<std::shared_ptr<CContactI
 			{
 				for (unsigned d = 0; d < 2; d++)
 				{
-					CContactInfo A = *a_Info[i];
-					CContactInfo B = *a_Info[index];
+					CInternalContactInfo A = *a_Info[i];
+					CInternalContactInfo B = *a_Info[index];
 					CCollisionObject* object_from_A = A[b];
 					CCollisionObject* object_from_B = B[d];
 					if (object_from_A == object_from_B)
@@ -175,10 +175,10 @@ Cinkes::CVector3 Cinkes::CCollisionResolver::ConvertToWorld(CCollisionObject* a_
 }
 
 
-void Cinkes::CCollisionResolver::CalculateDeltaVelocity(CScalar a_T, CContactInfo* a_Info) const
+void Cinkes::CCollisionResolver::CalculateDeltaVelocity(CScalar a_T, CInternalContactInfo* a_Info) const
 {
 	CScalar velocityformacceleration = 0;
-	CContactInfo temp = *a_Info;
+	CInternalContactInfo temp = *a_Info;
 	CCollisionObject* object = temp[0];
 	if (temp[0]->GetType() == EOBJECT_TYPE::TYPE_RIGID) {
 		velocityformacceleration += std::static_pointer_cast<CRigidBody>(a_Info->m_First)->GetLastFrameAcceleration().Dot(a_Info->m_Normal) * a_T;
@@ -191,7 +191,7 @@ void Cinkes::CCollisionResolver::CalculateDeltaVelocity(CScalar a_T, CContactInf
 
 }
 
-Cinkes::CVector3 Cinkes::CCollisionResolver::CalculateLocalVelocity(unsigned a_Index, CScalar a_T, CContactInfo* a_Info) const
+Cinkes::CVector3 Cinkes::CCollisionResolver::CalculateLocalVelocity(unsigned a_Index, CScalar a_T, CInternalContactInfo* a_Info) const
 {
 	CCollisionObject* temp[2] = { a_Info->m_First.get(),a_Info->m_Second.get() };
 	CRigidBody* body = static_cast<CRigidBody*>(temp[a_Index]);
@@ -206,7 +206,7 @@ Cinkes::CVector3 Cinkes::CCollisionResolver::CalculateLocalVelocity(unsigned a_I
 }
 
 
-void Cinkes::CCollisionResolver::ApplyPositionChange(CVector3 a_LinearChange[2], CVector3 a_AngularChange[2], CScalar a_Penetration, CContactInfo* a_Info) const
+void Cinkes::CCollisionResolver::ApplyPositionChange(CVector3 a_LinearChange[2], CVector3 a_AngularChange[2], CScalar a_Penetration, CInternalContactInfo* a_Info) const
 {
 	CRigidBody* temp[2] = { nullptr,nullptr };
 	if (a_Info->m_First->GetType() == EOBJECT_TYPE::TYPE_RIGID) { temp[0] = static_cast<CRigidBody*>(a_Info->m_First.get()); }
@@ -284,7 +284,7 @@ void Cinkes::CCollisionResolver::ApplyPositionChange(CVector3 a_LinearChange[2],
 
 }
 
-void Cinkes::CCollisionResolver::ApplyVelocityChange(CContactInfo* a_Info, CVector3 a_VelocityChange[2], CVector3 a_RotationChange[2]) const
+void Cinkes::CCollisionResolver::ApplyVelocityChange(CInternalContactInfo* a_Info, CVector3 a_VelocityChange[2], CVector3 a_RotationChange[2]) const
 {
 	CRigidBody* temp[2] = { nullptr,nullptr };
 	if (a_Info->m_First->GetType() == EOBJECT_TYPE::TYPE_RIGID) { temp[0] = static_cast<CRigidBody*>(a_Info->m_First.get()); }
@@ -319,7 +319,7 @@ void Cinkes::CCollisionResolver::ApplyVelocityChange(CContactInfo* a_Info, CVect
 	}
 }
 
-Cinkes::CVector3 Cinkes::CCollisionResolver::FrictionlessImpulse(CMat3x3 a_Tensor[2], CScalar a_DesiredVelocity, CContactInfo* a_Info) const
+Cinkes::CVector3 Cinkes::CCollisionResolver::FrictionlessImpulse(CMat3x3 a_Tensor[2], CScalar a_DesiredVelocity, CInternalContactInfo* a_Info) const
 {
 	CRigidBody* temp[2] = { nullptr, nullptr };
 	if (a_Info->m_First->GetType() == EOBJECT_TYPE::TYPE_RIGID) { temp[0] = static_cast<CRigidBody*>(a_Info->m_First.get()); }
@@ -349,7 +349,7 @@ Cinkes::CVector3 Cinkes::CCollisionResolver::FrictionlessImpulse(CMat3x3 a_Tenso
 	return impulsecontact;
 }
 
-Cinkes::CVector3 Cinkes::CCollisionResolver::FrictionImpulse(CMat3x3 a_Tensor[2], CScalar a_DesiredVelocity, CScalar a_Friction, CContactInfo* a_Info) const
+Cinkes::CVector3 Cinkes::CCollisionResolver::FrictionImpulse(CMat3x3 a_Tensor[2], CScalar a_DesiredVelocity, CScalar a_Friction, CInternalContactInfo* a_Info) const
 {
 	CRigidBody* temp[2] = { nullptr, nullptr };
 	if (a_Info->m_First->GetType() == EOBJECT_TYPE::TYPE_RIGID) { temp[0] = static_cast<CRigidBody*>(a_Info->m_First.get()); }

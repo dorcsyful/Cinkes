@@ -5,22 +5,20 @@
 
 #include "CCollisionObject.h"
 #include "CCollisionShape.h"
-#include "CContactInfo.h"
+#include "CInternalContactInfo.h"
 #include "../CinkesMath/CUtils.h"
 #include "CSimplex.h"
 
-void Cinkes::CEPA::Run(CContactInfo* a_Contact, CSimplex& a_Simplex)
+void Cinkes::CEPA::Run(CInternalContactInfo* a_Contact, CSimplex& a_Simplex)
 {
 
 	Algorithm(a_Contact, a_Simplex);
 }
 
-void Cinkes::CEPA::Algorithm(CContactInfo* a_Contact, const CSimplex& a_Simplex)
+void Cinkes::CEPA::Algorithm(CInternalContactInfo* a_Contact, const CSimplex& a_Simplex)
 {
 	//the tetrahedron from GJK, the faces contain every triangle that are on it by the vertex indices
 	std::vector<CVector3> polytope = { a_Simplex[0],a_Simplex[1],a_Simplex[2],a_Simplex[3] };
-	std::vector<CVector3> polytopeA = { a_Simplex.getPointA(0),a_Simplex.getPointA(1),a_Simplex.getPointA(2),a_Simplex.getPointA(3) };
-	std::vector<CVector3> polytopeB = { a_Simplex.getPointB(0),a_Simplex.getPointB(1),a_Simplex.getPointB(2),a_Simplex.getPointB(3) };
 	std::vector<size_t> faces{
 		0,1,2,
 		0,3,1,
@@ -82,8 +80,6 @@ void Cinkes::CEPA::Algorithm(CContactInfo* a_Contact, const CSimplex& a_Simplex)
 				newFaces.push_back(i.second);
 				newFaces.push_back(polytope.size());  // NOLINT(clang-diagnostic-shorten-64-to-32)
 			}
-			polytopeA.push_back(A);
-			polytopeB.push_back(B);
 			polytope.push_back(support);
 
 			std::pair<std::vector<Cinkes::CFaceData>, size_t> newStuff = GetFaceNormals(polytope, newFaces);

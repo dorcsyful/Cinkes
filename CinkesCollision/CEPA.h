@@ -7,7 +7,7 @@
 namespace Cinkes
 {
 	class CCollisionObject;
-	struct CContactInfo;
+	struct CInternalContactInfo;
 	class CSimplex;
 
 	struct CFaceData
@@ -32,8 +32,8 @@ namespace Cinkes
 		CEPA& operator=(CEPA&& a_Rhs) noexcept = delete;
 		CEPA& operator=(const CEPA& a_Rhs) noexcept = delete;
 
-		void Run(CContactInfo* a_Contact, CSimplex& a_Simplex);
-		void Algorithm(CContactInfo* a_Contact, const CSimplex& a_Simplex);
+		void Run(CInternalContactInfo* a_Contact, CSimplex& a_Simplex);
+		void Algorithm(CInternalContactInfo* a_Contact, const CSimplex& a_Simplex);
 
 		std::pair<std::vector<CFaceData>, size_t> GetFaceNormals(const std::vector<CVector3>& a_Polytope, const std::vector<size_t>& a_Faces);
 		void AddUniqueEdge(std::vector<std::pair<size_t, size_t>>& a_Edges, const std::vector<size_t>& a_Faces, size_t a_A, size_t a_B);

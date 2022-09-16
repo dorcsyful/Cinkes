@@ -58,7 +58,7 @@ namespace UnitTest {
 			std::shared_ptr<CCollisionObject> object2 = std::make_shared<CCollisionObject>(transform, shape1);
 
 			CSimplex simplex;
-			std::shared_ptr<CContactInfo> info = std::make_shared<CContactInfo>();
+			std::shared_ptr<CInternalContactInfo> info = std::make_shared<CInternalContactInfo>();
 			gjk.Algorithm(object1.get(), object2.get(), simplex);
 
 			info->m_First = object1;
@@ -79,7 +79,7 @@ namespace UnitTest {
 			std::shared_ptr<CCollisionObject> object1 = std::make_shared<CCollisionObject>(CVector3(5, 7, 2), shape1);
 			std::shared_ptr<CCollisionObject> object2 = std::make_shared<CCollisionObject>(transform, shape2);
 			CSimplex simplex;
-			std::shared_ptr<CContactInfo> info = std::make_shared<CContactInfo>();
+			std::shared_ptr<CInternalContactInfo> info = std::make_shared<CInternalContactInfo>();
 			gjk.Algorithm(object1.get(), object2.get(), simplex);
 			info->m_First = object1;
 			object1->SetHasContact(info.get());
@@ -101,7 +101,7 @@ namespace UnitTest {
 			std::shared_ptr<CCollisionObject> object1 = std::make_shared<CCollisionObject>(CVector3(2.5f, 7, 2), shape1);
 			std::shared_ptr<CCollisionObject> object2 = std::make_shared<CCollisionObject>(transform, shape2);
 			CSimplex simplex;
-			std::shared_ptr<CContactInfo> info = std::make_shared<CContactInfo>();
+			std::shared_ptr<CInternalContactInfo> info = std::make_shared<CInternalContactInfo>();
 			gjk.Algorithm(object1.get(), object2.get(), simplex);
 			info->m_First = object1;
 			object1->SetHasContact(info.get());

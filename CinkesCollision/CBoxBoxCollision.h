@@ -1,6 +1,6 @@
 #pragma once
 #include "CVector3.h"
-#include "CContactInfo.h"
+#include "CInternalContactInfo.h"
 #include "CPlane.h"
 namespace Cinkes {
 
@@ -15,7 +15,7 @@ namespace Cinkes {
 	public:
 		CBoxBoxCollision();
 
-		bool Run(CContactInfo* a_Info);
+		bool Run(CInternalContactInfo* a_Info);
 
 
 	private:
@@ -28,7 +28,7 @@ namespace Cinkes {
 
 		CFace m_ReferenceFace;
 		CFace m_IncidentFace;
-		CContactInfo* m_Info;
+		CInternalContactInfo* m_Info;
 		std::vector<CPlane> m_Planes;
 		std::vector<std::pair<CVector3, CVector3>> m_Lines;
 		CVector3 m_Sides[6];

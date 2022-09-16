@@ -30,7 +30,7 @@ Cinkes::CBoxBoxCollision::CBoxBoxCollision()
 
 }
 
-bool Cinkes::CBoxBoxCollision::Run(CContactInfo* a_Info)
+bool Cinkes::CBoxBoxCollision::Run(CInternalContactInfo* a_Info)
 {
 	m_Info = a_Info;
 	FindReference();

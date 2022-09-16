@@ -2,7 +2,7 @@
 #include <memory>
 #include <vector>
 
-#include "CContactInfo.h"
+#include "CInternalContactInfo.h"
 
 namespace Cinkes
 {

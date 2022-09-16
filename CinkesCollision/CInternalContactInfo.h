@@ -45,9 +45,9 @@ namespace Cinkes
 		std::vector<std::shared_ptr<CCollisionObject>> m_Objects;
 	};
 
-	struct CContactInfo
+	struct CInternalContactInfo
 	{
-		CContactInfo() = default;
+		CInternalContactInfo() = default;
 		CCollisionObject* operator[](const unsigned int a_Rhs)
 		{
 			assert(a_Rhs == 0 || a_Rhs == 1);

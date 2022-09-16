@@ -22,7 +22,7 @@ void Cinkes::CPhysicsWorld::Update(CScalar a_T)
 	}
 	for (const auto& element : m_RigidBodies)
 	{
-		element->SetTransform(CTransform(CMat3x3(), element->GetTransform().getOrigin() + element->GetLinearVelocity() * a_T));
+		element->SetTransform(CTransform(CMat3x3(), element->GetTransform().getOrigin() + element->GetLinearVelocity()));
 
 	}
 }

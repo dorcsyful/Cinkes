@@ -11,7 +11,7 @@ namespace Cinkes
 		TYPE_SOFT
 	};
 
-	struct CContactInfo;
+	struct CInternalContactInfo;
 	class CCollisionShape;
 
 	class CCollisionObject
@@ -44,7 +44,7 @@ namespace Cinkes
 		void SetMoveable(bool a_Rhs) { m_Moveable = a_Rhs; }
 		bool GetMoveable() { return m_Moveable; }
 		bool GetMoveable() const { return m_Moveable; }
-		void SetHasContact(CContactInfo* a_Rhs) { m_HasContact = a_Rhs; }
+		void SetHasContact(CInternalContactInfo* a_Rhs) { m_HasContact = a_Rhs; }
 		bool GetHasContact() { return m_HasContact; }
 		bool GetHasContact() const { return m_HasContact; }
 		EOBJECT_TYPE GetType() const { return m_Type; }
@@ -56,7 +56,7 @@ namespace Cinkes
 		bool m_InRemoveQueue = false;
 
 	protected:
-		CContactInfo* m_HasContact;
+		CInternalContactInfo* m_HasContact;
 		std::shared_ptr<CCollisionShape> m_Shape;
 		CTransform m_Transform;
 		bool m_Moveable;
