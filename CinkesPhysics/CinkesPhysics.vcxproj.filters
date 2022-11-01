@@ -45,9 +45,6 @@
     <ClCompile Include="CCollisionResolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CTestResolver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPhysicsWorld.h">
@@ -75,9 +72,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CCollisionResolver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CTestResolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
