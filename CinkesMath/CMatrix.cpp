@@ -64,6 +64,9 @@ bool Cinkes::CMatrix::operator!=(const CMatrix& a_Rhs) const
 	return true;
 }
 
+Cinkes::CMatrix& Cinkes::CMatrix::operator=(const CMatrix& a_Rhs)
+= default;
+
 Cinkes::CMatrix Cinkes::CMatrix::operator+(const CMatrix& a_Rhs)
 {
 	assert(a_Rhs.m_Values.size() == m_Values.size());

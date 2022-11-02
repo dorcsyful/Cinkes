@@ -47,7 +47,6 @@ namespace Cinkes
 		void SetColumn(size_t a_Num, const std::vector<CScalar>& a_Column);
 		CMatrix Transpose();
 		CMatrix GetInverse();
-		CMatrix GetInverse() const { return GetInverse(); }
 	private:
 
 		std::vector<std::vector<CScalar>> m_Values;
