@@ -27,10 +27,10 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
     {
         next.Normalize();
         A = a_Object1->GetTransform().getBasis() * 
-            (a_Object1->GetCollisionShape()->Support(a_Object1->GetTransform().getBasis().Transpose() * next))
+            a_Object1->GetCollisionShape()->Support(a_Object1->GetTransform().getBasis().Transpose() * next)
             + a_Object1->GetTransform().getOrigin();
         B = a_Object2->GetTransform().getBasis() * 
-            (a_Object2->GetCollisionShape()->Support(a_Object2->GetTransform().getBasis().Transpose() * (next * -1)))
+            a_Object2->GetCollisionShape()->Support(a_Object2->GetTransform().getBasis().Transpose() * (next * -1))
             + a_Object2->GetTransform().getOrigin();
         support = A - B;
 

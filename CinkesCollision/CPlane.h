@@ -1,11 +1,13 @@
 #pragma once
+#include <utility>
+
 #include "CVector3.h"
 namespace Cinkes {
 	struct CPlane {
 		CPlane() = default;
 		CPlane(const CVector3& a_Normal, CVector3 a_Point) 
 		{
-			point = a_Point;
+			point = std::move(a_Point);
 			normal = a_Normal;
 		}
 
