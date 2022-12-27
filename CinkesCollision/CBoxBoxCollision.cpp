@@ -32,6 +32,14 @@ Cinkes::CBoxBoxCollision::CBoxBoxCollision()
 
 bool Cinkes::CBoxBoxCollision::Run(CInternalContactInfo* a_Info)
 {
+	if (a_Info->m_Normal.getX() >= static_cast<CScalar>(0.57735))
+		a_Info->m_Tangents[0] = CVector3(a_Info->m_Normal.getY(), -a_Info->m_Normal.getX(), 0.0f);
+	else
+		a_Info->m_Tangents[1] = CVector3(0.0f, -a_Info->m_Normal.getZ(), -a_Info->m_Normal.getY());
+
+	a_Info->m_Tangents[0].Normalize();
+	a_Info->m_Tangents[1] = a_Info->m_Normal.Cross(a_Info->m_Tangents[0]);
+
 	m_Info = a_Info;
 	FindReference();
 	FindIncident();
@@ -51,7 +59,7 @@ bool Cinkes::CBoxBoxCollision::Run(CInternalContactInfo* a_Info)
 
 void Cinkes::CBoxBoxCollision::FindReference()
 {
-
+	//TODO: generalize this to accept vertices instead
     CVector3 local = m_Info->m_Normal;
 	CVector3 position = m_Info->m_First->GetTransform().getOrigin();
 	CVector3 dimensions = static_cast<CBoxShape*>(m_Info->m_First->GetCollisionShape().get())->GetDimensions();
@@ -132,6 +140,7 @@ void Cinkes::CBoxBoxCollision::FindIncident()
 
 void Cinkes::CBoxBoxCollision::FindSidePlanes()
 {
+	//TODO: optimize
 	CVector3 top = m_Info->m_First->GetTransform().getOrigin() + 
 		(static_cast<CBoxShape*>(m_Info->m_First->GetCollisionShape().get())->GetDimensions() * m_ReferenceFace.normal);
 	int ref[4] = 
@@ -210,6 +219,7 @@ void Cinkes::CBoxBoxCollision::Clip()
 
 void Cinkes::CBoxBoxCollision::CreateIncidentLines()
 {
+	//TODO: optimize
 	CVector3 top = 
 		static_cast<CBoxShape*>(m_Info->m_First->GetCollisionShape().get())->GetDimensions() * m_IncidentFace.normal;
 	int first = 0;

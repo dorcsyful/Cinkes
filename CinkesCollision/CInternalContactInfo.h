@@ -61,10 +61,10 @@ namespace Cinkes
 			if (a_Rhs == 0) { return m_First.get(); }
 			return m_Second.get();
 		}
-		CVector3 m_RelativeContactPosition[2][4];
 		std::shared_ptr<CCollisionObject> m_First;
 		std::shared_ptr<CCollisionObject> m_Second;
 		CVector3 m_Normal;
+		CVector3 m_Tangents[2];
 		CScalar m_PenetrationDepth{};
 		std::vector<CVector3> m_ContactPoints;
 		CScalar m_Friction{};

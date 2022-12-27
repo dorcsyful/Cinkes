@@ -43,7 +43,7 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
         simplex.Push_Front(support);
 
 
-        if(NextSimplex(simplex, next))
+        if(NextPoint(simplex, next))
         {
             a_Simplex = simplex;
         	return true;
@@ -52,7 +52,7 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
 
 }
 
-bool Cinkes::CGJKAlgorithm::NextSimplex(CSimplex& a_Simplex, CVector3& a_Direction)
+bool Cinkes::CGJKAlgorithm::NextPoint(CSimplex& a_Simplex, CVector3& a_Direction)
 {
 	switch (a_Simplex.Size())
 	{

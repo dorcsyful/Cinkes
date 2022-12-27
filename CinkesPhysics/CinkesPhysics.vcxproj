@@ -156,7 +156,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CBody.cpp" />
-    <ClCompile Include="CCollisionResolver.cpp" />
     <ClCompile Include="CForceGenerator.cpp" />
     <ClCompile Include="CForceGeneratorRegistry.cpp" />
     <ClCompile Include="CinkesPhysics.cpp" />
@@ -167,7 +166,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBody.h" />
-    <ClInclude Include="CCollisionResolver.h" />
     <ClInclude Include="CForceGenerator.h" />
     <ClInclude Include="CForceGeneratorRegistry.h" />
     <ClInclude Include="CGravitiyGenerator.h" />

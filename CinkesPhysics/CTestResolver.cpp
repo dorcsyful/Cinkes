@@ -4,93 +4,121 @@
 
 #include "CRigidBody.h"
 
-bool Cinkes::CTestResolver::Resolve(const std::vector<std::shared_ptr<CInternalContactInfo>>& a_Info, CScalar a_T) const
+void Cinkes::CTestResolver::PreSolver(const std::shared_ptr<Cinkes::CInternalContactInfo>& a_Info, CScalar a_T, int a_Id)
 {
-	for (const auto& info : a_Info)
-	{
-		CVector3 a_velocities;
-		CVector3 b_velocities;
+	CScalar inverse_mass_a = 0;
+	CScalar inverse_mass_b = 0;
+	CMat3x3 inverse_inertia_a = CMat3x3().GetIdentity();
+	CMat3x3 inverse_inertia_b = CMat3x3().GetIdentity();
 
-		for (auto& point : info->m_ContactPoints) {
-			CVector3 actual = point - info->m_PenetrationDepth;
-			CVector3 a_relative_position = actual - info->m_First->GetTransform().getOrigin();
-			CVector3 b_relative_position = actual - info->m_Second->GetTransform().getOrigin();
-
-			CVector3 a_angular_velocity = CVector3(0, 0, 0);
-			CVector3 b_angular_velocity = CVector3(0, 0, 0);
-
-			CRigidBody* a = nullptr;
-			CRigidBody* b = nullptr;
-
-			CVector3 a_full_velocity;
-			CVector3 b_full_velocity;
-
-			CScalar a_inverse_mass = 0;
-			CScalar b_inverse_mass = 0;
-			CScalar total_mass = 0;
-
-			CMat3x3 a_inverse_inertia_tensor = CMat3x3(0, 0, 0, 0, 0, 0, 0, 0, 0);
-			CMat3x3 b_inverse_inertia_tensor = CMat3x3(0, 0, 0, 0, 0, 0, 0, 0, 0);
-
-			if (info->m_First->GetType() == EOBJECT_TYPE::TYPE_RIGID)
-			{
-				a = static_cast<CRigidBody*>(info->m_First.get());
-
-				a_angular_velocity/* = CVector3::Cross(a->GetAngularVelocity(), a_relative_position)*/;
-				a_full_velocity = a->GetLinearVelocity() + a_angular_velocity;
-
-				a_inverse_mass = a->GetInverseMass();
-				a->SetInverseInertiaTensorWorld();
-				a_inverse_inertia_tensor = a->GetInverseInertiaTensorWorld();
-			}
-
-			if (info->m_Second->GetType() == EOBJECT_TYPE::TYPE_RIGID)
-			{
-				b = static_cast<CRigidBody*>(info->m_Second.get());
-				b_inverse_mass = b->GetInverseMass();
-				b_angular_velocity/* = CVector3::Cross(b->GetAngularVelocity(), b_relative_position)*/;
-				b_full_velocity = b->GetLinearVelocity() + b_angular_velocity;
-			}
-
-			if (a)
-			{
-
-			}
-			if (b)
-			{
-				CVector3 contact_velocity = b_full_velocity - a_full_velocity;
-				CScalar impulse_force = ((1.f + 0.1f) * -1) * (CVector3::Dot(contact_velocity, info->m_Normal));
-				CVector3 a_cross_point_normal = a_relative_position.Cross(info->m_Normal);
-				a_cross_point_normal = (a_inverse_inertia_tensor * (a_cross_point_normal)).Cross(a_cross_point_normal);
-				CVector3 b_cross_point_normal = b_relative_position.Cross(info->m_Normal);
-				b_cross_point_normal = (b_inverse_inertia_tensor * (b_cross_point_normal)).Cross(b_cross_point_normal);
-				CScalar k = a_inverse_mass + b_inverse_mass + (a_cross_point_normal + b_cross_point_normal).Dot(info->m_Normal);
-				CScalar normal_impulse = impulse_force / k;
-
-				//Linear
-				CVector3 p = (info->m_Normal * normal_impulse) * a_inverse_mass;
-				b->SetLinearVelocity(a->GetLinearVelocity() - p);
-
-				//Angular
-				CVector3 b_position_cross_normal = (b_relative_position.Cross((info->m_Normal * normal_impulse)));
-				b_position_cross_normal = a_inverse_inertia_tensor * b_position_cross_normal;
-				b->SetAngularVelocity(b->GetAngularVelocity() - b_position_cross_normal);
-			}
-		}
-		if (a_velocities != CVector3(0,0,0)) {
-			CRigidBody* first = static_cast<CRigidBody*>(info->m_First.get());
-			CVector3 current_velocity = first->GetLinearVelocity();
-			first->SetLinearVelocity((current_velocity + a_velocities) * a_T);
-		}
+	if (a_Info->m_First->GetType() == EOBJECT_TYPE::TYPE_RIGID) {
+		inverse_inertia_a = static_cast<CRigidBody*>(a_Info->m_First.get())->GetInverseInertiaTensorWorld();
+		inverse_mass_a = static_cast<CRigidBody*>(a_Info->m_First.get())->GetInverseMass();
 	}
-    return false;
+	if (a_Info->m_Second->GetType() == EOBJECT_TYPE::TYPE_RIGID) {
+		inverse_inertia_b = static_cast<CRigidBody*>(a_Info->m_Second.get())->GetInverseInertiaTensorWorld();
+		inverse_mass_b = static_cast<CRigidBody*>(a_Info->m_Second.get())->GetInverseMass();
+	}
+
+	for (const auto& point : a_Info->m_ContactPoints) {
+		std::shared_ptr<CTempContactPoint> temp = std::make_shared<CTempContactPoint>();
+		temp->m_Point = point;
+		temp->m_Objects[0] = a_Info->m_First.get();
+		temp->m_Objects[1] = a_Info->m_Second.get();
+		temp->m_Info = a_Id;
+		temp->m_RelativePosition[0] = point - a_Info->m_First->GetTransform().getOrigin();
+		temp->m_RelativePosition[1] = point - a_Info->m_Second->GetTransform().getOrigin();
+		temp->m_Normal = a_Info->m_Normal;
+		CalculateJacobian(temp.get());
+	}
 }
 
-void Cinkes::CTestResolver::SetUp(const std::vector<std::shared_ptr<Cinkes::CInternalContactInfo>>& a_Info, CScalar a_T)
+Cinkes::CSolverData Cinkes::CTestResolver::Solver(const std::shared_ptr<Cinkes::CInternalContactInfo>& a_Info, CScalar a_T)
 {
-	for (auto& info : a_Info) {
-		for (auto& point : info->m_ContactPoints) {
+	CSolverData data;
 
-		}
+	CScalar contraint_epsilon = static_cast<CScalar>(0);
+
+		return data;
+}
+
+void Cinkes::CTestResolver::CalculateJacobian(CTempContactPoint* a_Point)
+{
+	CVector3 normal = a_Point->m_Normal;
+	CVector3 a_relative_position = a_Point->m_RelativePosition[0];
+	CVector3 b_relative_position = a_Point->m_RelativePosition[1];
+	
+	CVector3 cross_product_a = CVector3::Cross(a_relative_position, normal);
+	CVector3 cross_product_b = CVector3::Cross(b_relative_position, normal);
+
+	a_Point->m_IndividualJacobian[0] = CMatrix(1, 6);
+	a_Point->m_IndividualJacobian[1] = CMatrix(1, 6);
+	if (a_Point->m_Objects[0]->GetType() == EOBJECT_TYPE::TYPE_RIGID)
+	{
+		a_Point->m_IndividualJacobian[0][0] = { -normal[0], -normal[1], -normal[2], -cross_product_a[0], -cross_product_a[1], -cross_product_a[2] };
 	}
+	if (a_Point->m_Objects[1]->GetType() == EOBJECT_TYPE::TYPE_RIGID)
+	{
+		a_Point->m_IndividualJacobian[1][0] = { normal[0],  normal[1],  normal[2],  cross_product_a[0],  cross_product_a[1],  cross_product_a[2] };
+	}
+
+	a_Point->m_Jacobian = CMatrix(1, 12);
+	for (int i = 0; i < 6; i++) { a_Point->m_Jacobian[0][i] = a_Point->m_IndividualJacobian[0][0][i]; }
+	for (int i = 0; i < 6; i++) { a_Point->m_Jacobian[1][5 + i] = a_Point->m_IndividualJacobian[1][0][i]; }
+
+	a_Point->m_EffectiveMassJacobian[0] = a_Point->m_InverseMassMatrix * a_Point->m_Jacobian.Transpose();
+	CMatrix temp = a_Point->m_Jacobian * a_Point->m_EffectiveMassJacobian[0];
+	assert(temp.GetNumAll() == 0);
+	a_Point->m_EffectiveMass = temp[0][0];
+}
+
+void Cinkes::CTestResolver::CalculateInverseMassMatrices(CTempContactPoint* a_Info)
+{
+	CMat3x3 inverse_inertia_tensor_a = CMat3x3::GetIdentity();
+	CMat3x3 inverse_inertia_tensor_b = CMat3x3::GetIdentity();
+	CMat3x3 mass_matrix_a = CMat3x3::GetIdentity();
+	CMat3x3 mass_matrix_b = CMat3x3::GetIdentity();
+	CMat3x3 zero = CMat3x3::GetZero();
+	if (a_Info->m_Objects[0]->GetType() == EOBJECT_TYPE::TYPE_RIGID) {
+		inverse_inertia_tensor_a = static_cast<CRigidBody*>(a_Info->m_Objects[0])->GetInverseInertiaTensorWorld();
+		mass_matrix_a *= static_cast<CRigidBody*>(a_Info->m_Objects[0])->GetMass();
+		mass_matrix_a = mass_matrix_a.GetInverse();
+	}
+	if (a_Info->m_Objects[1]->GetType() == EOBJECT_TYPE::TYPE_RIGID) {
+		inverse_inertia_tensor_b = static_cast<CRigidBody*>(a_Info->m_Objects[1])->GetInverseInertiaTensorWorld();
+		mass_matrix_b *= static_cast<CRigidBody*>(a_Info->m_Objects[1])->GetMass();
+		mass_matrix_b = mass_matrix_b.GetInverse();
+		
+	}
+
+	a_Info->m_InverseMassMatrix = CMatrix(12, 12);
+	a_Info->m_InverseMassMatrix[0] = { mass_matrix_a[0][0], mass_matrix_a[0][1], mass_matrix_a[0][2], 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	a_Info->m_InverseMassMatrix[1] = { mass_matrix_a[1][0], mass_matrix_a[1][1], mass_matrix_a[1][2], 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	a_Info->m_InverseMassMatrix[2] = { mass_matrix_a[2][0], mass_matrix_a[2][1], mass_matrix_a[2][2], 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	a_Info->m_InverseMassMatrix[3] = { 0, 0, 0, inverse_inertia_tensor_a[0][0], inverse_inertia_tensor_a[0][1], inverse_inertia_tensor_a[0][2], 0, 0, 0, 0, 0, 0 };
+	a_Info->m_InverseMassMatrix[4] = { 0, 0, 0, inverse_inertia_tensor_a[1][0], inverse_inertia_tensor_a[1][1], inverse_inertia_tensor_a[1][2], 0, 0, 0, 0, 0, 0 };
+	a_Info->m_InverseMassMatrix[5] = { 0, 0, 0, inverse_inertia_tensor_a[2][0], inverse_inertia_tensor_a[2][1], inverse_inertia_tensor_a[2][2], 0, 0, 0, 0, 0, 0 };
+	a_Info->m_InverseMassMatrix[6] = { 0, 0, 0, 0, 0, 0, mass_matrix_b[0][0], mass_matrix_b[0][1], mass_matrix_b[0][2], 0, 0, 0 };
+	a_Info->m_InverseMassMatrix[7] = { 0, 0, 0, 0, 0, 0, mass_matrix_b[1][0], mass_matrix_b[1][1], mass_matrix_b[1][2], 0, 0, 0 };
+	a_Info->m_InverseMassMatrix[8] = { 0, 0, 0, 0, 0, 0, mass_matrix_b[2][0], mass_matrix_b[2][1], mass_matrix_b[2][2], 0, 0, 0 };
+	a_Info->m_InverseMassMatrix[9] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, inverse_inertia_tensor_b[0][0], inverse_inertia_tensor_b[0][1], inverse_inertia_tensor_b[0][2] };
+	a_Info->m_InverseMassMatrix[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, inverse_inertia_tensor_b[1][0], inverse_inertia_tensor_b[1][1], inverse_inertia_tensor_b[1][2] };
+	a_Info->m_InverseMassMatrix[11] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, inverse_inertia_tensor_b[2][0], inverse_inertia_tensor_b[2][1], inverse_inertia_tensor_b[2][2] };
+
+	a_Info->m_InverseMassMatrixA = CMatrix(6, 6);
+	a_Info->m_InverseMassMatrixA[0] = { mass_matrix_a[0][0],mass_matrix_a[0][1],mass_matrix_a[0][2], 0, 0, 0 };
+	a_Info->m_InverseMassMatrixA[1] = { mass_matrix_a[1][0],mass_matrix_a[1][1],mass_matrix_a[1][2], 0, 0, 0 };
+	a_Info->m_InverseMassMatrixA[2] = { mass_matrix_a[2][0],mass_matrix_a[2][1],mass_matrix_a[2][2], 0, 0, 0 };
+	a_Info->m_InverseMassMatrixA[3] = { 0, 0, 0, inverse_inertia_tensor_a[0][0], inverse_inertia_tensor_a[0][1], inverse_inertia_tensor_a[0][2] };
+	a_Info->m_InverseMassMatrixA[4] = { 0, 0, 0, inverse_inertia_tensor_a[1][0], inverse_inertia_tensor_a[1][1], inverse_inertia_tensor_a[1][2] };
+	a_Info->m_InverseMassMatrixA[5] = { 0, 0, 0, inverse_inertia_tensor_a[2][0], inverse_inertia_tensor_a[2][1], inverse_inertia_tensor_a[2][2] };
+
+
+	a_Info->m_InverseMassMatrixB = CMatrix(6, 6);
+	a_Info->m_InverseMassMatrixB[0] = { mass_matrix_b[0][0],mass_matrix_b[0][1],mass_matrix_b[0][2], 0, 0, 0 };
+	a_Info->m_InverseMassMatrixB[1] = { mass_matrix_b[1][0],mass_matrix_b[1][1],mass_matrix_b[1][2], 0, 0, 0 };
+	a_Info->m_InverseMassMatrixB[2] = { mass_matrix_b[2][0],mass_matrix_b[2][1],mass_matrix_b[2][2], 0, 0, 0 };
+	a_Info->m_InverseMassMatrixB[3] = { 0, 0, 0, inverse_inertia_tensor_b[0][0], inverse_inertia_tensor_b[0][1], inverse_inertia_tensor_b[0][2] };
+	a_Info->m_InverseMassMatrixB[4] = { 0, 0, 0, inverse_inertia_tensor_b[1][0], inverse_inertia_tensor_b[1][1], inverse_inertia_tensor_b[1][2] };
+	a_Info->m_InverseMassMatrixB[5] = { 0, 0, 0, inverse_inertia_tensor_b[2][0], inverse_inertia_tensor_b[2][1], inverse_inertia_tensor_b[2][2] };
 }

@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CMat3x3.h" />
+    <ClInclude Include="CMatrix.h" />
     <ClInclude Include="CQuaternion.h" />
     <ClInclude Include="CScalar.h" />
     <ClInclude Include="CTransform.h" />
@@ -148,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CMat3x3.cpp" />
+    <ClCompile Include="CMatrix.cpp" />
     <ClCompile Include="CQuaternion.cpp" />
     <ClCompile Include="CTransform.cpp" />
     <ClCompile Include="CUtils.cpp" />

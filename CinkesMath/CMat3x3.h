@@ -64,6 +64,7 @@ namespace Cinkes
 		 Static function to get the identity matrix. Do not call on member function!
 		 */
 		static CMat3x3 GetIdentity();
+		static CMat3x3 GetZero();
 		CScalar Determinant();
 		/*
 		 MemberDescription:
@@ -76,6 +77,8 @@ namespace Cinkes
 		void SetFromAxisAngle(const CVector3& a_Axis, CScalar a_Angle);
 		void SetFromQuaternion(const CQuaternion& a_Quaternion);
 		CMat3x3 Scale(const CVector3& a_V);
+		void SetIdentity();
+		void SetZero();
 		//}
 	private:
 		//Subgroup: Matrix Elements {

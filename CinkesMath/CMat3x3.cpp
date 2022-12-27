@@ -337,6 +337,15 @@ CMat3x3 CMat3x3::GetIdentity()
 	return CMat3x3(1, 0, 0, 0, 1, 0, 0, 0, 1);
 }
 
+CMat3x3 Cinkes::CMat3x3::GetZero()
+{
+	CMat3x3 zero;
+	zero[0] = CVector3(0, 0, 0);
+	zero[1] = CVector3(0, 0, 0);
+	zero[2] = CVector3(0, 0, 0);
+	return zero;
+}
+
 CScalar CMat3x3::Determinant()
 {
 	CScalar part1 = m_Rows[0][0] * (m_Rows[1][1] * m_Rows[2][2] - m_Rows[1][2] * m_Rows[2][1]);
@@ -494,4 +503,18 @@ CMat3x3 CMat3x3::Scale(const CVector3& a_V)
 		m_Rows[0][0] * a_V[0], m_Rows[0][1] * a_V[1], m_Rows[0][2] * a_V[2],
 		m_Rows[1][0] * a_V[0], m_Rows[1][1] * a_V[1], m_Rows[1][2] * a_V[2],
 		m_Rows[2][0] * a_V[0], m_Rows[2][1] * a_V[1], m_Rows[2][2] * a_V[2]);
+}
+
+void Cinkes::CMat3x3::SetIdentity()
+{
+	m_Rows[0] = CVector3(1, 0, 0);
+	m_Rows[1] = CVector3(0, 1, 0);
+	m_Rows[2] = CVector3(0, 0, 1);
+}
+
+void Cinkes::CMat3x3::SetZero()
+{
+	m_Rows[0] = CVector3(0, 0, 0);
+	m_Rows[1] = CVector3(0, 0, 0);
+	m_Rows[2] = CVector3(0, 0, 0);
 }
