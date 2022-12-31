@@ -47,23 +47,18 @@ namespace UnitTest {
 		TEST_METHOD(EPANormal) {
 			CGJKAlgorithm gjk;
 			CEPA epa;
-
-			std::shared_ptr<CBoxShape> shape = std::make_shared<CBoxShape>(5, 2, 3);
-			std::shared_ptr<CBoxShape> shape1 = std::make_shared<CBoxShape>(3, 2, 3);
-			std::shared_ptr<CCollisionObject> object1 = std::make_shared<CCollisionObject>(CVector3(5,7,2), shape);
-
-			CTransform transform = CTransform(CMat3x3(1,0,0,
-													0, 0.71, -0.71,
-													0, 0.71, 0.71), CVector3(5, 6, 2));
-			std::shared_ptr<CCollisionObject> object2 = std::make_shared<CCollisionObject>(transform, shape1);
-
+			CTransform transform = CTransform(CMat3x3(0.71, 0, 0.71, 0, 1, 0, -0.71, 0, 0.71), CVector3(5, 13, 2));
+			std::shared_ptr<CBoxShape> shape1 = std::make_shared<CBoxShape>(7, 5, 8);
+			std::shared_ptr<CBoxShape> shape2 = std::make_shared<CBoxShape>(5, 5, 5);
+			std::shared_ptr<CCollisionObject> object1 = std::make_shared<CCollisionObject>(CVector3(5, 7, 2), shape1);
+			std::shared_ptr<CCollisionObject> object2 = std::make_shared<CCollisionObject>(transform, shape2);
 			CSimplex simplex;
 			std::shared_ptr<CInternalContactInfo> info = std::make_shared<CInternalContactInfo>();
 			gjk.Algorithm(object1.get(), object2.get(), simplex);
-
 			info->m_First = object1;
+			object1->SetHasContact(info.get());
+			object2->SetHasContact(info.get());
 			info->m_Second = object2;
-
 			epa.Algorithm(info.get(), simplex);
 
 			Assert::IsTrue(info.get()->m_Normal == CVector3(0, 1, 0) || info.get()->m_Normal == CVector3(0,-1,0));

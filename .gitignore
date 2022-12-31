@@ -420,3 +420,7 @@ FodyWeavers.xsd
 /CinkesApp/OgreAssimpConverter_d.exe
 /CinkesApp/DefaultSamples_d.dll
 /CinkesApp/Codec_STBI_d.dll
+/CinkesRenderer/include/glm
+/CinkesRenderer/include
+/CinkesRenderer/glad.c
+*.h
