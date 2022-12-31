@@ -1,132 +1,331 @@
 #include "CMatrix.h"
+
 #include <cassert>
-Cinkes::CMatrix::CMatrix(unsigned a_Rows, unsigned a_Columns)
+
+#include "CUtils.h"
+
+Cinkes::CMatrix::CMatrix(size_t a_Rows, size_t a_Columns)
 {
-	std::vector<CScalar> temp;
-	for (unsigned i = 0; i < a_Columns; i++) {
-		temp.push_back(0);
-	}
-	for (unsigned i = 0; i < a_Rows; i++) {
+	for(size_t i = 0; i < a_Rows; i++)
+	{
+		std::vector<CScalar> temp = std::vector<CScalar>(a_Columns);
+		temp[static_cast<size_t>(i) * a_Columns] = 1;
+		for(size_t j = 0; j < a_Columns; j++)
+		{
+			if (j != i * a_Columns) { temp[j] = 0; }
+		}
 		m_Values.push_back(temp);
 	}
 }
 
-Cinkes::CMatrix::CMatrix()
+Cinkes::CMatrix::CMatrix(const CMatrix& a_Rhs)
 {
+	m_Values = a_Rhs.m_Values;
 }
 
-std::vector<CScalar> Cinkes::CMatrix::operator[](unsigned a_Row) const
+Cinkes::CMatrix::CMatrix(CMatrix&& a_Rhs) noexcept
 {
-	assert(a_Row < m_Values.size());
-	return m_Values[a_Row];
+	m_Values = a_Rhs.m_Values;
 }
 
-std::vector<CScalar>& Cinkes::CMatrix::operator[](unsigned a_Row)
+Cinkes::CMatrix& Cinkes::CMatrix::operator=(CMatrix&& a_Rhs) noexcept
 {
-	assert(a_Row < m_Values.size());
-	return m_Values[a_Row];
+	m_Values = a_Rhs.m_Values;
+	return *this;
 }
 
-Cinkes::CMatrix Cinkes::CMatrix::operator*(const CMatrix& a_Other)
+bool Cinkes::CMatrix::operator==(const CMatrix& a_Rhs) const
 {
-	CMatrix values = CMatrix(m_Values.size(), a_Other[0].size());
-
-	for (int i = 0; i < m_Values.size(); i++) {
-		for (int j = 0; j < a_Other[0].size(); j++) {
-			values.m_Values[i][j] = Dot(m_Values[i], m_Values[j]);
-		}
-	}
-
-	return values;
-}
-
-void Cinkes::CMatrix::Set(std::vector<std::vector<CScalar>> a_New, int a_StartingRow = 0, int a_StartingColumn = 0)
-{
-	assert(a_StartingRow < m_Values.size());
-	assert(a_StartingColumn < m_Values[0].size());
-
-	if (a_StartingRow < 0 || a_StartingColumn < 0) {
-		for (int i = 0; i < m_Values.size(); i++) {
-			for (int j = 0; j < m_Values[i].size(); j++) {
-				m_Values[i][j] = 0;
+	for(size_t i = 0; i < a_Rhs.m_Values.size(); i++)
+	{
+		for(size_t j = 0; j < a_Rhs.m_Values[i].size(); j++)
+		{
+			if(CUtils::Abs(m_Values[i][j] - a_Rhs[i][j]) > CEPSILON)
+			{
+				return false;
 			}
 		}
 	}
-
-	for (unsigned i = a_StartingRow; i < a_New.size(); i++) {
-		if (i >= m_Values.size() - 1) { break; }
-
-		for (unsigned j = a_StartingColumn; j < a_New[i].size(); j++) {
-			if (j >= m_Values[i].size() - 1) { break; }
-			m_Values[i][j] = a_New[i - a_StartingRow][j - a_StartingColumn];
-		}
-	}
+	return true;
 }
 
-void Cinkes::CMatrix::Resize(unsigned a_NewRows, unsigned a_NewColumns, bool a_Reset)
+bool Cinkes::CMatrix::operator!=(const CMatrix& a_Rhs) const
 {
-	std::vector<std::vector<CScalar>> new_matrix;
-	if (a_Reset) {
-		m_Values.clear();
-		std::vector<CScalar> temp;
-		for (unsigned i = 0; i < a_NewColumns; i++) {
-			temp.push_back(0);
-		}
-		for (unsigned i = 0; i < a_NewRows; i++) {
-			m_Values.push_back(temp);
-		}
-		
-		return;
-	}
-
-	std::vector<CScalar> temp;
-	for (int i = 0; i < a_NewRows; i++) 
+	for (size_t i = 0; i < a_Rhs.m_Values.size(); i++)
 	{
-		new_matrix.push_back(temp);
-
-		for (int j = 0; j < a_NewColumns; j++) 
+		for (size_t j = 0; j < a_Rhs.m_Values[i].size(); j++)
 		{
-			if(j > m_Values[i].size() -1) { new_matrix[i].push_back(0); }
-			else { new_matrix[i].push_back(m_Values[i][j]); }
+			if (CUtils::Abs(m_Values[i][j] - a_Rhs[i][j]) < CEPSILON)
+			{
+				return false;
+			}
 		}
 	}
-	m_Values = new_matrix;
+	return true;
 }
 
-void Cinkes::CMatrix::SetZero()
+Cinkes::CMatrix& Cinkes::CMatrix::operator=(const CMatrix& a_Rhs)
+= default;
+
+Cinkes::CMatrix Cinkes::CMatrix::operator+(const CMatrix& a_Rhs)
 {
-	for (int i = 0; i < m_Values.size(); i++) {
-		for (int j = 0; j < m_Values[i].size(); j++) {
-			m_Values[i][j] = 0;
+	assert(a_Rhs.m_Values.size() == m_Values.size());
+	assert(a_Rhs.m_Values[0].size() == m_Values[0].size());
+	CMatrix added = CMatrix(m_Values.size(),m_Values[0].size());
+	for(size_t i = 0; i < m_Values.size(); i++)
+	{
+		for(size_t j = 0; j < m_Values[0].size(); j++)
+		{
+			added[i][j] = m_Values[i][j] + a_Rhs.m_Values[i][j];
+		}
+	}
+	return added;
+}
+
+void Cinkes::CMatrix::operator+=(const CMatrix& a_Rhs)
+{
+
+	assert(a_Rhs.m_Values.size() == m_Values.size());
+	assert(a_Rhs.m_Values[0].size() == m_Values[0].size());
+	for (size_t i = 0; i < m_Values.size(); i++)
+	{
+		for (size_t j = 0; j < m_Values[0].size(); j++)
+		{
+			m_Values[i][j] = m_Values[i][j] + a_Rhs.m_Values[i][j];
 		}
 	}
 }
 
-void Cinkes::CMatrix::SetIdentity()
+Cinkes::CMatrix Cinkes::CMatrix::operator+(const CScalar& a_Rhs)
 {
+	CMatrix added = CMatrix(m_Values.size(), m_Values[0].size());
+	for (size_t i = 0; i < m_Values.size(); i++)
+	{
+		for (size_t j = 0; j < m_Values[0].size(); j++)
+		{
+			added.m_Values[i][j] = m_Values[i][j] + a_Rhs;
+		}
+	}
+	return added;
 }
 
-CScalar Cinkes::CMatrix::Dot(std::vector<CScalar> a_Lhs, std::vector<CScalar> a_Rhs)
+void Cinkes::CMatrix::operator+=(const CScalar& a_Rhs)
 {
-	assert(a_Lhs.size() == a_Rhs.size());
-	CScalar value = 0;
+	for (auto& value : m_Values)
+	{
+		for (size_t j = 0; j < m_Values[0].size(); j++)
+		{
+			value[j] = value[j] + a_Rhs;
+		}
+	}
+}
 
-	for (int i = 0; i < a_Lhs.size(); i++) {
-		value += a_Lhs[i] * a_Rhs[i];
+Cinkes::CMatrix Cinkes::CMatrix::operator-(const CScalar& a_Rhs)
+{
+	CMatrix subbed = CMatrix(m_Values.size(), m_Values[0].size());
+	for (size_t i = 0; i < m_Values.size(); i++)
+	{
+		for (size_t j = 0; j < m_Values[0].size(); j++)
+		{
+			subbed.m_Values[i][j] = m_Values[i][j] - a_Rhs;
+		}
+	}
+	return subbed;
+}
+
+void Cinkes::CMatrix::operator-=(const CScalar& a_Rhs)
+{
+	for (auto& value : m_Values)
+	{
+		for (size_t j = 0; j < m_Values[0].size(); j++)
+		{
+			value[j] = value[j] - a_Rhs;
+		}
+	}
+}
+
+Cinkes::CMatrix Cinkes::CMatrix::operator-(const CMatrix& a_Rhs)
+{
+	assert(a_Rhs.m_Values.size() == m_Values.size());
+	assert(a_Rhs.m_Values[0].size() == m_Values[0].size());
+	CMatrix subbed = CMatrix(m_Values.size(), m_Values[0].size());
+	for (size_t i = 0; i < m_Values.size(); i++)
+	{
+		for (size_t j = 0; j < m_Values[0].size(); j++)
+		{
+			subbed[i][j] = m_Values[i][j] - a_Rhs.m_Values[i][j];
+		}
+	}
+	return subbed;
+}
+
+void Cinkes::CMatrix::operator-=(const CMatrix& a_Rhs)
+{
+	assert(a_Rhs.m_Values.size() == m_Values.size());
+	assert(a_Rhs.m_Values[0].size() == m_Values[0].size());
+	for (size_t i = 0; i < m_Values.size(); i++)
+	{
+		for (size_t j = 0; j < m_Values[0].size(); j++)
+		{
+			m_Values[i][j] = m_Values[i][j] - a_Rhs.m_Values[i][j];
+		}
+	}
+}
+
+Cinkes::CMatrix Cinkes::CMatrix::operator*(const CMatrix& a_Rhs)
+{
+	assert(m_Values[0].size() == a_Rhs.m_Values.size());
+
+	CMatrix result = CMatrix(m_Values.size(), a_Rhs.m_Values[0].size());
+
+	for(size_t n = 0; n < m_Values.size(); n++)
+	{
+		for(size_t j = 0; j < a_Rhs.m_Values[0].size(); j++)
+		{
+			CScalar sum = 0;
+			for(size_t k = 0; k < a_Rhs.m_Values[0].size(); k++)
+			{
+				sum += m_Values[j][k] * a_Rhs.m_Values[k][j];
+			}
+			result[n][j] = sum;
+		}
 	}
 
-	return value;
+	return result;
+}
+
+void Cinkes::CMatrix::operator*=(const CMatrix& a_Rhs)
+{
+	assert(m_Values[0].size() == a_Rhs.m_Values.size());
+
+	CMatrix result = CMatrix(m_Values.size(), a_Rhs.m_Values[0].size());
+
+	for (size_t n = 0; n < m_Values.size(); n++)
+	{
+		for (size_t j = 0; j < a_Rhs.m_Values[0].size(); j++)
+		{
+			CScalar sum = 0;
+			for (size_t k = 0; k < a_Rhs.m_Values[0].size(); k++)
+			{
+				sum += m_Values[j][k] * a_Rhs.m_Values[k][j];
+			}
+			result[n][j] = sum;
+		}
+	}
+
+	m_Values = result.m_Values;
+}
+
+Cinkes::CMatrix Cinkes::CMatrix::operator*(const CScalar& a_Rhs)
+{
+	CMatrix multiplied = CMatrix(m_Values.size(), m_Values[0].size());
+	for (size_t i = 0; i < m_Values.size(); i++)
+	{
+		for (size_t j = 0; j < m_Values[0].size(); j++)
+		{
+			multiplied.m_Values[i][j] = m_Values[i][j] * a_Rhs;
+		}
+	}
+	return multiplied;
+}
+
+void Cinkes::CMatrix::operator*=(const CScalar& a_Rhs)
+{
+	for (auto& value : m_Values)
+	{
+		for (size_t j = 0; j < m_Values[0].size(); j++)
+		{
+			value[j] = value[j] * a_Rhs;
+		}
+	}
+}
+
+std::vector<CScalar> Cinkes::CMatrix::operator[](size_t a_Row) const
+{
+	return m_Values[a_Row];
+}
+
+std::vector<CScalar>& Cinkes::CMatrix::operator[](size_t a_Row)
+{
+	return m_Values[a_Row];
+}
+
+void Cinkes::CMatrix::SetSize(size_t a_Rows, size_t a_Columns, bool a_KeepValues)
+{
+	if(a_KeepValues)
+	{
+		std::vector<std::vector<CScalar>> new_values;
+		for(size_t i = 0; i < a_Rows; i++)
+		{
+			std::vector<CScalar> temp;
+			for(size_t j = 0; j < a_Columns; j++)
+			{
+				if(m_Values.size() <= a_Rows && m_Values[0].size() <= a_Columns)
+				{
+					temp.push_back(m_Values[i][j]);
+				}
+			}
+			new_values.push_back(temp);
+		}
+	}
+	else
+	{
+		*this = CMatrix(a_Rows, a_Columns);
+	}
+}
+
+std::vector<CScalar> Cinkes::CMatrix::GetRow(size_t a_Row)
+{
+	return m_Values[a_Row];
+}
+
+std::vector<CScalar> Cinkes::CMatrix::GetRow(size_t a_Row) const
+{
+	return m_Values[a_Row];
+}
+
+std::vector<CScalar> Cinkes::CMatrix::GetColumn(size_t a_Column)
+{
+	std::vector<CScalar> column;
+	for (auto& value : m_Values)
+	{
+		column.push_back(value[a_Column]);
+	}
+	return column;
+}
+
+std::vector<CScalar> Cinkes::CMatrix::GetColumn(size_t a_Column) const
+{
+	std::vector<CScalar> column;
+	for (const auto& value : m_Values)
+	{
+		column.push_back(value[a_Column]);
+	}
+	return column;
+}
+
+void Cinkes::CMatrix::SetColumn(size_t a_Num, const std::vector<CScalar>& a_Column)
+{
+	for(size_t i = 0; i < m_Values.size(); i++)
+	{
+		m_Values[i][a_Num] = a_Column[i];
+	}
 }
 
 Cinkes::CMatrix Cinkes::CMatrix::Transpose()
 {
-	CMatrix matrix = CMatrix(m_Values[0].size(), m_Values.size());
-
-	for (int i = 0; i < m_Values.size(); i++) {
-		for (int j = 0; j < m_Values[i].size(); j++) {
-			matrix[j][i] = m_Values[i][j];
-		}
+	CMatrix new_matrix = CMatrix(m_Values[0].size(), m_Values.size());
+	for(size_t i = 0; i < m_Values[0].size(); i++)
+	{
+		new_matrix[i] = GetColumn(i);
 	}
+	return new_matrix;
+}
 
-	return matrix;
+Cinkes::CMatrix Cinkes::CMatrix::GetInverse()
+{
+	//TODO Finish this
+	assert(m_Values.size() == m_Values[0].size());
+	CMatrix new_matrix;
+	return new_matrix;
 }

@@ -42,7 +42,7 @@
     <ClCompile Include="CSpringForceGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CTestResolver.cpp">
+    <ClCompile Include="CCollisionResolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,7 +71,7 @@
     <ClInclude Include="CSpringForceGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CTestResolver.h">
+    <ClInclude Include="CCollisionResolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,5 @@
 #pragma once
 #include "CForceGeneratorRegistry.h"
-#include "CTestResolver.h"
 #include "CCollisionResolver.h"
 #include "CCollisionWorld.h"
 
@@ -37,7 +36,6 @@ namespace Cinkes
 		std::vector<std::shared_ptr<CSprings>> m_Springs;
 		std::vector<std::shared_ptr<CRigidBody>> m_RigidBodies;
 		std::shared_ptr<CCollisionResolver> m_Resolver;
-		std::shared_ptr<CTestResolver> m_TestResolver;
 	};
 
 

@@ -22,14 +22,16 @@ namespace Cinkes {
 
 		void FindReference();
 		void FindIncident();
-		void FindSidePlanes();
-		void Clip();
+		void FindRefSidePlanes();
+		void FindIncSidePlanes();
+		void Clip(CFace& a_Face, std::vector<CVector3>& a_Box, std::vector<CPlane>& a_Planes, int a_Index);
 		void CreateIncidentLines();
 
 		CFace m_ReferenceFace;
 		CFace m_IncidentFace;
 		CInternalContactInfo* m_Info;
-		std::vector<CPlane> m_Planes;
+		std::vector<CPlane> m_RefSidePlanes;
+		std::vector<CPlane> m_IncSidePlanes;
 		std::vector<std::pair<CVector3, CVector3>> m_Lines;
 		CVector3 m_Sides[6];
 		CVector3 m_LocalNormal;
