@@ -32,13 +32,13 @@ namespace Cinkes {
 				m_Update[1] = false;
 			}
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-				m_Camera->ProcessKeyboard(FORWARD, deltaTime);
+				m_Camera->ProcessKeyboard(E_CAMERAMOVEMENT_FORWARD, deltaTime);
 			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-				m_Camera->ProcessKeyboard(BACKWARD, deltaTime);
+				m_Camera->ProcessKeyboard(E_CAMERAMOVEMENT_BACKWARD, deltaTime);
 			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-				m_Camera->ProcessKeyboard(LEFT, deltaTime);
+				m_Camera->ProcessKeyboard(E_CAMERAMOVEMENT_LEFT, deltaTime);
 			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-				m_Camera->ProcessKeyboard(RIGHT, deltaTime);
+				m_Camera->ProcessKeyboard(E_CAMERAMOVEMENT_RIGHT, deltaTime);
 		}
 		bool m_Update[2] = { false, false };
 		float m_MouseMovement[2] = { 0, 0 };
