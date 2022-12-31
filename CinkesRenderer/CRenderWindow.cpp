@@ -18,7 +18,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 // -------------------------------------------------------
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
-    CInputHandler* input =  static_cast<CInputHandler*>(glfwGetWindowUserPointer(window));
+    Cinkes::CInputHandler* input =  static_cast<Cinkes::CInputHandler*>(glfwGetWindowUserPointer(window));
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
 
@@ -41,22 +41,22 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 // ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    CInputHandler* input = static_cast<CInputHandler*>(glfwGetWindowUserPointer(window));
+    Cinkes::CInputHandler* input = static_cast<Cinkes::CInputHandler*>(glfwGetWindowUserPointer(window));
     input->AddMouseScrollToQueue(yoffset);
 }
 
-CRenderWindow::CRenderWindow(int a_Width, int a_Height, int a_Version_Major, int a_Version_Minor)
+Cinkes::CRenderWindow::CRenderWindow(int a_Width, int a_Height, int a_Version_Major, int a_Version_Minor)
 {
     InitializeWindow(800, 600, a_Version_Major, a_Version_Minor);
 }
 
-CRenderWindow::~CRenderWindow()
+Cinkes::CRenderWindow::~CRenderWindow()
 {
     //delete m_Input;
     glfwTerminate();
 }
 
-bool CRenderWindow::InitializeWindow(int a_Width, int a_Height, int a_Version_Major, int a_Version_Minor)
+bool Cinkes::CRenderWindow::InitializeWindow(int a_Width, int a_Height, int a_Version_Major, int a_Version_Minor)
 {
 
     glfwInit();
@@ -93,7 +93,7 @@ bool CRenderWindow::InitializeWindow(int a_Width, int a_Height, int a_Version_Ma
 }
 
 
-void CRenderWindow::Run()
+void Cinkes::CRenderWindow::Run()
 {
     while (!glfwWindowShouldClose(m_Window))
     {
@@ -127,11 +127,11 @@ void CRenderWindow::Run()
     }
 }
 
-void CRenderWindow::Update()
+void Cinkes::CRenderWindow::Update()
 {
 }
 
-bool CRenderWindow::AddRenderShape(std::shared_ptr<CRenderShape>& a_Shape)
+bool Cinkes::CRenderWindow::AddRenderShape(std::shared_ptr<CRenderShape>& a_Shape)
 {
     auto found = std::find(m_Shapes.begin(), m_Shapes.end(), a_Shape);
     if (found == m_Shapes.end()) {
@@ -142,7 +142,7 @@ bool CRenderWindow::AddRenderShape(std::shared_ptr<CRenderShape>& a_Shape)
     return false;
 }
 
-bool CRenderWindow::RemoveRenderShapeByObject(std::shared_ptr<CRenderShape>& a_Shape)
+bool Cinkes::CRenderWindow::RemoveRenderShapeByObject(std::shared_ptr<CRenderShape>& a_Shape)
 {
     auto found = std::find(m_Shapes.begin(), m_Shapes.end(), a_Shape);
     if (found != m_Shapes.end()) {
@@ -153,7 +153,7 @@ bool CRenderWindow::RemoveRenderShapeByObject(std::shared_ptr<CRenderShape>& a_S
     return false; 
 }
 
-bool CRenderWindow::RemoveRenderShapeByIndex(unsigned int a_Index)
+bool Cinkes::CRenderWindow::RemoveRenderShapeByIndex(unsigned int a_Index)
 {
     if (a_Index > m_Shapes.size()) {
         auto found = std::find(m_Shapes.begin(), m_Shapes.end(), m_Shapes[a_Index]);

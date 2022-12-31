@@ -3,15 +3,16 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include "CShader.h"
-
-class CTexture
+namespace Cinkes
 {
-public:
-	CTexture() = default;
-	~CTexture() = default;
+	class CTexture
+	{
+	public:
+		CTexture() = default;
+		~CTexture() = default;
 
-	bool CreateTexture(CShader* a_Shader, std::string a_Path);
+		bool CreateTexture(CShader* a_Shader, std::string a_Path);
 
-	GLuint m_Texture;
+		GLuint m_Texture;
+	};
 };
-

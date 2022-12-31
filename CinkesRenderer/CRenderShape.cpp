@@ -1,7 +1,7 @@
 #include "CRenderShape.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <string>
-CRenderShape::CRenderShape()
+Cinkes::CRenderShape::CRenderShape()
 {
     m_Vertices = {
     -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -55,7 +55,7 @@ CRenderShape::CRenderShape()
     m_Transform = glm::translate(m_Transform, glm::vec3(0,0,-10));
 }
 
-int CRenderShape::CreateVBO()
+int Cinkes::CRenderShape::CreateVBO()
 {
     glGenVertexArrays(1, &m_VAO);
     glGenBuffers(1, &m_VBO);
@@ -74,13 +74,13 @@ int CRenderShape::CreateVBO()
     return m_VBO;
 }
 
-bool CRenderShape::LoadTexture(std::string a_Path, CShader* a_Shader)
+bool Cinkes::CRenderShape::LoadTexture(std::string a_Path, CShader* a_Shader)
 {
     m_Texture = std::make_shared<CTexture>();
     return m_Texture->CreateTexture(a_Shader, a_Path);
 }
 
-glm::mat4 CRenderShape::Convert()
+glm::mat4 Cinkes::CRenderShape::Convert()
 {
     return glm::mat4();
 }

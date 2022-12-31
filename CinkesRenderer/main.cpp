@@ -1,10 +1,9 @@
 #pragma once
 #include "CRenderWindow.h"
-#include "CShaderHandler.h"
 #include "CRenderShape.h"
 int main()
 {
-
+    using namespace Cinkes;
     std::vector<glm::vec3> cubePositions = {
     glm::vec3(0.0f,  0.0f,  0.0f),
     glm::vec3(2.0f,  5.0f, -15.0f),

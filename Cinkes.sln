@@ -23,6 +23,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CinkesPhysics", "CinkesPhys
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CinkesRenderer", "CinkesRenderer\CinkesRenderer.vcxproj", "{C3E5B403-668B-4E71-8DB1-A17AE453BF26}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3B27A253-A4C5-4D98-90E4-40F39FC5A7F7} = {3B27A253-A4C5-4D98-90E4-40F39FC5A7F7}
+		{A5E53787-D5B7-4922-93C3-9482A22ACF79} = {A5E53787-D5B7-4922-93C3-9482A22ACF79}
+		{EB1704ED-E28A-46CD-9402-F0DA1D92989D} = {EB1704ED-E28A-46CD-9402-F0DA1D92989D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
