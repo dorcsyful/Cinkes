@@ -1,6 +1,6 @@
 #ifndef SHADER_H
 #define SHADER_H
-
+#pragma once
 #include <glad/glad.h>
 
 #include <string>
@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iostream>
 #include <glm/glm.hpp>
+#include "CRenderDefines.h"
 namespace Cinkes
 {
     class CShader
@@ -16,7 +17,7 @@ namespace Cinkes
         unsigned int ID;
         // constructor generates the shader on the fly
         // ------------------------------------------------------------------------
-        CShader(const char* vertexPath, const char* fragmentPath)
+        CShader()
         {
             // 1. retrieve the vertex/fragment source code from filePath
             std::string vertexCode;
@@ -29,8 +30,8 @@ namespace Cinkes
             try
             {
                 // open files
-                vShaderFile.open(vertexPath);
-                fShaderFile.open(fragmentPath);
+                vShaderFile.open(VERTEX_SHADER);
+                fShaderFile.open(FRAGMENT_SHADER);
                 std::stringstream vShaderStream, fShaderStream;
                 // read file's buffer contents into streams
                 vShaderStream << vShaderFile.rdbuf();

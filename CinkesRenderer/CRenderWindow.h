@@ -1,24 +1,22 @@
 #pragma once
 #include <vector>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <iostream>
-#include "CShader.h"
-#include "CRenderShape.h"
-#include "CTexture.h"
-
+#include <memory>
+#include "CRenderDefines.h"
 #include "CInputHandler.h"
+#include "CRenderShape.h"
+
+class GLFWwindow;
+
 namespace Cinkes
 {
 	class CRenderWindow
 	{
 	public:
 		CRenderWindow() { m_Input = std::make_shared<CInputHandler>(); };
-		CRenderWindow(int a_Width, int a_Height, int a_Version_Major = 4, int a_Version_Minor = 6);
 
 		~CRenderWindow();
 
-		bool InitializeWindow(int a_Width, int a_Height, int a_Version_Major, int a_Version_Minor);
+		bool InitializeWindow();
 		void Run();
 		void Update();
 

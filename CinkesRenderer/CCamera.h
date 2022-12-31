@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CAMERA_H
 #define CAMERA_H
 
@@ -10,6 +11,7 @@
 
 #include <vector>
 #include "CCameraSettings.h"
+#include "CRenderDefines.h"
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
 
 
@@ -91,7 +93,7 @@ namespace Cinkes {
 
         glm::mat4 GetProjectionMatrix()
         {
-            return glm::perspective(glm::radians(45.f), (float)800 / (float)600, 0.1f, 100.0f);;
+            return glm::perspective(glm::radians(45.f), WIDTH / HEIGHT, 0.1f, 100.0f);;
         }
 
         // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)

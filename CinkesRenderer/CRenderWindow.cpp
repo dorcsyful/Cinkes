@@ -1,9 +1,14 @@
-#include "CRenderWindow.h"
+#pragma once
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <GLFW/glfw3.h>
 #include "CCamera.h"
+#include "CShader.h"
+#include "CTexture.h"
+#include "CRenderWindow.h"
+
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -44,27 +49,20 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
     Cinkes::CInputHandler* input = static_cast<Cinkes::CInputHandler*>(glfwGetWindowUserPointer(window));
     input->AddMouseScrollToQueue(yoffset);
 }
-
-Cinkes::CRenderWindow::CRenderWindow(int a_Width, int a_Height, int a_Version_Major, int a_Version_Minor)
-{
-    InitializeWindow(800, 600, a_Version_Major, a_Version_Minor);
-}
-
 Cinkes::CRenderWindow::~CRenderWindow()
 {
     //delete m_Input;
     glfwTerminate();
 }
 
-bool Cinkes::CRenderWindow::InitializeWindow(int a_Width, int a_Height, int a_Version_Major, int a_Version_Minor)
+bool Cinkes::CRenderWindow::InitializeWindow()
 {
-
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, a_Version_Major);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, a_Version_Minor);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VERSION_MAJOR);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VERSION_MINOR);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    m_Window = glfwCreateWindow(a_Width, a_Height, "CinkesRenderer", NULL, NULL);
+    m_Window = glfwCreateWindow(WIDTH, HEIGHT, "CinkesRenderer", NULL, NULL);
     if (m_Window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -85,7 +83,7 @@ bool Cinkes::CRenderWindow::InitializeWindow(int a_Width, int a_Height, int a_Ve
         return false;
     }
     glEnable(GL_DEPTH_TEST);
-    m_Shader = std::make_shared<CShader>("resources/shaders/CShader.vs","resources/shaders/CShader.fss");
+    m_Shader = std::make_shared<CShader>();
 
     glfwSetWindowUserPointer(m_Window, m_Input.get());
 
