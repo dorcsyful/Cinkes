@@ -27,7 +27,7 @@ namespace Cinkes
 	{
 	public:
 		//Subgroup: Constructors {
-		CCollisionShape() = default;
+		CCollisionShape() { m_Type = ESHAPE_TYPE::SHAPE_NO_TYPE; };
 		virtual ~CCollisionShape() = default;
 		CCollisionShape(const CCollisionShape& a_Rhs) = default;
 		CCollisionShape(CCollisionShape&& a_Rhs) = default;
@@ -47,7 +47,7 @@ namespace Cinkes
 		//}
 
 	protected:
-		ESHAPE_TYPE m_Type = ESHAPE_TYPE::SHAPE_NO_TYPE;
+		ESHAPE_TYPE m_Type;
 	};
 
 }

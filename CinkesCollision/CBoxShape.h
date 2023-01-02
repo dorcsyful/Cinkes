@@ -14,11 +14,13 @@ namespace Cinkes
 	{
 	public:
 		//Subgroup: Constructors {
-		CBoxShape() {m_Type = ESHAPE_TYPE::SHAPE_BOX; }
+		CBoxShape() { m_Type = ESHAPE_TYPE::SHAPE_BOX; }
 		CBoxShape(CVector3 a_Dimensions) {
+			m_Type = ESHAPE_TYPE::SHAPE_BOX;
 			SetDimensions(a_Dimensions);
 		}
 		CBoxShape(const CScalar a_X, const CScalar a_Y, const CScalar a_Z) { 
+			m_Type = ESHAPE_TYPE::SHAPE_BOX;
 			SetDimensions(a_X,a_Y,a_Z);
 		}
 		~CBoxShape() override = default;

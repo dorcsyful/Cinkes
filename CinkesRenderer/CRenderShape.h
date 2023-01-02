@@ -28,11 +28,13 @@ namespace Cinkes
 		glm::mat4 GetTransform() { return m_Transform; }
 		CTexture* GetTexture() { return m_Texture.get(); }
 
+		std::vector<float> m_Vertices;
+		std::vector<int> m_Indices;
+
 	private:
 		std::shared_ptr<CTexture> m_Texture;
 		glm::mat4 m_Transform;
-		std::vector<float> m_Vertices;
-		std::vector<int> m_Indices;
+
 		GLuint m_VBO;
 		GLuint m_VAO;
 		GLuint m_EBO;

@@ -114,7 +114,7 @@ void Cinkes::CRenderWindow::Run()
             m_Shader->setMat4("view", m_Input->m_Camera->GetViewMatrix());    
             m_Shader->setMat4("model", current->GetTransform());
             glm::vec3 position = current->GetTransform()[3];
-            //std::cout << position[0] << " " << position[1] << " " << position[2] << std::endl;
+            std::cout << position[0] << " " << position[1] << " " << position[2] << std::endl;
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
