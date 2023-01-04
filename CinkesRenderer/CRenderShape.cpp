@@ -3,56 +3,12 @@
 #include <string>
 Cinkes::CRenderShape::CRenderShape()
 {
-    //m_Vertices = {
-    //-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-    // 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-    // 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    // 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    //-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    //-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-    //-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    // 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    // 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    // 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    //-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-    //-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-    //-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    //-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    //-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    //-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-    // 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    // 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    // 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    // 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    // 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    // 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-    //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    // 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-    // 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    // 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    //-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-    //-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    // 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    // 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    // 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    //-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-    //-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    //};
-    //m_Indices = {
-    //    0, 1, 3, // first triangle
-    //    1, 2, 3  // second triangle
-    //};
+    m_Transform = glm::mat4(1.f);
     m_Transform = glm::mat4(1.f);
     m_Transform = glm::rotate(glm::mat4(1.0f), glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    m_Transform = glm::translate(m_Transform, glm::vec3(0,0,-10));
+    m_Transform = glm::translate(m_Transform, glm::vec3(0, 0, -10));
+
 }
 
 int Cinkes::CRenderShape::CreateVBO()
@@ -63,13 +19,13 @@ int Cinkes::CRenderShape::CreateVBO()
     glBindVertexArray(m_VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m_Vertices.size(), m_Vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * m_Vertices.size(), m_Vertices.data(), GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(CVertex), (void*)0);
     glEnableVertexAttribArray(0);
     // texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(CVertex), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
     return m_VBO;
 }
