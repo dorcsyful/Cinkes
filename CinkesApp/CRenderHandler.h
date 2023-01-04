@@ -46,7 +46,14 @@ namespace Cinkes
 
 		CObjectWrapper GetWrapperByCollisionRef(std::shared_ptr<CCollisionObject>& a_Collision);
 		CObjectWrapper GetWrapperByRenderRef(std::shared_ptr<CRenderShape>& a_Render);
-		CObjectWrapper GetWrapperByIndex(int a_Index);
+		CObjectWrapper GetWrapperByIndex(int a_Index) { return m_Objects[a_Index]; }
+
+		/*Can be called from anywhere, if the project is set as a dependency.
+		For best results create a (global) window object and pass it to the function.
+		Otherwise the window will be closed and recreated every time the function is called*/
+		static void DebugDraw(const std::vector<std::vector<CVector3>>& a_Vertices, const std::vector<std::vector<int>>& a_Indices,
+			const std::vector<std::vector<CVector3>>& a_Normals, const std::vector<CTransform>& a_Transforms,
+			float a_Wait = 5.f, CRenderWindow* a_Window = nullptr);
 
 		std::shared_ptr<CRenderWindow> m_Window;
 

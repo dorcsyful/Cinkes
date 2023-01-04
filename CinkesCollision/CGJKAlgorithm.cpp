@@ -11,11 +11,11 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
 {
     CVector3 next = CVector3(1, 0, 0);
     CVector3 A = a_Object1->GetTransform().getBasis() *
-        (a_Object1->GetCollisionShape()->Support(a_Object1->GetTransform().getBasis().Transpose() * next))
+        a_Object1->GetCollisionShape()->Support(a_Object1->GetTransform().getBasis().Transpose() * next)
         + a_Object1->GetTransform().getOrigin();
     CVector3 B = a_Object2->GetTransform().getBasis() *
-        (a_Object2->GetCollisionShape()->Support(a_Object2->GetTransform().getBasis().Transpose() * (next * -1)))
-        + a_Object2->GetTransform().getOrigin();
+        a_Object2->GetCollisionShape()->Support(a_Object2->GetTransform().getBasis().Transpose() *
+            (next * (-1))) + a_Object2->GetTransform().getOrigin();
     CVector3 support = A - B;
 
     CSimplex simplex;
@@ -26,12 +26,12 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
     while(true)
     {
         next.Normalize();
-        A = a_Object1->GetTransform().getBasis() * 
+        A = a_Object1->GetTransform().getBasis() *
             a_Object1->GetCollisionShape()->Support(a_Object1->GetTransform().getBasis().Transpose() * next)
             + a_Object1->GetTransform().getOrigin();
-        B = a_Object2->GetTransform().getBasis() * 
-            a_Object2->GetCollisionShape()->Support(a_Object2->GetTransform().getBasis().Transpose() * (next * -1))
-            + a_Object2->GetTransform().getOrigin();
+        B = a_Object2->GetTransform().getBasis() *
+            a_Object2->GetCollisionShape()->Support(a_Object2->GetTransform().getBasis().Transpose() *
+                (next * (-1))) + a_Object2->GetTransform().getOrigin();
         support = A - B;
 
     	if(support.Dot(next) <= 0)
@@ -59,7 +59,7 @@ bool Cinkes::CGJKAlgorithm::NextPoint(CSimplex& a_Simplex, CVector3& a_Direction
     case 2: return Line(a_Simplex, a_Direction);
     case 3: return Triangle(a_Simplex, a_Direction);
     case 4: return Tetrahedron(a_Simplex, a_Direction);
-    default: return false;
+
 	}
 }
 

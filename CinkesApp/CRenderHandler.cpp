@@ -202,7 +202,11 @@ Cinkes::CObjectWrapper Cinkes::CRenderHandler::GetWrapperByRenderRef(std::shared
 	return CObjectWrapper();
 }
 
-Cinkes::CObjectWrapper Cinkes::CRenderHandler::GetWrapperByIndex(int a_Index)
+void Cinkes::CRenderHandler::DebugDraw(const std::vector<std::vector<CVector3>>& a_Vertices, const std::vector<std::vector<int>>& a_Indices, const std::vector<std::vector<CVector3>>& a_Normals, const std::vector<CTransform>& a_Transforms, float a_Wait, CRenderWindow* a_Window)
 {
-	return m_Objects[a_Index];
+	if (a_Window == nullptr) 
+	{
+
+	}
 }
+

@@ -142,15 +142,10 @@ void Cinkes::CEPA::AddUniqueEdge(std::vector<std::pair<size_t, size_t>>& a_Edges
 	//Actual return value: std::vector<std::pair<unsigned, unsigned>>::iterator
 	auto reverse = std::find(a_Edges.begin(), a_Edges.end(),
 		std::make_pair(a_Faces[a_B], a_Faces[a_A]));
-	auto duplicate = std::find(a_Edges.begin(), a_Edges.end(),
-		std::make_pair(a_Faces[a_A], a_Faces[a_B]));
+
 	if(reverse != a_Edges.end())
 	{
 		a_Edges.erase(reverse);
-	}
-	else if (duplicate != a_Edges.end())
-	{
-		a_Edges.erase(duplicate);
 	}
 	else
 	{

@@ -1,4 +1,5 @@
 #pragma once
+
 #define WIDTH 800.f
 #define HEIGHT 600.f
 #define OPENGL_VERSION_MAJOR 4
