@@ -2,7 +2,7 @@
 #include "CBoxBoxCollision.h"
 #include "CCollisionObject.h"
 #include "CBoxShape.h"
-
+#include "CUtils.h"
 //Order of indices:
 // 0 -> (-1, -1, -1)
 // 1 -> (-1, -1,  1)

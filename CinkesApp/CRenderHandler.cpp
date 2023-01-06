@@ -1,5 +1,6 @@
 #include "CRenderHandler.h"
 #include "CBoxShape.h"
+#include "CQuaternion.h"
 void Cinkes::CObjectWrapper::CreateRenderShape()
 {
 	m_RenderObject = std::make_shared<CRenderShape>();
@@ -14,7 +15,7 @@ void Cinkes::CObjectWrapper::RunVertexConverter()
 void Cinkes::CObjectWrapper::ConvertBoxToVertices()
 {
 	CVector3 dimensions = static_cast<CBoxShape*>(m_CollisionObject->GetCollisionShape().get())->GetDimensions();
-
+	//CVertex first = CVertex(-3.7071f, 1.9497f,6.f);
 	m_RenderObject->m_Vertices = {
 		CVertex(-dimensions[0], -dimensions[1], -dimensions[2],  0.0f, 0.0f),
 		 CVertex(dimensions[0], -dimensions[1], -dimensions[2],  1.0f, 0.0f),
@@ -94,6 +95,7 @@ bool Cinkes::CRenderHandler::RegisterObject(std::shared_ptr<CCollisionObject> a_
 		object.m_RenderObject->CreateVBO();
 		object.m_RenderObject->LoadTexture(TEXTURE, m_Window->m_Shader.get());
 		m_Objects.push_back(object);
+		ConvertTransforms();
 	return true;
 }
 
@@ -122,12 +124,15 @@ void Cinkes::CRenderHandler::ConvertTransforms()
 	{
 		CVector3 collisionLocation = current.m_CollisionObject->GetTransform().getOrigin();
 		CMat3x3 collisionRotation = current.m_CollisionObject->GetTransform().getBasis();
-		glm::mat4 render = current.m_RenderObject->GetTransform();
 		glm::mat4 converted = glm::mat4(1.f);
-		converted[0] = glm::vec4(collisionRotation[0][0], collisionRotation[0][1], collisionRotation[0][2], 1.f);
-		converted[1] = glm::vec4(collisionRotation[1][0], collisionRotation[1][1], collisionRotation[1][2], 1.f);
-		converted[2] = glm::vec4(collisionRotation[2][0], collisionRotation[2][1], collisionRotation[2][2], 1.f);
-		converted[3] = glm::vec4(collisionLocation[0], collisionLocation[1], collisionLocation[2], 1.f);
+		glm::vec3 location = glm::vec3(collisionLocation[0], collisionLocation[1], collisionLocation[2]);
+		converted = glm::translate(converted, location);
+
+		converted[0][0] = collisionRotation[0][0]; converted[0][1] = collisionRotation[1][0]; converted[0][2] = collisionRotation[2][0];
+		converted[1][0] = collisionRotation[0][1]; converted[1][1] = collisionRotation[1][1]; converted[1][2] = collisionRotation[2][1];
+		converted[2][0] = collisionRotation[0][2]; converted[2][1] = collisionRotation[1][2]; converted[2][2] = collisionRotation[2][2];
+
+		current.m_RenderObject->SetTransform(converted);
 	}
 }
 

@@ -93,6 +93,7 @@ bool Cinkes::CRenderWindow::InitializeWindow()
 
 void Cinkes::CRenderWindow::Run()
 {
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     while (!glfwWindowShouldClose(m_Window))
     {
         m_Input->ProcessInput(m_Window);

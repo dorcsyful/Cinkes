@@ -5,12 +5,12 @@ Cinkes::CRenderShape::CRenderShape()
 {
 
     m_Transform = glm::mat4(1.f);
-    m_Transform = glm::mat4(1.f);
-    m_Transform = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    m_Transform = glm::translate(m_Transform, glm::vec3(0, -20, -10));
-    std::cout << m_Transform[0][0] << " " << m_Transform[0][1] << " " << m_Transform[0][2] << std::endl;
-    std::cout << m_Transform[1][0] << " " << m_Transform[1][1] << " " << m_Transform[1][2] << std::endl;
-    std::cout << m_Transform[2][0] << " " << m_Transform[2][1] << " " << m_Transform[2][2] << std::endl;
+    //m_Transform = glm::mat4(1.f);
+    //m_Transform = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    //m_Transform = glm::translate(m_Transform, glm::vec3(0, -20, -10));
+    //std::cout << m_Transform[0][0] << " " << m_Transform[0][1] << " " << m_Transform[0][2] << std::endl;
+    //std::cout << m_Transform[1][0] << " " << m_Transform[1][1] << " " << m_Transform[1][2] << std::endl;
+    //std::cout << m_Transform[2][0] << " " << m_Transform[2][1] << " " << m_Transform[2][2] << std::endl;
 
 }
 

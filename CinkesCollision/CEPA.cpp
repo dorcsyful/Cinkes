@@ -7,6 +7,43 @@
 #include "CInternalContactInfo.h"
 #include "../CinkesMath/CUtils.h"
 #include "CSimplex.h"
+#include "CConvexHull.h"
+
+
+bool IsConvex(std::vector<Cinkes::CVector3>& points, std::vector<size_t>& triangles, float threshold = 0.001)
+{
+using namespace Cinkes;
+	for (unsigned long i = 0; i < triangles.size() / 3; i++)
+	{
+		Cinkes::CVector3 Atmp = points[triangles[i * 3 + 0]];
+		Cinkes::CVector3 Btmp = points[triangles[i * 3 + 1]];
+		Cinkes::CVector3 Ctmp = points[triangles[i * 3 + 2]];
+
+		Cinkes::CVector3 A(Atmp[0], Atmp[1], Atmp[2]);
+		Cinkes::CVector3 B(Btmp[0], Btmp[1], Btmp[2]);
+		Cinkes::CVector3 C(Ctmp[0], Ctmp[1], Ctmp[2]);
+		B -= A;
+		C -= A;
+
+		Cinkes::CVector3 BCNorm = B.Cross(C);
+		BCNorm.Normalize();
+
+		float checkPoint = Cinkes::CVector3(points[0][0] - A[0], points[0][1] - A[1], points[0][2] - A[2]).Dot(BCNorm);
+
+		for (unsigned long j = 0; j < points.size(); j++)
+		{
+			float dist = Cinkes::CVector3(points[j][0] - A[0], points[j][1] - A[1], points[j][2] - A[2]).Dot(BCNorm);
+
+			if ((std::abs(checkPoint) > threshold) && (std::abs(dist) > threshold) && (checkPoint * dist < 0))
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
 
 void Cinkes::CEPA::Run(CInternalContactInfo* a_Contact, CSimplex& a_Simplex)
 {
@@ -16,6 +53,18 @@ void Cinkes::CEPA::Run(CInternalContactInfo* a_Contact, CSimplex& a_Simplex)
 
 void Cinkes::CEPA::Algorithm(CInternalContactInfo* a_Contact, const CSimplex& a_Simplex)
 {
+	//support function data
+	CCollisionObject* obj1 = a_Contact->m_First.get();
+	CCollisionShape* obj1_shape = obj1->GetCollisionShape().get();
+	CMat3x3 obj1_rotation = obj1->GetTransform().getBasis();
+	CVector3 obj1_location = obj1->GetTransform().getOrigin();
+
+	CCollisionObject* obj2 = a_Contact->m_Second.get();
+	CCollisionShape* obj2_shape = obj2->GetCollisionShape().get();
+	CMat3x3 obj2_rotation = obj2->GetTransform().getBasis();
+	CVector3 obj2_location = obj2->GetTransform().getOrigin();
+
+
 	//the tetrahedron from GJK, the faces contain every triangle that are on it by the vertex indices
 	std::vector<CVector3> polytope = { a_Simplex[0],a_Simplex[1],a_Simplex[2],a_Simplex[3] };
 	std::vector<size_t> faces{
@@ -38,12 +87,8 @@ void Cinkes::CEPA::Algorithm(CInternalContactInfo* a_Contact, const CSimplex& a_
 		min_normal = normals[min_face].m_Normal;
 		min_distance = normals[min_face].m_Distance;
 
-		CVector3 A = a_Contact->m_First->GetTransform().getBasis() * 
-			a_Contact->m_First->GetCollisionShape()->Support(a_Contact->m_First->GetTransform().getBasis().Transpose() * min_normal)
-			 + a_Contact->m_First->GetTransform().getOrigin();
-		CVector3 B = a_Contact->m_Second->GetTransform().getBasis() * 
-			a_Contact->m_Second->GetCollisionShape()->Support(a_Contact->m_Second->GetTransform().getBasis().Transpose() * 
-				(min_normal * (-1))) + a_Contact->m_Second->GetTransform().getOrigin();
+		CVector3 A = obj1_rotation * obj1_shape->Support(obj1_rotation.Transpose() * min_normal) + obj1_location;
+		CVector3 B = obj2_rotation * obj2_shape->Support(obj2_rotation.Transpose() * (min_normal * -1)) + obj2_location;
 		CVector3 support = A - B;
 		CScalar distance = min_normal.Dot(support);
 
@@ -55,7 +100,8 @@ void Cinkes::CEPA::Algorithm(CInternalContactInfo* a_Contact, const CSimplex& a_
 
 			for(size_t i = 0; i < normals.size(); i++)
 			{
-				if(normals[i].m_Normal.Dot(support) > 0)
+				float dot = normals[i].m_Normal.Dot(support);
+				if(dot > 0)
 				{
 					size_t face = i * 3;
 
@@ -99,10 +145,13 @@ void Cinkes::CEPA::Algorithm(CInternalContactInfo* a_Contact, const CSimplex& a_
 			normals.insert(normals.end(), new_stuff.first.begin(), new_stuff.first.end());
 		}
 	}
+	
 	a_Contact->m_Normal = min_normal;
-
+	if (IsConvex(polytope, faces)) {
 	a_Contact->m_PenetrationDepth = min_distance + 0.001f;
 	a_Contact->m_Simplex = a_Simplex;
+	}
+
 }
 
 std::pair<std::vector<Cinkes::CFaceData>, size_t> Cinkes::CEPA::GetFaceNormals(const std::vector<CVector3>& a_Polytope, const std::vector<size_t>& a_Faces)

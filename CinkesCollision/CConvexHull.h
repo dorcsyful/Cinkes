@@ -28,8 +28,12 @@ namespace Cinkes
 		bool AddVerticesAsArray(std::vector<CVector3>& a_Points, bool a_DelayBuild = false) {}
 		void BuildHull() {}
 		//}
-	protected:
 		std::vector<CVector3> m_Vertices;
+		std::vector<size_t> m_Faces;
+		std::vector<CVector3> m_Normals;
+
+	protected:
+
 		ESHAPE_TYPE m_Type = ESHAPE_TYPE::SHAPE_CONVEX_HULL;
 
 	};

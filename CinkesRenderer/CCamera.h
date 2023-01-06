@@ -46,11 +46,11 @@ namespace Cinkes {
         CCamera() {
             // camera Attributes
             CCameraSettings a_Settings = CCameraSettings();
-            Position = a_Settings.Position;
-            Front = a_Settings.Front;
+            Position = glm::vec3(0.0,8.0,20.0);
+            Front = glm::vec3(1.0,0.0,-1.0);
             WorldUp = a_Settings.WorldUp;
             // euler Angles
-            Yaw = a_Settings.Yaw;
+            Yaw = 90;
             Pitch = a_Settings.Pitch;
             // camera options
             MovementSpeed = a_Settings.MovementSpeed;
