@@ -101,22 +101,27 @@ void Cinkes::CRenderWindow::Run()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
+        auto index = m_Input->m_Camera->index;
+        index = std::min((int)m_Shapes.size() - 1, index);
+        index = std::max(0, index);
+        m_Input->m_Camera->index = index;
 
-        for (const auto& current : m_Shapes) {
+        //for (const auto& current : m_Shapes) {
+        auto& shape = m_Shapes[index];
             // bind textures on corresponding texture units
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, current->GetTexture()->m_Texture);
+            //glActiveTexture(GL_TEXTURE0);
+            //glBindTexture(GL_TEXTURE_2D, shape->GetTexture()->m_Texture);
 
             // activate shader
             m_Shader->use();
             // render boxes
-            glBindVertexArray(current->GetVAO());
+            glBindVertexArray(shape->GetVAO());
             m_Shader->setMat4("projection", m_Input->m_Camera->GetProjectionMatrix());
             m_Shader->setMat4("view", m_Input->m_Camera->GetViewMatrix());    
-            m_Shader->setMat4("model", current->GetTransform());
+            m_Shader->setMat4("model", shape->GetTransform());
 
-            glDrawArrays(GL_TRIANGLES, 0, current->m_Vertices.size());
-        }
+            glDrawArrays(GL_TRIANGLES, 0, shape->m_Vertices.size());
+        //}
 
         Update();
         glfwSwapBuffers(m_Window);

@@ -34,6 +34,7 @@ namespace Cinkes {
         glm::vec3 Up;
         glm::vec3 Right;
         glm::vec3 WorldUp;
+        int index;
         // euler Angles
         float Yaw;
         float Pitch;
@@ -56,6 +57,7 @@ namespace Cinkes {
             MovementSpeed = a_Settings.MovementSpeed;
             MouseSensitivity = a_Settings.MouseSensitivity;
             Zoom = a_Settings.Zoom;
+            index = 0;
             updateCameraVectors();
         }
 
@@ -68,6 +70,7 @@ namespace Cinkes {
             // euler Angles
             Yaw = a_Settings.Yaw;
             Pitch = a_Settings.Pitch;
+            index = 0;
             // camera options
             MovementSpeed = a_Settings.MovementSpeed;
             MouseSensitivity = a_Settings.MouseSensitivity;
@@ -76,7 +79,7 @@ namespace Cinkes {
         }
         // constructor with scalar values
         CCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) 
-            : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(2.5), MouseSensitivity(0.1), Zoom(45)
+            : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(7), MouseSensitivity(0.1), Zoom(45)
         {
             Position = glm::vec3(posX, posY, posZ);
             WorldUp = glm::vec3(upX, upY, upZ);
@@ -93,7 +96,7 @@ namespace Cinkes {
 
         glm::mat4 GetProjectionMatrix()
         {
-            return glm::perspective(glm::radians(45.f), WIDTH / HEIGHT, 0.1f, 100.0f);;
+            return glm::perspective(glm::radians(70.f), WIDTH / HEIGHT, 0.1f, 100.0f);;
         }
 
         // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)

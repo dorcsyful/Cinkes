@@ -5,6 +5,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <memory>
 #include "CCamera.h"
+
+#include <iostream>
+#include <chrono>
+
 namespace Cinkes {
 
 	class CInputHandler
@@ -39,6 +43,24 @@ namespace Cinkes {
 				m_Camera->ProcessKeyboard(E_CAMERAMOVEMENT_LEFT, deltaTime);
 			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 				m_Camera->ProcessKeyboard(E_CAMERAMOVEMENT_RIGHT, deltaTime);
+
+			static auto last_time = std::chrono::system_clock::from_time_t(0);
+			auto now = std::chrono::system_clock::now();
+			auto passed = now - last_time;
+			auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(passed).count();
+
+			if (millis > 100) {
+				if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+					m_Camera->index += 1;
+					last_time = now;
+				}
+				if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+				{
+					m_Camera->index -= 1;
+					last_time = now;
+				}
+					
+			}
 		}
 		bool m_Update[2] = { false, false };
 		float m_MouseMovement[2] = { 0, 0 };

@@ -30,6 +30,9 @@ int Cinkes::CRenderShape::CreateVBO()
     // texture coord attribute
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(CVertex), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    // BE NORMAL NO BOOB
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(CVertex), (void*)(5 * sizeof(float)));
+    glEnableVertexAttribArray(2);
     return m_VBO;
 }
 

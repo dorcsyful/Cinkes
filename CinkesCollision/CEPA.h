@@ -17,6 +17,13 @@ namespace Cinkes
 		CScalar m_Distance;
 	};
 
+	class EPAVisualization {
+	public:
+		std::vector<CVector3> points;
+		std::vector<int> indices;
+		size_t closestIndex;
+	};
+
 
 	class CEPA
 	{
@@ -24,9 +31,10 @@ namespace Cinkes
 		CEPA() = default;
 		~CEPA() = default;
 
+		std::vector<EPAVisualization> boob;
+
 		CEPA(const CEPA& a_Rhs) = delete;
 		CEPA(CEPA&& a_Rhs) noexcept = delete;
-		//}
 
 		//Subgroup: Operators {
 		CEPA& operator=(CEPA&& a_Rhs) noexcept = delete;
