@@ -45,12 +45,14 @@ namespace UnitTest {
 		}
 		TEST_METHOD(GJKBoolTrue)
 		{
+			std::shared_ptr<CBoxShape> shape1 = std::make_shared<CBoxShape>(2, 3, 3);
+			std::shared_ptr<CCollisionObject> object1 = std::make_shared<CCollisionObject>(CVector3(2, 7, 0), shape1);
+
+
 			CTransform transform = CTransform(CMat3x3(0.7071068f, -0.7071068f, 0.f,
 				0.7071068f, 0.7071068f, 0.f,
 				0.f, 0.f, 1.f), CVector3(5, 13, 2));
-			std::shared_ptr<CBoxShape> shape1 = std::make_shared<CBoxShape>(2, 3, 3);
 			std::shared_ptr<CBoxShape> shape2 = std::make_shared<CBoxShape>(3, 4, 3);
-			std::shared_ptr<CCollisionObject> object1 = std::make_shared<CCollisionObject>(CVector3(2, 7, 0), shape1);
 			std::shared_ptr<CCollisionObject> object2 = std::make_shared<CCollisionObject>(transform, shape2);
 
 			CSimplex simplex;
@@ -94,12 +96,16 @@ namespace UnitTest {
 			std::shared_ptr<CCollisionObject> object2 = std::make_shared<CCollisionObject>(transform, shape2);
 			CSimplex simplex;
 			std::shared_ptr<CInternalContactInfo> info = std::make_shared<CInternalContactInfo>();
-			gjk.Algorithm(object1.get(), object2.get(), simplex);
+			bool algo =CGJKAlgorithm::Algorithm(object1.get(), object2.get(), simplex);
+			if(algo)
+			{
 			info->m_First = object1;
 			object1->SetHasContact(info.get());
 			object2->SetHasContact(info.get());
 			info->m_Second = object2;
-			epa.Algorithm(info.get(), simplex);
+			epa.Algorithm(info.get(), simplex);				
+			}
+
 			CScalar depth = info->m_PenetrationDepth;
 			Assert::AreEqual(6.07f, depth, 0.1f);
 		}

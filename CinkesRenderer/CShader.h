@@ -15,10 +15,14 @@ namespace Cinkes
     {
     public:
         unsigned int ID;
+        const char* m_Vertex_Path;
+        const char* m_Fragment_Path;
         // constructor generates the shader on the fly
         // ------------------------------------------------------------------------
-        CShader()
+        CShader(const char* a_Vertex = BASE_VERTEX_SHADER, const char* a_Fragment = BASE_FRAGMENT_SHADER)
         {
+            m_Vertex_Path = a_Vertex;
+            m_Fragment_Path = a_Fragment;
             // 1. retrieve the vertex/fragment source code from filePath
             std::string vertexCode;
             std::string fragmentCode;
@@ -30,8 +34,8 @@ namespace Cinkes
             try
             {
                 // open files
-                vShaderFile.open(VERTEX_SHADER);
-                fShaderFile.open(FRAGMENT_SHADER);
+                vShaderFile.open(a_Vertex);
+                fShaderFile.open(a_Fragment);
                 std::stringstream vShaderStream, fShaderStream;
                 // read file's buffer contents into streams
                 vShaderStream << vShaderFile.rdbuf();

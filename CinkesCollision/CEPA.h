@@ -6,6 +6,7 @@
 
 namespace Cinkes
 {
+	class CEPAVisualization;
 	class CCollisionObject;
 	struct CInternalContactInfo;
 	class CSimplex;
@@ -17,12 +18,7 @@ namespace Cinkes
 		CScalar m_Distance;
 	};
 
-	class EPAVisualization {
-	public:
-		std::vector<CVector3> points;
-		std::vector<int> indices;
-		size_t closestIndex;
-	};
+
 
 
 	class CEPA
@@ -30,8 +26,6 @@ namespace Cinkes
 	public:
 		CEPA() = default;
 		~CEPA() = default;
-
-		std::vector<EPAVisualization> boob;
 
 		CEPA(const CEPA& a_Rhs) = delete;
 		CEPA(CEPA&& a_Rhs) noexcept = delete;
@@ -45,5 +39,6 @@ namespace Cinkes
 
 		std::pair<std::vector<CFaceData>, size_t> GetFaceNormals(const std::vector<CVector3>& a_Polytope, const std::vector<size_t>& a_Faces);
 		void AddUniqueEdge(std::vector<std::pair<size_t, size_t>>& a_Edges, const std::vector<size_t>& a_Faces, size_t a_A, size_t a_B);
+
 	};
 }

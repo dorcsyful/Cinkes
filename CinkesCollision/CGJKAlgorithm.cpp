@@ -1,7 +1,8 @@
+#pragma once
+
 #include "CGJKAlgorithm.h"
 
 #include <iostream>
-
 #include "CCollisionObject.h"
 #include "CCollisionShape.h"
 #include "CSimplex.h"
@@ -33,7 +34,6 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
             a_Object2->GetCollisionShape()->Support(a_Object2->GetTransform().getBasis().Transpose() *
                 (next * (-1))) + a_Object2->GetTransform().getOrigin();
         support = A - B;
-
     	if(support.Dot(next) <= 0)
         {
             a_Simplex = simplex;
@@ -50,6 +50,7 @@ bool Cinkes::CGJKAlgorithm::Algorithm(CCollisionObject* a_Object1, CCollisionObj
         }
     }
 
+
 }
 
 bool Cinkes::CGJKAlgorithm::NextPoint(CSimplex& a_Simplex, CVector3& a_Direction)
@@ -59,7 +60,6 @@ bool Cinkes::CGJKAlgorithm::NextPoint(CSimplex& a_Simplex, CVector3& a_Direction
     case 2: return Line(a_Simplex, a_Direction);
     case 3: return Triangle(a_Simplex, a_Direction);
     case 4: return Tetrahedron(a_Simplex, a_Direction);
-
 	}
 }
 
@@ -145,8 +145,11 @@ bool Cinkes::CGJKAlgorithm::Tetrahedron(CSimplex& a_Simplex, CVector3& a_Directi
     CVector3 ad = d - a;
     CVector3 ao = a * -1;
     CVector3 abc = ab.Cross(ac);
+    abc.Normalize();
     CVector3 acd = ac.Cross(ad);
+    acd.Normalize();
     CVector3 adb = ad.Cross(ab);
+    adb.Normalize();
 
     if(SameDirection(abc, ao))
     {

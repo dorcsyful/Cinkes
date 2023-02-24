@@ -7,7 +7,7 @@ namespace Cinkes {
 		//initializes with default values
 		CCameraSettings(const glm::vec3& a_Position = glm::vec3(0, 0, -50), const glm::vec3& a_Front = glm::vec3(0, 0, 1),
 			const glm::vec3& a_Up = glm::vec3(0, 1, 0), float a_Yaw = -90, float a_Pitch = 0, float a_Speed = 20,
-			float a_Sensitivity = 0.8, float a_Zoom = 90) 
+			float a_Sensitivity = 0.8, float a_Zoom = 90)
 		{
 			glm::vec3 Position = a_Position;
 			glm::vec3 Front = a_Front;
@@ -21,7 +21,7 @@ namespace Cinkes {
 			float Zoom = a_Zoom;
 		}
 
-		glm::vec3 Position = glm::vec3(0,0,0);
+		glm::vec3 Position = glm::vec3(0, 0, 0);
 		glm::vec3 Front = glm::vec3(0, 0, -1);
 		glm::vec3 WorldUp = glm::vec3(0, 1, 0);
 		// euler Angles

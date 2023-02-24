@@ -1,12 +1,7 @@
 #pragma once
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <memory>
 #include "CCamera.h"
 
-#include <iostream>
 #include <chrono>
 
 namespace Cinkes {
@@ -43,6 +38,8 @@ namespace Cinkes {
 				m_Camera->ProcessKeyboard(E_CAMERAMOVEMENT_LEFT, deltaTime);
 			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 				m_Camera->ProcessKeyboard(E_CAMERAMOVEMENT_RIGHT, deltaTime);
+			if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+				m_Camera->Wireframe = !m_Camera->Wireframe;
 
 			static auto last_time = std::chrono::system_clock::from_time_t(0);
 			auto now = std::chrono::system_clock::now();
@@ -59,17 +56,17 @@ namespace Cinkes {
 					m_Camera->index -= 1;
 					last_time = now;
 				}
-					
+
 			}
 		}
 		bool m_Update[2] = { false, false };
 		float m_MouseMovement[2] = { 0, 0 };
-		float m_MouseScroll;
+		float m_MouseScroll{};
 		std::shared_ptr<CCamera> m_Camera;
 		bool firstMouse = true;
-		float lastX;
-		float lastY;
-		float lastFrame;
+		float lastX{};
+		float lastY{};
+		float lastFrame{};
 	};
 };
 

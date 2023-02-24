@@ -17,14 +17,14 @@
 
 namespace Cinkes {
     // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
-    
+
     enum E_CAMERAMOVEMENT {
         E_CAMERAMOVEMENT_FORWARD,
         E_CAMERAMOVEMENT_BACKWARD,
         E_CAMERAMOVEMENT_LEFT,
         E_CAMERAMOVEMENT_RIGHT
     };
-    
+
     class CCamera
     {
     public:
@@ -42,22 +42,26 @@ namespace Cinkes {
         float MovementSpeed;
         float MouseSensitivity;
         float Zoom;
+        float m_FOV;
+        bool Wireframe;
 
         // constructor with vectors
         CCamera() {
+            Wireframe = false;
             // camera Attributes
             CCameraSettings a_Settings = CCameraSettings();
-            Position = glm::vec3(0.0,8.0,20.0);
-            Front = glm::vec3(1.0,0.0,-1.0);
+            Position = glm::vec3(10.0, 0.0, 0.0);
+            Front = glm::vec3(1.0, 0.0, 1.0);
             WorldUp = a_Settings.WorldUp;
             // euler Angles
             Yaw = 90;
-            Pitch = a_Settings.Pitch;
+            Pitch = 0;
             // camera options
             MovementSpeed = a_Settings.MovementSpeed;
             MouseSensitivity = a_Settings.MouseSensitivity;
             Zoom = a_Settings.Zoom;
             index = 0;
+            m_FOV = 45.f;
             updateCameraVectors();
         }
 
@@ -78,7 +82,7 @@ namespace Cinkes {
             updateCameraVectors();
         }
         // constructor with scalar values
-        CCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) 
+        CCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
             : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(7), MouseSensitivity(0.1), Zoom(45)
         {
             Position = glm::vec3(posX, posY, posZ);

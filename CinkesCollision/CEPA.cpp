@@ -78,108 +78,77 @@ void Cinkes::CEPA::Algorithm(CInternalContactInfo* a_Contact, const CSimplex& a_
 
 	std::vector<CFaceData>& normals = temp.first;
 
+	size_t min_face = temp.second;
+	CVector3 min_normal = normals[min_face].m_Normal;
 
-	CVector3 min_normal;
-	
-	size_t minFaceIndex = 0;
-	auto generalMinDistance = std::numeric_limits<CScalar>::max();
+	CScalar min_distance = std::numeric_limits<CScalar>::max();
 
-	int counter = 0;
+	while (min_distance == std::numeric_limits<CScalar>::max())  // NOLINT(clang-diagnostic-float-equal)
+	{
+		min_normal = normals[min_face].m_Normal;
+		min_distance = normals[min_face].m_Distance;
 
-	for (int faceIndex = 0; faceIndex < normals.size(); ++faceIndex) {
-		++counter;
-		CScalar min_distance = std::numeric_limits<CScalar>::max();
+		CVector3 A = obj1_rotation * obj1_shape->Support(obj1_rotation.Transpose() * min_normal) + obj1_location;
+		CVector3 B = obj2_rotation * obj2_shape->Support(obj2_rotation.Transpose() * (min_normal * -1.f)) + obj2_location;
+		CVector3 support = A - B;
+		CScalar distance = min_normal.Dot(support);
 
-		while (min_distance == std::numeric_limits<CScalar>::max())  // NOLINT(clang-diagnostic-float-equal)
-		{
-			min_normal = normals[faceIndex].m_Normal;
-			min_distance = normals[faceIndex].m_Distance;
+		if (CUtils::Abs(distance - min_distance) > static_cast<CScalar>(0.00001))
+		{				
+			min_distance = std::numeric_limits<CScalar>::max();
 
-			CVector3 A = obj1_rotation * obj1_shape->Support(obj1_rotation.Transpose() * min_normal) + obj1_location;
-			CVector3 B = obj2_rotation * obj2_shape->Support(obj2_rotation.Transpose() * (min_normal * -1.f)) + obj2_location;
-			CVector3 support = A - B;
-			CScalar distance = min_normal.Dot(support);
+			std::vector<std::pair<size_t, size_t>> unique;
 
-			std::vector<int> indicesConverted;
-			for (auto index : faces) {
-				indicesConverted.push_back((int)index);
+			for (size_t i = 0; i < normals.size(); i++)
+			{
+				float dot = normals[i].m_Normal.Dot(support);
+				if (dot > 0)
+				{
+					size_t face = i * 3;
+
+					AddUniqueEdge(unique, faces, face, face + static_cast<size_t>(1));
+					AddUniqueEdge(unique, faces, face + static_cast<size_t>(1), face + static_cast<size_t>(2));
+					AddUniqueEdge(unique, faces, face + static_cast<size_t>(2), face);
+
+					faces[face + 2] = faces.back(); faces.pop_back();
+					faces[face + 1] = faces.back(); faces.pop_back();
+					faces[face] = faces.back(); faces.pop_back();
+
+					normals[i] = normals.back(); normals.pop_back();
+
+					i--;
+				}
+			}
+			std::vector<size_t> new_faces;
+			for (const auto& i : unique)
+			{
+				new_faces.push_back(i.first);
+				new_faces.push_back(i.second);
+				new_faces.push_back(polytope.size());  // NOLINT(clang-diagnostic-shorten-64-to-32)
+			}
+			polytope.push_back(support);
+
+			std::pair<std::vector<Cinkes::CFaceData>, size_t> new_normals = GetFaceNormals(polytope, new_faces);
+
+			CScalar old_min_distance = std::numeric_limits<CScalar>::max();
+			for (unsigned i = 0; i < normals.size(); i++) {
+				if (normals[i].m_Distance < old_min_distance) {
+					old_min_distance = normals[i].m_Distance;
+					min_face = i;
+				}
 			}
 
-			if (CUtils::Abs(distance - min_distance) > static_cast<CScalar>(0.1))
-			{				
-				if (min_distance < generalMinDistance) {
-					generalMinDistance = min_distance;
-					minFaceIndex = faceIndex;
-				}
-
-
-
-				this->boob.push_back(EPAVisualization{
-					polytope,
-					indicesConverted,
-					minFaceIndex,
-				});
-
-				min_distance = std::numeric_limits<CScalar>::max();
-
-				std::vector<std::pair<size_t, size_t>> unique;
-
-				for (size_t i = 0; i < normals.size(); i++)
-				{
-					float dot = normals[i].m_Normal.Dot(support);
-					if (dot > 0)
-					{
-						size_t face = i * 3;
-
-						AddUniqueEdge(unique, faces, face, face + static_cast<size_t>(1));
-						AddUniqueEdge(unique, faces, face + static_cast<size_t>(1), face + static_cast<size_t>(2));
-						AddUniqueEdge(unique, faces, face + static_cast<size_t>(2), face);
-
-						faces[face + 2] = faces.back(); faces.pop_back();
-						faces[face + 1] = faces.back(); faces.pop_back();
-						faces[face] = faces.back(); faces.pop_back();
-
-						normals[i] = normals.back(); normals.pop_back();
-
-						i--;
-					}
-				}
-				std::vector<size_t> new_faces;
-				for (const auto& i : unique)
-				{
-					new_faces.push_back(i.first);
-					new_faces.push_back(i.second);
-					new_faces.push_back(polytope.size());  // NOLINT(clang-diagnostic-shorten-64-to-32)
-				}
-				polytope.push_back(support);
-
-				std::pair<std::vector<Cinkes::CFaceData>, size_t> new_stuff = GetFaceNormals(polytope, new_faces);
-
-				CScalar old_min_distance = std::numeric_limits<CScalar>::max();
-				for (unsigned i = 0; i < normals.size(); i++) {
-					if (normals[i].m_Distance < old_min_distance) {
-						old_min_distance = normals[i].m_Distance;
-						//min_face = i;
-					}
-				}
-
-				//if (new_stuff.first[new_stuff.second].m_Distance < old_min_distance) {
-				//	min_face = new_stuff.second + normals.size();  // NOLINT(clang-diagnostic-shorten-64-to-32)
-				//}
-
-				faces.insert(faces.end(), new_faces.begin(), new_faces.end());
-				normals.insert(normals.end(), new_stuff.first.begin(), new_stuff.first.end());
-				faceIndex = 0;
+			if (new_normals.first[new_normals.second].m_Distance < old_min_distance) {
+				min_face = new_normals.second + normals.size();  // NOLINT(clang-diagnostic-shorten-64-to-32)
 			}
-		}
 
-		if (counter > 50) {
-			break;
+			faces.insert(faces.end(), new_faces.begin(), new_faces.end());
+			normals.insert(normals.end(), new_normals.first.begin(), new_normals.first.end());
 		}
 	}
 	a_Contact->m_Normal = min_normal;
 	if (IsConvex(polytope, faces)) {
-		a_Contact->m_PenetrationDepth = generalMinDistance + 0.001f;
+		a_Contact->m_PenetrationDepth = min_distance + 0.001f;
 		a_Contact->m_Simplex = a_Simplex;
 	}
 

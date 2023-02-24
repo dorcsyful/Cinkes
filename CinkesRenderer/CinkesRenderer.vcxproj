@@ -156,6 +156,12 @@
     <ClInclude Include="stbi.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\source\repos\CollisionTest\CinkesRenderer\resources\shaders\CLineShader.fss" />
+    <None Include="..\..\..\..\source\repos\CollisionTest\CinkesRenderer\resources\shaders\CLineShader.vs" />
+    <None Include="..\..\..\..\source\repos\CollisionTest\CinkesRenderer\resources\shaders\CShader.fss" />
+    <None Include="..\..\..\..\source\repos\CollisionTest\CinkesRenderer\resources\shaders\CShader.vs" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

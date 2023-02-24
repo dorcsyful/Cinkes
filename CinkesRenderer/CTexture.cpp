@@ -1,7 +1,9 @@
+
 #include "CTexture.h"
-#include <iostream>
-#include "stbi.h"
-bool Cinkes::CTexture::CreateTexture(CShader* a_Shader, std::string a_Path)
+
+#include "stb_image.h"
+
+bool Cinkes::CTexture::CreateTexture(CShader* a_Shader, const std::string& a_Path)
 {
     glGenTextures(1, &m_Texture);
     glBindTexture(GL_TEXTURE_2D, m_Texture);

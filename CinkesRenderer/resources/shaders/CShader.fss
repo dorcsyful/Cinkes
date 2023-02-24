@@ -2,43 +2,13 @@
 out vec4 FragColor;
 
 in vec2 TexCoord;
-in vec3 WorldPos;
-in vec3 WorldNormal;
 
 // texture samplers
 uniform sampler2D texture1;
+uniform sampler2D texture2;
 
 void main()
 {
-	vec3 lights[8] = {
-		vec3(-50, -50, -50),
-		vec3(50, -50, -50),
-		vec3(-50, -50, 50),
-		vec3(50, 50, -50),
-		
-		vec3(50, 50, 50),
-		vec3(-50, 50, -50),
-		vec3(50, -50, 50),
-		vec3(-50, 50, 50),
-	};
-	float lightStrength = 2000;
-	float boob = 0;
-	for (int l = 0; l < 8; ++l) {
-		vec3 lightPos = lights[l];
-		vec3 pixelToLight = lightPos - WorldPos;
-		float distance = length(pixelToLight);
-		pixelToLight = normalize(pixelToLight);
-		
-		boob += lightStrength * max(0, dot(pixelToLight, normalize(WorldNormal))) * (1 / (distance * distance));
-		
-	}
-
-	vec3 lightColor = vec3(1,1,1) * boob;
-
 	// linearly interpolate between both textures (80% container, 20% awesomeface)
-	if(TexCoord.x < 0.5) {
-		FragColor = vec4(1,1,1,1) * vec4(lightColor, 1);	
-	} else {
-		FragColor = vec4(1,0,0,1) * vec4(lightColor, 1);
-	}
+	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);
 }

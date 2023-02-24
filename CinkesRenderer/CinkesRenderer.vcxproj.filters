@@ -60,4 +60,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\source\repos\CollisionTest\CinkesRenderer\resources\shaders\CLineShader.fss">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\..\source\repos\CollisionTest\CinkesRenderer\resources\shaders\CLineShader.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\..\source\repos\CollisionTest\CinkesRenderer\resources\shaders\CShader.fss">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\..\source\repos\CollisionTest\CinkesRenderer\resources\shaders\CShader.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

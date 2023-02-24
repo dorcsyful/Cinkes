@@ -7,14 +7,10 @@ namespace Cinkes
 
 	class CSimplex
 	{
-	private:
-		std::vector<CVector3> m_Points;
-		unsigned int m_Size;
 
 	public:
-		CSimplex()
-			: m_Points({ CVector3(), CVector3(), CVector3(), CVector3()})
-			, m_Size(0)
+		CSimplex() :
+			m_Size(0)
 		{}
 
 		CSimplex& operator=(std::initializer_list<CVector3> list) {
@@ -28,8 +24,8 @@ namespace Cinkes
 
 		void Push_Front(const CVector3& a_Vector3)
 		{
-				m_Points = { a_Vector3, m_Points[0], m_Points[1], m_Points[2] };
-				m_Size = std::min(m_Size + 1, 4u);
+			m_Points.insert(m_Points.begin(), a_Vector3);
+			m_Size = m_Points.size();
 		}
 
 		bool Erase(const CVector3& a_Vector3)
@@ -43,10 +39,11 @@ namespace Cinkes
 
 		CVector3& operator[](int a_Number) { return m_Points[a_Number]; }
 		CVector3 operator[](int a_Number) const { return m_Points[a_Number]; }
-		unsigned Size() const { return m_Size; }
+		size_t Size() const { return m_Points.size(); }
 
-		auto begin() const { return m_Points.begin(); }
-		auto end()   const { return m_Points.end() - (4 - m_Size); }
+		std::vector<CVector3> m_Points;
+		size_t m_Size;
+
 
 	};
 }
