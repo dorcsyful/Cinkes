@@ -1,7 +1,5 @@
 #pragma once
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <vector>
 #include "CShader.h"
 namespace Cinkes
 {
@@ -11,7 +9,7 @@ namespace Cinkes
 		CTexture() = default;
 		~CTexture() = default;
 
-		bool CreateTexture(CShader* a_Shader, std::string a_Path);
+		bool CreateTexture(CShader* a_Shader, const std::string& a_Path);
 
 		GLuint m_Texture;
 	};

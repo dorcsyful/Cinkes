@@ -1,105 +1,22 @@
 #include "CRenderHandler.h"
 #include "CBoxShape.h"
-#include "CQuaternion.h"
-void Cinkes::CObjectWrapper::CreateRenderShape()
+
+bool Cinkes::CRenderHandler::RegisterObject(const std::shared_ptr<CCollisionObject>& a_Collision)
 {
-	m_RenderObject = std::make_shared<CRenderShape>();
-	RunVertexConverter();
-}
-void Cinkes::CObjectWrapper::RunVertexConverter()
-{
-	if (m_CollisionObject->GetCollisionShape()->GetType() == ESHAPE_TYPE::SHAPE_BOX) {
-		ConvertBoxToVertices();
-	}
-}
-void Cinkes::CObjectWrapper::ConvertBoxToVertices()
-{
-	CVector3 dimensions = static_cast<CBoxShape*>(m_CollisionObject->GetCollisionShape().get())->GetDimensions();
-	//CVertex first = CVertex(-3.7071f, 1.9497f,6.f);
-	m_RenderObject->m_Vertices = {
-		CVertex(-dimensions[0], -dimensions[1], -dimensions[2],  0.0f, 0.0f),
-		 CVertex(dimensions[0], -dimensions[1], -dimensions[2],  1.0f, 0.0f),
-		CVertex(dimensions[0],  dimensions[1], -dimensions[2],  1.0f, 1.0f),
-		CVertex(dimensions[0],  dimensions[1], -dimensions[2],  1.0f, 1.0f),
-		CVertex(-dimensions[0],  dimensions[1], -dimensions[2],  0.0f, 1.0f),
-		CVertex(-dimensions[0], -dimensions[1], -dimensions[2],  0.0f, 0.0f),
-
-		CVertex(-dimensions[0], -dimensions[1],  dimensions[2],  0.0f, 0.0f),
-		CVertex(dimensions[0], -dimensions[1],  dimensions[2],  1.0f, 0.0f),
-		CVertex(dimensions[0],  dimensions[1],  dimensions[2],  1.0f, 1.0f),
-		CVertex(dimensions[0],  dimensions[1],  dimensions[2],  1.0f, 1.0f),
-		CVertex(-dimensions[0],  dimensions[1],  dimensions[2],  0.0f, 1.0f),
-		CVertex(-dimensions[0], -dimensions[1],  dimensions[2],  0.0f, 0.0f),
-
-		CVertex(-dimensions[0],  dimensions[1],  dimensions[2],  1.0f, 0.0f),
-		CVertex(-dimensions[0],  dimensions[1], -dimensions[2],  1.0f, 1.0f),
-		CVertex(-dimensions[0], -dimensions[1], -dimensions[2],  0.0f, 1.0f),
-		CVertex(-dimensions[0], -dimensions[1], -dimensions[2],  0.0f, 1.0f),
-		CVertex(-dimensions[0], -dimensions[1],  dimensions[2],  0.0f, 0.0f),
-		CVertex(-dimensions[0],  dimensions[1],  dimensions[2],  1.0f, 0.0f),
-
-		CVertex(dimensions[0],  dimensions[1],  dimensions[2],  1.0f, 0.0f),
-		CVertex(dimensions[0],  dimensions[1], -dimensions[2],  1.0f, 1.0f),
-		CVertex(dimensions[0], -dimensions[1], -dimensions[2],  0.0f, 1.0f),
-		CVertex(dimensions[0], -dimensions[1], -dimensions[2],  0.0f, 1.0f),
-		CVertex(dimensions[0], -dimensions[1],  dimensions[2],  0.0f, 0.0f),
-		CVertex(dimensions[0],  dimensions[1],  dimensions[2],  1.0f, 0.0f),
-
-		CVertex(-dimensions[0], -dimensions[1], -dimensions[2],  0.0f, 1.0f),
-		CVertex(dimensions[0], -dimensions[1], -dimensions[2],  1.0f, 1.0f),
-		CVertex(dimensions[0], -dimensions[1],  dimensions[2],  1.0f, 0.0f),
-		CVertex(dimensions[0], -dimensions[1],  dimensions[2],  1.0f, 0.0f),
-		CVertex(-dimensions[0], -dimensions[1],  dimensions[2],  0.0f, 0.0f),
-		CVertex(-dimensions[0], -dimensions[1], -dimensions[2],  0.0f, 1.0f),
-
-		CVertex(-dimensions[0],  dimensions[1], -dimensions[2],  0.0f, 1.0f),
-		CVertex(dimensions[0],  dimensions[1], -dimensions[2],  1.0f, 1.0f),
-		CVertex(dimensions[0],  dimensions[1],  dimensions[2],  1.0f, 0.0f),
-		CVertex(dimensions[0],  dimensions[1],  dimensions[2],  1.0f, 0.0f),
-		CVertex(-dimensions[0],  dimensions[1],  dimensions[2],  0.0f, 0.0f),
-		CVertex(-dimensions[0],  dimensions[1], -dimensions[2],  0.0f, 1.0f)
-	};
-	m_RenderObject->m_Indices = {
-		0, 1, 3, // first triangle
-		1, 2, 3  // second triangle
-	};
-}
-
-Cinkes::CRenderHandler::CRenderHandler(bool a_CreateWindow)
-{
-	if (a_CreateWindow) {
-		CreateWindowObject();
-	}
-}
-
-Cinkes::CRenderHandler::~CRenderHandler()
-{
-}
-
-bool Cinkes::CRenderHandler::RegisterObject(std::shared_ptr<CCollisionObject> a_Collision)
-{
-	for (auto& current : m_Objects) 
+	CObjectWrapper object = CObjectWrapper();
+	object.m_CollisionObject = a_Collision;
+	if(a_Collision->GetCollisionShape()->GetType() == ESHAPE_TYPE::SHAPE_BOX)
 	{
-		if (current.m_CollisionObject.get() == a_Collision.get())
-		{
-			CVector3 location = a_Collision->GetTransform().getOrigin();
-			std::cout << "Collision object at location " << location[0] << " " << location[1];
-			std::cout << " " << location[2] << " already exists" << std::endl;
-			return false;
-		}
+		glm::vec3 extent = ConvertVectorToGlm(static_cast<CBoxShape*>(a_Collision->GetCollisionShape().get())->GetDimensions());
+		std::shared_ptr<CCuboidRenderShape> shape1 = std::make_shared<CCuboidRenderShape>(ConvertTransformToGLM(a_Collision->GetTransform()), extent);
+		auto upcast = std::static_pointer_cast<CRenderShape>(shape1);
+		m_Window->AddRenderShape(upcast);
 	}
-		CObjectWrapper object = CObjectWrapper();
-		object.m_CollisionObject = a_Collision;
-		object.CreateRenderShape();
-		m_Window->AddRenderShape(object.m_RenderObject);
-		object.m_RenderObject->CreateVBO();
-		object.m_RenderObject->LoadTexture(TEXTURE, m_Window->m_Shader.get());
-		m_Objects.push_back(object);
-		ConvertTransforms();
+	m_Objects.push_back(object);
 	return true;
 }
 
-void Cinkes::CRenderHandler::RegisterAll(std::vector<std::shared_ptr<CCollisionObject>> a_CollisionObjects, bool a_DuplicatesAllowed)
+void Cinkes::CRenderHandler::RegisterAll(const std::vector<std::shared_ptr<CCollisionObject>>& a_CollisionObjects, bool a_DuplicatesAllowed)
 {
 	for (auto& current : a_CollisionObjects)
 	{
@@ -113,17 +30,16 @@ void Cinkes::CRenderHandler::RegisterAll(std::vector<std::shared_ptr<CCollisionO
 		object.CreateRenderShape();
 		m_Window->AddRenderShape(object.m_RenderObject);
 		object.m_RenderObject->CreateVBO();
-		object.m_RenderObject->LoadTexture(TEXTURE, m_Window->m_Shader.get());
+		//object.m_RenderObject->LoadTexture(BASE_TEXTURE, m_Window->m_Shader[0]->);
 		m_Objects.push_back(object);
 	}
 }
 
-void Cinkes::CRenderHandler::ConvertTransforms()
+glm::mat4x4 Cinkes::CRenderHandler::ConvertTransformToGLM(const Cinkes::CTransform& a_Transform)
 {
-	for (auto& current : m_Objects)
-	{
-		CVector3 collisionLocation = current.m_CollisionObject->GetTransform().getOrigin();
-		CMat3x3 collisionRotation = current.m_CollisionObject->GetTransform().getBasis();
+
+		CVector3 collisionLocation = a_Transform.getOrigin();
+		CMat3x3 collisionRotation = a_Transform.getBasis();
 		glm::mat4 converted = glm::mat4(1.f);
 		glm::vec3 location = glm::vec3(collisionLocation[0], collisionLocation[1], collisionLocation[2]);
 		converted = glm::translate(converted, location);
@@ -132,18 +48,18 @@ void Cinkes::CRenderHandler::ConvertTransforms()
 		converted[1][0] = collisionRotation[0][1]; converted[1][1] = collisionRotation[1][1]; converted[1][2] = collisionRotation[2][1];
 		converted[2][0] = collisionRotation[0][2]; converted[2][1] = collisionRotation[1][2]; converted[2][2] = collisionRotation[2][2];
 
-		current.m_RenderObject->SetTransform(converted);
+		return converted;
 	}
+
+glm::vec3 Cinkes::CRenderHandler::ConvertVectorToGlm(const CVector3& a_Vector3)
+{
+	return glm::vec3(a_Vector3[0], a_Vector3[1], a_Vector3[2]);
 }
 
 void Cinkes::CRenderHandler::CreateWindowObject()
 {
 	m_Window = std::make_shared<CRenderWindow>();
 	m_Window->InitializeWindow();
-}
-
-void Cinkes::CRenderHandler::TerminateWindow()
-{
 }
 
 bool Cinkes::CRenderHandler::RemoveWrapperByCollisionRef(std::shared_ptr<CCollisionObject>& a_Collision)
@@ -205,13 +121,5 @@ Cinkes::CObjectWrapper Cinkes::CRenderHandler::GetWrapperByRenderRef(std::shared
 	}
 	std::cout << "Cannot find wrapper associated with this render object!" << std::endl;
 	return CObjectWrapper();
-}
-
-void Cinkes::CRenderHandler::DebugDraw(const std::vector<std::vector<CVector3>>& a_Vertices, const std::vector<std::vector<int>>& a_Indices, const std::vector<std::vector<CVector3>>& a_Normals, const std::vector<CTransform>& a_Transforms, float a_Wait, CRenderWindow* a_Window)
-{
-	if (a_Window == nullptr) 
-	{
-
-	}
 }
 

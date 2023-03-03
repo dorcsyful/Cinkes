@@ -9,21 +9,21 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Header Files\Shapes">
-      <UniqueIdentifier>{91165e9e-dbfb-4766-8d4f-2d17afe6d352}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Shapes">
-      <UniqueIdentifier>{5b81be93-48fb-4f40-b95f-3f2340925ed8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Algorithms">
       <UniqueIdentifier>{cf85888f-115c-4b0f-95a2-4a6cd66015ca}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Algorithms">
       <UniqueIdentifier>{f113b65c-8cce-4890-a5cf-202cf925cf71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Redundant">
+      <UniqueIdentifier>{aff8adad-6540-4549-a9cb-edec27d382a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Redundant\Shapes">
+      <UniqueIdentifier>{5b81be93-48fb-4f40-b95f-3f2340925ed8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -33,65 +33,65 @@
     <ClInclude Include="CCollisionObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CBoxShape.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="CCollisionShape.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="CCompoundPartialShape.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="CCompoundShape.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="CConcaveShape.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="CConvexHull.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="CSphereShape.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="CCapsuleShape.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="CConeShape.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="CGJKAlgorithm.h">
-      <Filter>Header Files\Algorithms</Filter>
-    </ClInclude>
-    <ClInclude Include="CCylinder.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
     <ClInclude Include="CInternalContactInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CBVH.h">
       <Filter>Header Files\Algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="CEPA.h">
-      <Filter>Header Files\Algorithms</Filter>
-    </ClInclude>
-    <ClInclude Include="CTriangleShape.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="CPlane.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="CSimplex.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="CLine.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="CRaycast.h">
-      <Filter>Header Files\Algorithms</Filter>
-    </ClInclude>
     <ClInclude Include="CBoxBoxCollision.h">
       <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="CEPA.h">
+      <Filter>Redundant</Filter>
+    </ClInclude>
+    <ClInclude Include="CGJKAlgorithm.h">
+      <Filter>Redundant</Filter>
+    </ClInclude>
+    <ClInclude Include="CRaycast.h">
+      <Filter>Redundant</Filter>
+    </ClInclude>
+    <ClInclude Include="CBoxShape.h">
+      <Filter>Redundant\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CCapsuleShape.h">
+      <Filter>Redundant\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CCollisionShape.h">
+      <Filter>Redundant\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CCompoundPartialShape.h">
+      <Filter>Redundant\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CCompoundShape.h">
+      <Filter>Redundant\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CConcaveShape.h">
+      <Filter>Redundant\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CConeShape.h">
+      <Filter>Redundant\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CConvexHull.h">
+      <Filter>Redundant\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CCylinder.h">
+      <Filter>Redundant\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CLine.h">
+      <Filter>Redundant\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlane.h">
+      <Filter>Redundant\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CSimplex.h">
+      <Filter>Redundant\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CSphereShape.h">
+      <Filter>Redundant\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="CTriangleShape.h">
+      <Filter>Redundant\Shapes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -102,52 +102,52 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CCompoundShape.cpp">
-      <Filter>Source Files\Shapes</Filter>
+      <Filter>Redundant\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="CConcaveShape.cpp">
-      <Filter>Source Files\Shapes</Filter>
+      <Filter>Redundant\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="CConvexHull.cpp">
-      <Filter>Source Files\Shapes</Filter>
+      <Filter>Redundant\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="CCompoundPartialShape.cpp">
-      <Filter>Source Files\Shapes</Filter>
+      <Filter>Redundant\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="CCapsuleShape.cpp">
-      <Filter>Source Files\Shapes</Filter>
+      <Filter>Redundant\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="CConeShape.cpp">
-      <Filter>Source Files\Shapes</Filter>
+      <Filter>Redundant\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="CCylinder.cpp">
-      <Filter>Source Files\Shapes</Filter>
+      <Filter>Redundant\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="CBoxShape.cpp">
-      <Filter>Source Files\Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="CSimplex.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Redundant\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="CBVH.cpp">
       <Filter>Source Files\Algorithms</Filter>
     </ClCompile>
-    <ClCompile Include="CEPA.cpp">
-      <Filter>Source Files\Algorithms</Filter>
-    </ClCompile>
-    <ClCompile Include="CGJKAlgorithm.cpp">
-      <Filter>Source Files\Algorithms</Filter>
-    </ClCompile>
     <ClCompile Include="CSphereShape.cpp">
-      <Filter>Source Files\Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="CTriangleShape.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Redundant\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="CLine.cpp">
-      <Filter>Source Files\Shapes</Filter>
+      <Filter>Redundant\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="CBoxBoxCollision.cpp">
       <Filter>Source Files\Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="CEPA.cpp">
+      <Filter>Redundant</Filter>
+    </ClCompile>
+    <ClCompile Include="CGJKAlgorithm.cpp">
+      <Filter>Redundant</Filter>
+    </ClCompile>
+    <ClCompile Include="CSimplex.cpp">
+      <Filter>Redundant</Filter>
+    </ClCompile>
+    <ClCompile Include="CTriangleShape.cpp">
+      <Filter>Redundant</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -15,40 +15,44 @@ namespace Cinkes
     {
     public:
         unsigned int ID;
+        const char* m_VertexPath;
+        const char* m_FragmentPath;
         // constructor generates the shader on the fly
         // ------------------------------------------------------------------------
-        CShader()
+        CShader(const char* a_Vertex = BASE_VERTEX_SHADER, const char* a_Fragment = BASE_FRAGMENT_SHADER)
         {
+            m_VertexPath = a_Vertex;
+            m_FragmentPath = a_Fragment;
             // 1. retrieve the vertex/fragment source code from filePath
-            std::string vertexCode;
-            std::string fragmentCode;
-            std::ifstream vShaderFile;
-            std::ifstream fShaderFile;
+            std::string vertex_code;
+            std::string fragment_code;
+            std::ifstream v_shader_file;
+            std::ifstream f_shader_file;
             // ensure ifstream objects can throw exceptions:
-            vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-            fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+            v_shader_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+            f_shader_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
             try
             {
                 // open files
-                vShaderFile.open(VERTEX_SHADER);
-                fShaderFile.open(FRAGMENT_SHADER);
+                v_shader_file.open(a_Vertex);
+                f_shader_file.open(a_Fragment);
                 std::stringstream vShaderStream, fShaderStream;
                 // read file's buffer contents into streams
-                vShaderStream << vShaderFile.rdbuf();
-                fShaderStream << fShaderFile.rdbuf();
+                vShaderStream << v_shader_file.rdbuf();
+                fShaderStream << f_shader_file.rdbuf();
                 // close file handlers
-                vShaderFile.close();
-                fShaderFile.close();
+                v_shader_file.close();
+                f_shader_file.close();
                 // convert stream into string
-                vertexCode = vShaderStream.str();
-                fragmentCode = fShaderStream.str();
+                vertex_code = vShaderStream.str();
+                fragment_code = fShaderStream.str();
             }
             catch (std::ifstream::failure& e)
             {
                 std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ: " << e.what() << std::endl;
             }
-            const char* vShaderCode = vertexCode.c_str();
-            const char* fShaderCode = fragmentCode.c_str();
+            const char* vShaderCode = vertex_code.c_str();
+            const char* fShaderCode = fragment_code.c_str();
             // 2. compile shaders
             unsigned int vertex, fragment;
             // vertex shader
@@ -73,92 +77,92 @@ namespace Cinkes
         }
         // activate the shader
         // ------------------------------------------------------------------------
-        void use()
+        void Use()
         {
             glUseProgram(ID);
         }
         // utility uniform functions
         // ------------------------------------------------------------------------
-        void setBool(const std::string& name, bool value) const
+        void setBool(const std::string& a_Name, bool a_Value) const
         {
-            glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+            glUniform1i(glGetUniformLocation(ID, a_Name.c_str()), static_cast<int>(a_Value));
         }
         // ------------------------------------------------------------------------
-        void setInt(const std::string& name, int value) const
+        void setInt(const std::string& a_Name, int a_Value) const
         {
-            glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+            glUniform1i(glGetUniformLocation(ID, a_Name.c_str()), a_Value);
         }
         // ------------------------------------------------------------------------
-        void setFloat(const std::string& name, float value) const
+        void setFloat(const std::string& a_Name, float a_Value) const
         {
-            glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+            glUniform1f(glGetUniformLocation(ID, a_Name.c_str()), a_Value);
         }
         // ------------------------------------------------------------------------
-        void setVec2(const std::string& name, const glm::vec2& value) const
+        void setVec2(const std::string& a_Name, const glm::vec2& a_Value) const
         {
-            glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+            glUniform2fv(glGetUniformLocation(ID, a_Name.c_str()), 1, &a_Value[0]);
         }
-        void setVec2(const std::string& name, float x, float y) const
+        void setVec2(const std::string& a_Name, float a_X, float a_Y) const
         {
-            glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
-        }
-        // ------------------------------------------------------------------------
-        void setVec3(const std::string& name, const glm::vec3& value) const
-        {
-            glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
-        }
-        void setVec3(const std::string& name, float x, float y, float z) const
-        {
-            glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+            glUniform2f(glGetUniformLocation(ID, a_Name.c_str()), a_X, a_Y);
         }
         // ------------------------------------------------------------------------
-        void setVec4(const std::string& name, const glm::vec4& value) const
+        void setVec3(const std::string& a_Name, const glm::vec3& a_Value) const
         {
-            glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+            glUniform3fv(glGetUniformLocation(ID, a_Name.c_str()), 1, &a_Value[0]);
         }
-        void setVec4(const std::string& name, float x, float y, float z, float w) const
+        void setVec3(const std::string& a_Name, float a_X, float a_Y, float a_Z) const
         {
-            glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
-        }
-        // ------------------------------------------------------------------------
-        void setMat2(const std::string& name, const glm::mat2& mat) const
-        {
-            glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+            glUniform3f(glGetUniformLocation(ID, a_Name.c_str()), a_X, a_Y, a_Z);
         }
         // ------------------------------------------------------------------------
-        void setMat3(const std::string& name, const glm::mat3& mat) const
+        void setVec4(const std::string& a_Name, const glm::vec4& a_Value) const
         {
-            glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+            glUniform4fv(glGetUniformLocation(ID, a_Name.c_str()), 1, &a_Value[0]);
+        }
+        void setVec4(const std::string& a_Name, float a_X, float a_Y, float a_Z, float a_W) const
+        {
+            glUniform4f(glGetUniformLocation(ID, a_Name.c_str()), a_X, a_Y, a_Z, a_W);
         }
         // ------------------------------------------------------------------------
-        void setMat4(const std::string& name, const glm::mat4& mat) const
+        void setMat2(const std::string& a_Name, const glm::mat2& a_Mat) const
         {
-            glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+            glUniformMatrix2fv(glGetUniformLocation(ID, a_Name.c_str()), 1, GL_FALSE, &a_Mat[0][0]);
+        }
+        // ------------------------------------------------------------------------
+        void setMat3(const std::string& a_Name, const glm::mat3& a_Mat) const
+        {
+            glUniformMatrix3fv(glGetUniformLocation(ID, a_Name.c_str()), 1, GL_FALSE, &a_Mat[0][0]);
+        }
+        // ------------------------------------------------------------------------
+        void setMat4(const std::string& a_Name, const glm::mat4& a_Mat) const
+        {
+            glUniformMatrix4fv(glGetUniformLocation(ID, a_Name.c_str()), 1, GL_FALSE, &a_Mat[0][0]);
         }
 
     private:
         // utility function for checking shader compilation/linking errors.
         // ------------------------------------------------------------------------
-        void checkCompileErrors(unsigned int shader, std::string type)
+        void checkCompileErrors(unsigned int a_Shader, std::string a_Type)
         {
             int success;
-            char infoLog[1024];
-            if (type != "PROGRAM")
+            char info_log[1024];
+            if (a_Type != "PROGRAM")
             {
-                glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+                glGetShaderiv(a_Shader, GL_COMPILE_STATUS, &success);
                 if (!success)
                 {
-                    glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-                    std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+                    glGetShaderInfoLog(a_Shader, 1024, NULL, info_log);
+                    std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << a_Type << "\n" << info_log << "\n -- --------------------------------------------------- -- " << std::endl;
                 }
             }
             else
             {
-                glGetProgramiv(shader, GL_LINK_STATUS, &success);
+                glGetProgramiv(a_Shader, GL_LINK_STATUS, &success);
                 if (!success)
                 {
-                    glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-                    std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+                    glGetProgramInfoLog(a_Shader, 1024, NULL, info_log);
+                    std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << a_Type << "\n" << info_log << "\n -- --------------------------------------------------- -- " << std::endl;
                 }
             }
         }
