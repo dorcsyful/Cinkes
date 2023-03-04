@@ -146,6 +146,7 @@
     <ClCompile Include="..\Dependencies\includes\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\Dependencies\includes\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\Dependencies\includes\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="CImguiHandler.cpp" />
     <ClCompile Include="CRenderShape.cpp" />
     <ClCompile Include="CRenderWindow.cpp" />
     <ClCompile Include="CTexture.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="..\Dependencies\includes\imgui\imstb_truetype.h" />
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CCameraSettings.h" />
+    <ClInclude Include="CImguiHandler.h" />
     <ClInclude Include="CInputHandler.h" />
     <ClInclude Include="CRenderDefines.h" />
     <ClInclude Include="CRenderShape.h" />

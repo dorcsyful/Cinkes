@@ -1,6 +1,4 @@
-#pragma once
 #include "CRenderWindow.h"
-#include "CRenderDefines.h"
 #include "CRenderHandler.h"
 #include "CCollisionWorld.h"
 #include "CBoxShape.h"
@@ -21,8 +19,11 @@ int main()
     handler->RegisterObject(object1);
     handler->RegisterObject(object2);
 
-    handler->m_Window->Run();
-
+    while(true)
+    {
+        if (handler->m_Window->RenderUpdate()) { break; }
+    }
+    
     delete handler;
 
     return 0;

@@ -1,3 +1,4 @@
+// ReSharper disable CppClangTidyCppcoreguidelinesSpecialMemberFunctions
 #pragma once
 #include "CCollisionShape.h"
 #include "CCollisionObject.h"
@@ -20,7 +21,7 @@ namespace Cinkes
 		std::shared_ptr<CCollisionObject> m_CollisionObject;
 		std::shared_ptr<CRenderShape> m_RenderObject;
 
-		void CreateRenderShape() {};
+		void CreateRenderShape() {}
 	};
 
 	class CRenderHandler
@@ -30,8 +31,8 @@ namespace Cinkes
 		~CRenderHandler() = default;
 
 		bool RegisterObject(const std::shared_ptr<CCollisionObject>& a_Collision);
-		//SLOW OPERATION! Recommended to only use it once! Allow duplicates for optimization.
-		void RegisterAll(const std::vector<std::shared_ptr<CCollisionObject>>& a_CollisionObjects, bool a_DuplicatesAllowed); 
+		void RegisterAll(const std::vector<std::shared_ptr<CCollisionObject>>& a_CollisionObjects); 
+		// ReSharper disable once CppInconsistentNaming
 		glm::mat4x4 ConvertTransformToGLM(const CTransform& a_Transform);
 		glm::vec3 ConvertVectorToGlm(const CVector3& a_Vector3);
 
@@ -39,7 +40,7 @@ namespace Cinkes
 
 		bool RemoveWrapperByCollisionRef(std::shared_ptr<CCollisionObject>& a_Collision);
 		bool RemoveWrapperByRenderRef(std::shared_ptr<CRenderShape>& a_Render);
-		bool RemoveWrapperByRef(CObjectWrapper a_Wrapper);
+		bool RemoveWrapperByRef(const CObjectWrapper& a_Wrapper);
 		bool RemoveWrapperByIndex(int a_Index);
 
 		CObjectWrapper GetWrapperByCollisionRef(std::shared_ptr<CCollisionObject>& a_Collision);

@@ -16,21 +16,16 @@ bool Cinkes::CRenderHandler::RegisterObject(const std::shared_ptr<CCollisionObje
 	return true;
 }
 
-void Cinkes::CRenderHandler::RegisterAll(const std::vector<std::shared_ptr<CCollisionObject>>& a_CollisionObjects, bool a_DuplicatesAllowed)
+void Cinkes::CRenderHandler::RegisterAll(const std::vector<std::shared_ptr<CCollisionObject>>& a_CollisionObjects)
 {
 	for (auto& current : a_CollisionObjects)
 	{
-		if (!a_DuplicatesAllowed) {
-			CVector3 location = current->GetTransform().getOrigin();
-			std::cout << "Collision object at location " << location[0] << " " << location[1];
-			std::cout << " " << location[2] << " already exists" << std::endl;
-		}
+
 		CObjectWrapper object = CObjectWrapper();
 		object.m_CollisionObject = current;
 		object.CreateRenderShape();
 		m_Window->AddRenderShape(object.m_RenderObject);
 		object.m_RenderObject->CreateVBO();
-		//object.m_RenderObject->LoadTexture(BASE_TEXTURE, m_Window->m_Shader[0]->);
 		m_Objects.push_back(object);
 	}
 }
@@ -53,7 +48,7 @@ glm::mat4x4 Cinkes::CRenderHandler::ConvertTransformToGLM(const Cinkes::CTransfo
 
 glm::vec3 Cinkes::CRenderHandler::ConvertVectorToGlm(const CVector3& a_Vector3)
 {
-	return glm::vec3(a_Vector3[0], a_Vector3[1], a_Vector3[2]);
+	return {a_Vector3[0], a_Vector3[1], a_Vector3[2]};
 }
 
 void Cinkes::CRenderHandler::CreateWindowObject()
@@ -84,7 +79,7 @@ bool Cinkes::CRenderHandler::RemoveWrapperByRenderRef(std::shared_ptr<CRenderSha
 	return false;
 }
 
-bool Cinkes::CRenderHandler::RemoveWrapperByRef(CObjectWrapper a_Wrapper)
+bool Cinkes::CRenderHandler::RemoveWrapperByRef(const CObjectWrapper& a_Wrapper)
 {
 	m_Objects.erase(std::find(m_Objects.begin(), m_Objects.end(), a_Wrapper));
 
@@ -107,7 +102,7 @@ Cinkes::CObjectWrapper Cinkes::CRenderHandler::GetWrapperByCollisionRef(std::sha
 		}
 	}
 	std::cout << "Cannot find wrapper associated with this collision object!" << std::endl;
-	return CObjectWrapper();
+	return {};
 }
 
 Cinkes::CObjectWrapper Cinkes::CRenderHandler::GetWrapperByRenderRef(std::shared_ptr<CRenderShape>& a_Render)
@@ -120,6 +115,6 @@ Cinkes::CObjectWrapper Cinkes::CRenderHandler::GetWrapperByRenderRef(std::shared
 		}
 	}
 	std::cout << "Cannot find wrapper associated with this render object!" << std::endl;
-	return CObjectWrapper();
+	return {};
 }
 

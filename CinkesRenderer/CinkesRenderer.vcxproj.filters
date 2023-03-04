@@ -48,6 +48,9 @@
     <ClCompile Include="..\Dependencies\includes\imgui\imgui_impl_glfw.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="CImguiHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCamera.h">
@@ -106,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="..\Dependencies\includes\imgui\imgui_impl_glfw.h">
       <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CImguiHandler.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
