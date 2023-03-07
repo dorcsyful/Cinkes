@@ -43,8 +43,8 @@ bool Cinkes::CBoxBoxCollision::Run(CInternalContactInfo* a_Info)
 	CreateIncidentLines();
 
 	if (m_ReferenceFace.vertices.size() > 1 && m_IncidentFace.vertices.size() > 1) {
-		Clip(m_ReferenceFace,m_ReferenceBox,m_RefSidePlanes,0);
-		Clip(m_IncidentFace,m_IncidentBox,m_IncSidePlanes,1);
+		Clip(m_IncidentFace,m_IncidentBox,m_RefSidePlanes,0);
+		Clip(m_ReferenceFace,m_ReferenceBox,m_IncSidePlanes,1);
 	} 
 	m_ReferenceFace = CFace();
 	m_IncidentFace = CFace();

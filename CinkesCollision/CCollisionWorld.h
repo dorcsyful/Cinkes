@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 #include <memory>
 #include <vector>
 #include "CBVH.h"
@@ -6,7 +7,8 @@
 #include "CEPA.h"
 #include "CScalar.h"
 #include "CBoxBoxCollision.h"
-
+#include "CCollisionShape.h"
+#include "CSAT.h"
 
 namespace Cinkes
 {
@@ -65,7 +67,8 @@ namespace Cinkes
 		std::unique_ptr<CBVH> m_BVH;
 		std::unique_ptr<CGJKAlgorithm> m_GJK;
 		std::unique_ptr<CEPA> m_CEPA;
-		std::unique_ptr<CBoxBoxCollision> m_SAT;
+		std::unique_ptr<CSAT> m_SAT;
+		std::map<std::pair<ESHAPE_TYPE,ESHAPE_TYPE>, std::shared_ptr<CBoxBoxCollision>> m_ContactPoint;
 		//}
 	};
 

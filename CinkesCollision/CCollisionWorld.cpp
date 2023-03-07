@@ -12,7 +12,10 @@ Cinkes::CCollisionWorld::CCollisionWorld() : m_ShouldUpdate(false)
 	m_BVH = std::make_unique<CBVH>(m_Objects);
 	m_GJK = std::make_unique<CGJKAlgorithm>();
 	m_CEPA = std::make_unique<CEPA>();
-	m_SAT = std::make_unique<CBoxBoxCollision>();
+	m_SAT = std::make_unique<CSAT>();
+	auto pair = std::pair<ESHAPE_TYPE, ESHAPE_TYPE>(ESHAPE_TYPE::SHAPE_BOX, ESHAPE_TYPE::SHAPE_BOX);
+	auto boxbox = std::make_shared<CBoxBoxCollision>();
+	m_ContactPoint.insert({ pair,boxbox });
 }
 
 
@@ -25,7 +28,7 @@ Cinkes::CCollisionWorld& Cinkes::CCollisionWorld::operator=(const CCollisionWorl
 	m_BVH = std::make_unique<CBVH>(m_Objects);
 	m_GJK = std::make_unique<CGJKAlgorithm>();
 	m_CEPA = std::make_unique<CEPA>();
-	m_SAT = std::make_unique<CBoxBoxCollision>();
+	m_SAT = std::make_unique<CSAT>();
 	return *this;
 }
 
@@ -74,18 +77,21 @@ void Cinkes::CCollisionWorld::RunCollision(CScalar a_T)
 	for (auto& element : m_BVH->m_Contacts)
 	{
 		for (unsigned i = 0; i < element->m_Objects.size() - 1; i++) {
-			CSimplex simplex;
-			bool algorithm = m_GJK->Algorithm(element->m_Objects[i].get(), element->m_Objects[i + 1].get(),simplex);
+			std::vector<CVector3> axes;
+			std::vector<CVector3> a_vertices;
+			std::vector<CVector3> b_vertices;
+			m_SAT->m_Generator->ChooseFunction(element->m_Objects[i].get(), element->m_Objects[i + 1].get(), axes, a_vertices, b_vertices);
+			bool algorithm = m_SAT->Run(axes, a_vertices, b_vertices);
 			if(algorithm)
 			{
 				std::shared_ptr<CInternalContactInfo> contact = std::make_shared<CInternalContactInfo>();
+				contact->m_Normal = m_SAT->m_MinOverlapAxis;
 				contact->m_First = element->m_Objects[i];
 				element->m_Objects[i]->SetHasContact(contact.get());
 				element->m_Objects[i + 1]->SetHasContact(contact.get());
 				contact->m_Second = element->m_Objects[i + 1];
-				m_CEPA->Run(contact.get(), simplex);
+				m_ContactPoint.at(std::pair<ESHAPE_TYPE, ESHAPE_TYPE>(ESHAPE_TYPE::SHAPE_BOX, ESHAPE_TYPE::SHAPE_BOX)).get()->Run(contact.get());
 				m_Contacts.push_back(contact);
-				m_SAT->Run(contact.get());
 			}
 		}
 	}

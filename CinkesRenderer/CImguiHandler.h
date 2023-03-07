@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 
-#include "CRenderWindow.h"
 
 
 namespace Cinkes
@@ -71,6 +70,7 @@ namespace Cinkes
 	{
 	public:
 		CImguiHandler() = default;
+		~CImguiHandler() {}
 		bool AddWidget(CImguiWidget& a_Widget, const std::string& a_WindowName)
 		{
 			for (const auto& widget : m_Widgets[a_WindowName])
@@ -96,12 +96,6 @@ namespace Cinkes
 			assert(false);
 			return false;
 		}
-
-		void ImguiUpdate(GLFWwindow* a_Window)
-		{
-			//user needs to add functionality here
-		}
-
 		std::map<std::string, std::vector<CImguiWidget>> m_Widgets;
 		std::map<std::string, std::vector<CImguiWidget>> m_ChangedState;
 	};

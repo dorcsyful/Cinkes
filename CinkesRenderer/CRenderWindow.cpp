@@ -63,9 +63,8 @@ Cinkes::CRenderWindow::~CRenderWindow()
 
 }
 
-bool Cinkes::CRenderWindow::InitializeWindow(std::shared_ptr<CImguiHandler> a_Imgui)
+bool Cinkes::CRenderWindow::InitializeWindow()
 {
-    m_Imgui = a_Imgui;
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VERSION_MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VERSION_MINOR);
@@ -84,7 +83,7 @@ bool Cinkes::CRenderWindow::InitializeWindow(std::shared_ptr<CImguiHandler> a_Im
     glfwSetScrollCallback(m_Window, scroll_callback);
 
     // tell GLFW to capture our mouse
-    glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
@@ -98,7 +97,20 @@ bool Cinkes::CRenderWindow::InitializeWindow(std::shared_ptr<CImguiHandler> a_Im
     m_Shader.insert(std::pair<const char*, std::shared_ptr<CShader>>("Line", std::make_shared<CShader>(LINE_VERTEX_SHADER, LINE_FRAGMENT_SHADER)));
 
     glfwSetWindowUserPointer(m_Window, m_Input.get());
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsLight();
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
+    ImGui_ImplOpenGL3_Init("#version 150");
     return true;
 }
 
@@ -171,7 +183,7 @@ bool Cinkes::CRenderWindow::RenderUpdate()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    m_Imgui->ImguiUpdate(m_Window);
+    //m_Imgui->ImguiUpdate(m_Window);
 
     ImGui::Render();
     

@@ -93,6 +93,9 @@
     <ClInclude Include="CTriangleShape.h">
       <Filter>Redundant\Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="CSAT.h">
+      <Filter>Header Files\Algorithms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCollisionWorld.cpp">

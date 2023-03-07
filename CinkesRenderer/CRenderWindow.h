@@ -18,11 +18,13 @@ namespace Cinkes
 		CRenderWindow()
 		{
 			m_Input = std::make_shared<CInputHandler>();
+			m_Imgui = std::make_shared<CImguiHandler>();
+
 		}
 
 		~CRenderWindow();
 
-		bool InitializeWindow(std::shared_ptr<CImguiHandler> a_Imgui);
+		bool InitializeWindow();
 		void Update();
 
 

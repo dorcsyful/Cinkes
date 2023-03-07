@@ -27,7 +27,15 @@ namespace Cinkes
 	class CRenderHandler
 	{
 	public:
-		CRenderHandler(bool a_CreateWindow) { m_Window = std::make_shared<CRenderWindow>(); if (a_CreateWindow) { m_Window->InitializeWindow(); } }
+		CRenderHandler(bool a_CreateWindow)
+		{
+			m_Window = std::make_shared<CRenderWindow>();
+			
+			if (a_CreateWindow)
+			{
+				m_Window->InitializeWindow();
+			}
+		}
 		~CRenderHandler() = default;
 
 		bool RegisterObject(const std::shared_ptr<CCollisionObject>& a_Collision);
