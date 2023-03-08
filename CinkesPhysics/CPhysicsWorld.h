@@ -13,7 +13,7 @@ namespace Cinkes
 	{
 	public:
 		CPhysicsWorld() {
-			m_FGenerators = std::make_shared<CForceGeneratorRegistry>(this);
+			m_FGenerators = std::make_shared<CForceGeneratorRegistry>();
 			m_Resolver = std::make_shared<CCollisionResolver>();
 		}
 		~CPhysicsWorld() = default;
@@ -23,7 +23,7 @@ namespace Cinkes
 		bool RemoveRigidBodyByValue(const std::shared_ptr<CRigidBody>& a_Body, bool a_Delete);
 		bool RemoveRigidBodyByIndex(int a_Index);
 
-		bool AddSpring(const std::shared_ptr<CForceGenerator>& a_Generator) { return false; }
+		bool AddSpring(const std::shared_ptr<CSpring>& a_Spring);
 		bool RemoveSpringByValue(const std::shared_ptr<CForceGenerator>& a_Generator, bool a_Delete) { return false; }
 		bool RemoveSpringByIndex(int a_Index, bool a_Delete);
 		bool RemoveSpringByType(int a_Index, bool a_Delete);
@@ -33,7 +33,7 @@ namespace Cinkes
 
 	private:
 		std::shared_ptr<CForceGeneratorRegistry> m_FGenerators;
-		std::vector<std::shared_ptr<CSprings>> m_Springs;
+		std::vector<std::shared_ptr<CSpring>> m_Springs;
 		std::vector<std::shared_ptr<CRigidBody>> m_RigidBodies;
 		std::shared_ptr<CCollisionResolver> m_Resolver;
 	};

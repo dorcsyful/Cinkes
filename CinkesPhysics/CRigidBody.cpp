@@ -16,6 +16,8 @@ Cinkes::CRigidBody::CRigidBody(const CTransform& a_Transform, const std::shared_
 	m_Transform = a_Transform;
 	m_Shape = a_CollisionShape;
 	m_Moveable = true;
+	m_Type = EOBJECT_TYPE::TYPE_RIGID;
+
 }
 
 Cinkes::CRigidBody::CRigidBody(CBody&& a_Rhs, const std::vector<std::shared_ptr<CSpring>>& a_AttachedSprings,
@@ -26,6 +28,7 @@ Cinkes::CRigidBody::CRigidBody(CBody&& a_Rhs, const std::vector<std::shared_ptr<
 	m_Transform = a_Rhs.GetTransform();
 	m_Shape = a_Rhs.GetCollisionShape();
 	m_Moveable = true;
+	m_Type = EOBJECT_TYPE::TYPE_RIGID;
 
 }
 Cinkes::CRigidBody::CRigidBody(CRigidBody&& a_Rhs) noexcept
@@ -35,6 +38,7 @@ Cinkes::CRigidBody::CRigidBody(CRigidBody&& a_Rhs) noexcept
 	m_Shape = a_Rhs.GetCollisionShape();
 	m_InverseMass = 1/m_Mass;
 	m_Moveable = true;
+	m_Type = EOBJECT_TYPE::TYPE_RIGID;
 
 }
 
@@ -46,6 +50,7 @@ Cinkes::CRigidBody& Cinkes::CRigidBody::operator=(CRigidBody&& a_Rhs) noexcept  
 	m_Transform = a_Rhs.GetTransform();
 	m_Shape = a_Rhs.GetCollisionShape();
 	m_Moveable = true;
+	m_Type = EOBJECT_TYPE::TYPE_RIGID;
 
 	return *this;
 }
@@ -59,6 +64,7 @@ Cinkes::CRigidBody& Cinkes::CRigidBody::operator=(const CRigidBody& a_Rhs)
 	m_Transform = a_Rhs.GetTransform();
 	m_Shape = a_Rhs.GetCollisionShape();
 	m_Moveable = true;
+	m_Type = EOBJECT_TYPE::TYPE_RIGID;
 
 	return *this;
 }
@@ -126,7 +132,7 @@ void Cinkes::CRigidBody::AddForceAtPoint(const CVector3& a_ForceToAdd, const CVe
 void Cinkes::CRigidBody::Integrate(CScalar a_T)
 {
     if (m_InverseMass < static_cast<CScalar>(0.001)) { return; }
-    m_Velocity += m_Force * a_T * m_InverseMass;
+    m_Velocity += m_Force  * m_InverseMass;
 	m_AngularVelocity += m_InverseIntertiaTensorWorld * m_Torque * a_T;
 
 	m_Velocity *= m_LinearDamping;

@@ -8,6 +8,10 @@
 
 void Cinkes::CPhysicsWorld::Update(CScalar a_T)
 {
+
+	RunCollision(a_T);
+	if (!m_Contacts.empty()) {
+	}
 	m_FGenerators->UpdateGenerators();
 
 
@@ -15,13 +19,10 @@ void Cinkes::CPhysicsWorld::Update(CScalar a_T)
 	{
 		element->Integrate(a_T);
 		
-	}
-	RunCollision(a_T);
-	if (!m_Contacts.empty()) {
-	}
+	}	
 	for (const auto& element : m_RigidBodies)
 	{
-		element->SetTransform(CTransform(CMat3x3(), element->GetTransform().getOrigin() + element->GetLinearVelocity()));
+		element->SetTransform(CTransform(CMat3x3(), element->GetTransform().getOrigin() + element->GetLinearVelocity() * a_T));
 
 	}
 }
@@ -72,5 +73,13 @@ bool Cinkes::CPhysicsWorld::RemoveRigidBodyByIndex(int a_Index)
 	{
 		return false;
 	}
+	return true;
+}
+
+bool Cinkes::CPhysicsWorld::AddSpring(const std::shared_ptr<CSpring>& a_Spring)
+{
+	if (std::find(m_Springs.begin(), m_Springs.end(), a_Spring) != m_Springs.end()) { return false; }
+	m_Springs.push_back(a_Spring);
+	m_FGenerators->GetGeneratorByType(EGENERATOR_TYPE::TYPE_SPRING_BASIC)->AddObject(m_Springs[m_Springs.size() - 1].get());
 	return true;
 }

@@ -43,7 +43,7 @@ namespace Cinkes
 		// ReSharper disable once CppInconsistentNaming
 		glm::mat4x4 ConvertTransformToGLM(const CTransform& a_Transform);
 		glm::vec3 ConvertVectorToGlm(const CVector3& a_Vector3);
-
+		void UpdateObjects();
 		void CreateWindowObject();
 
 		bool RemoveWrapperByCollisionRef(std::shared_ptr<CCollisionObject>& a_Collision);

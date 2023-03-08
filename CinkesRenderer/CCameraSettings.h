@@ -25,7 +25,7 @@ namespace Cinkes {
 		glm::vec3 Front = glm::vec3(0, 0, -1);
 		glm::vec3 WorldUp = glm::vec3(0, 1, 0);
 		// euler Angles
-		float Yaw = -90.f;
+		float Yaw = 0.f;
 		float Pitch = 0.f;
 		// camera options
 		float MovementSpeed = 20.f;

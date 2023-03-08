@@ -20,8 +20,8 @@ namespace Cinkes
 		}
 
 		CRigidBody(const CTransform& a_Transform, const std::shared_ptr<CCollisionShape>& a_CollisionShape,
-			CScalar a_Mass,
-			const CVector3& a_CenterOfMass);
+			CScalar a_Mass = 1,
+			const CVector3& a_CenterOfMass = CVector3(0, 0, 0));
 
 
 		CRigidBody(CBody&& a_Rhs, const std::vector<std::shared_ptr<CSpring>>& a_AttachedSprings,

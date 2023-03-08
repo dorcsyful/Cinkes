@@ -5,13 +5,15 @@ bool Cinkes::CRenderHandler::RegisterObject(const std::shared_ptr<CCollisionObje
 {
 	CObjectWrapper object = CObjectWrapper();
 	object.m_CollisionObject = a_Collision;
+	std::shared_ptr<CRenderShape> temp;
 	if(a_Collision->GetCollisionShape()->GetType() == ESHAPE_TYPE::SHAPE_BOX)
 	{
 		glm::vec3 extent = ConvertVectorToGlm(static_cast<CBoxShape*>(a_Collision->GetCollisionShape().get())->GetDimensions());
 		std::shared_ptr<CCuboidRenderShape> shape1 = std::make_shared<CCuboidRenderShape>(ConvertTransformToGLM(a_Collision->GetTransform()), extent);
-		auto upcast = std::static_pointer_cast<CRenderShape>(shape1);
-		m_Window->AddRenderShape(upcast);
+		temp = std::static_pointer_cast<CRenderShape>(shape1);
+		m_Window->AddRenderShape(temp);
 	}
+	object.m_RenderObject = temp;
 	m_Objects.push_back(object);
 	return true;
 }
@@ -49,6 +51,14 @@ glm::mat4x4 Cinkes::CRenderHandler::ConvertTransformToGLM(const Cinkes::CTransfo
 glm::vec3 Cinkes::CRenderHandler::ConvertVectorToGlm(const CVector3& a_Vector3)
 {
 	return {a_Vector3[0], a_Vector3[1], a_Vector3[2]};
+}
+
+void Cinkes::CRenderHandler::UpdateObjects()
+{
+	for(auto& current : m_Objects)
+	{
+		current.m_RenderObject->SetTransform(ConvertTransformToGLM(current.m_CollisionObject->GetTransform()));
+	}
 }
 
 void Cinkes::CRenderHandler::CreateWindowObject()

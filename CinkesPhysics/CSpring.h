@@ -1,6 +1,7 @@
 #pragma once
 #include "CVector3.h"
-
+#include "CCollisionObject.h"
+#include "CRigidBody.h"
 namespace Cinkes
 {
 	class CBody;
@@ -10,36 +11,55 @@ namespace Cinkes
 		TYPE_BASIC = 0
 	};
 
+	struct CSpringData
+	{
+		
+		CCollisionObject* m_Body[2]{ nullptr,nullptr };
+		CVector3 m_Points[2];
+		CScalar m_SpringConstant;
+		CScalar m_RestLength;
+	};
+
 	class CSpring
 	{
 	public:
-		CSpring(CRigidBody* a_Body1, const CVector3& a_Point1,CRigidBody* a_Body2, const CVector3& a_Point2, CScalar a_SpringConstant,CScalar a_RestLength)
+		CSpring(const CSpringData& a_Data)
 		{
-			m_Body1 = a_Body1;
-			m_LocalConnectionPoint1 = a_Point1;
-			m_Body2 = a_Body2;
-			m_LocalConnectionPoint2 = a_Point2;
-			m_SpringConstant = a_SpringConstant;
-			m_RestLength = a_RestLength;
+			if(a_Data.m_Body[0] == nullptr) { m_Point[0] = a_Data.m_Points[0]; }
+			else if (a_Data.m_Body[0]->GetType() == EOBJECT_TYPE::TYPE_RIGID)
+			{
+				m_Body[0] = reinterpret_cast<CRigidBody*>(a_Data.m_Body[0]);
+			}
+			else{ m_Point[0] = a_Data.m_Body[0]->GetTransform().getOrigin(); }
+
+			if (a_Data.m_Body[1] == nullptr) { m_Point[1] = a_Data.m_Points[1]; }
+			else if (a_Data.m_Body[1]->GetType() == EOBJECT_TYPE::TYPE_RIGID)
+			{
+				m_Body[1] = reinterpret_cast<CRigidBody*>(a_Data.m_Body[1]);
+			}
+			else { m_Point[1] = a_Data.m_Body[1]->GetTransform().getOrigin(); }
+
+			m_SpringConstant = a_Data.m_SpringConstant;
+			m_RestLength = a_Data.m_RestLength;
 			m_Type = ESPRING_TYPE::TYPE_BASIC;
 		}
 		ESPRING_TYPE GetType() const { return m_Type; }
 
-		CRigidBody* GetBody1() { return m_Body1; }
-		CRigidBody* GetBody1() const { return m_Body1; }
-		bool SetBody1(CRigidBody* a_Body) { if (a_Body != m_Body2) { m_Body1 = a_Body; return true; } return false; }
+		CRigidBody* GetBody1() { return m_Body[0]; }
+		CRigidBody* GetBody1() const { return m_Body[0]; }
+		bool SetBody1(CRigidBody* a_Body) { if (a_Body != m_Body[1]) { m_Body[0] = a_Body; return true; } return false; }
 
-		CRigidBody* GetBody2() { return m_Body2; }
-		CRigidBody* GetBody2() const { return m_Body2; }
-		bool SetBody2(CRigidBody* a_Body) { if (a_Body != m_Body1) { m_Body2 = a_Body; return true; } return false; }
+		CRigidBody* GetBody2() { return m_Body[1]; }
+		CRigidBody* GetBody2() const { return m_Body[1]; }
+		bool SetBody2(CRigidBody* a_Body) { if (a_Body != m_Body[0]) { m_Body[1] = a_Body; return true; } return false; }
 
-		CVector3 GetLocalConnectionPoint1() { return m_LocalConnectionPoint1; }
-		CVector3 GetLocalConnectionPoint1() const { return m_LocalConnectionPoint1; }
-		void SetLocalConnectionPoint1(const CVector3& a_Point) { m_LocalConnectionPoint1 = a_Point; }
+		CVector3 GetLocalConnectionPoint1() { return m_Point[0]; }
+		CVector3 GetLocalConnectionPoint1() const { return m_Point[0]; }
+		void SetLocalConnectionPoint1(const CVector3& a_Point) { m_Point[0] = a_Point; }
 
-		CVector3 GetLocalConnectionPoint2() { return m_LocalConnectionPoint2; }
-		CVector3 GetLocalConnectionPoint2() const { return m_LocalConnectionPoint2; }
-		void SetLocalConnectionPoint2(const CVector3& a_Point) { m_LocalConnectionPoint2 = a_Point; }
+		CVector3 GetLocalConnectionPoint2() { return m_Point[1]; }
+		CVector3 GetLocalConnectionPoint2() const { return m_Point[1]; }
+		void SetLocalConnectionPoint2(const CVector3& a_Point) { m_Point[1] = a_Point; }
 
 		CScalar GetSpringConstant() { return m_SpringConstant; }
 		CScalar GetSpringConstant() const { return m_SpringConstant; }
@@ -50,10 +70,9 @@ namespace Cinkes
 		void SetRestLength(CScalar a_Length) { m_RestLength = a_Length; }
 
 	protected:
-		CVector3 m_LocalConnectionPoint1;
-		CVector3 m_LocalConnectionPoint2;
-		CRigidBody* m_Body1;
-		CRigidBody* m_Body2;
+
+		CRigidBody* m_Body[2]{};
+		CVector3 m_Point[2];
 		CScalar m_SpringConstant;
 		CScalar m_RestLength;
 
