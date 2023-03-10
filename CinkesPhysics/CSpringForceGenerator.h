@@ -1,4 +1,7 @@
 #pragma once
+#include <iostream>
+#include <ostream>
+
 #include "CRigidBody.h"
 #include "CForceGenerator.h"
 #include "CSpring.h"
@@ -15,29 +18,52 @@ namespace Cinkes
 		{
 			m_Current = static_cast<CSpring*>(a_Body);
 			
-			if (m_Current->GetBody1() != nullptr) { m_Positions[0] = m_Current->GetBody1()->GetTransform().getOrigin(); }
-			else { m_Positions[0] = m_Current->GetLocalConnectionPoint1(); }
-			if (m_Current->GetBody2() != nullptr) { m_Positions[1] = m_Current->GetBody2()->GetTransform().getOrigin(); }
-			else { m_Positions[1] = m_Current->GetLocalConnectionPoint2(); }
+			if (m_Current->GetBody1() != nullptr)
+			{
+				m_Positions[0] = m_Current->GetBody1()->GetTransform().getOrigin();
+				if (m_Current->GetBody1()->GetType() == EOBJECT_TYPE::TYPE_RIGID) { m_Velocities[0] = m_Current->GetBody1()->GetLinearVelocity(); }
+			}
+			else
+			{
+				m_Positions[0] = m_Current->GetPoint1();
 
-			CalculateFirst();
-			CalculateSecond();
+
+			}
+			if (m_Current->GetBody2() != nullptr)
+			{
+				m_Positions[1] = m_Current->GetBody2()->GetTransform().getOrigin();
+				if (m_Current->GetBody2()->GetType() == EOBJECT_TYPE::TYPE_RIGID) { m_Velocities[1] = m_Current->GetBody2()->GetLinearVelocity(); }
+			}
+			else
+			{
+				m_Positions[1] = m_Current->GetPoint2();
+
+			}
+
+
+			if (m_Current->GetBody1() != nullptr) CalculateFirst();
+			if (m_Current->GetBody2() != nullptr) CalculateSecond();
 		}
 		void CalculateFirst() const
 		{
-			// Calculate the vector of the spring.
-			CVector3 force = m_Positions[0] - m_Positions[1];
-			// Calculate the magnitude of the force.
-			CScalar length = force.Length();
-			length = CUtils::Abs(length - m_Current->GetRestLength());
-			length *= m_Current->GetSpringConstant();
-			// Calculate the final force and apply it.
-			force.Normalize();
-			force *= -length;
-			if(m_Current->GetBody1() != nullptr)
-			{
-				m_Current->GetBody1()->AddForceAtPoint(force, m_Positions[0]);
+			// spring force
+			CScalar dist = (m_Positions[0] - m_Positions[1]).Length();
+			CScalar scalar = 10.f * m_Current->GetSpringConstant() * (dist - m_Current->GetRestLength());
+			CVector3 dir = CVector3::Normalize(m_Positions[1] - m_Positions[0]);
+
+			// find speed of contraction/expansion for damping force
+			CScalar s1 = CVector3::Dot(m_Velocities[0], dir);
+			CScalar s2 = CVector3::Dot(m_Velocities[1], dir);
+			CScalar dampingScalar = -0.1f * (s1 + s2);
+			CVector3 force;
+			if (1.f == m_Current->GetBody1()->GetMass()) {
+				force = dir * (scalar + dampingScalar);
 			}
+			else {
+				force = dir * (-scalar + dampingScalar);
+			}
+			//std::cout << force.getY() << std::endl;
+			m_Current->GetBody1()->AddForceAtPoint(force, m_Positions[0]);
 			
 		}
 		void CalculateSecond() const
@@ -50,11 +76,12 @@ namespace Cinkes
 			// Calculate the final force and apply it.
 			force.Normalize();
 			force *= -length;
-			if(m_Current->GetBody2() != nullptr) m_Current->GetBody2()->AddForceAtPoint(force, m_Positions[1]);
+			m_Current->GetBody2()->AddForceAtPoint(force, m_Positions[1]);
 		}
 
 		CSpring* m_Current = nullptr;
 		CVector3 m_Positions[2];
+		CVector3 m_Velocities[2];
 	};
 
 }

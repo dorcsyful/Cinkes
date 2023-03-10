@@ -24,8 +24,9 @@ int main()
     CSpringData data;
     data.m_Body[0] = rb1.get();
     data.m_Points[1] = CVector3(0, 10, 10);
-    data.m_RestLength = 10;
-    data.m_SpringConstant = 1;
+    data.m_RestLength = 5;
+    data.m_SpringConstant = 2.5f;
+    data.m_DampeningConstant = 0.4f;
     std::shared_ptr<CSpring> spring = std::make_shared<CSpring>(data);
     //world->RunCollision(1);
     world->AddSpring(spring);

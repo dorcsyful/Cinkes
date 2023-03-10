@@ -18,6 +18,7 @@ namespace Cinkes
 		CVector3 m_Points[2];
 		CScalar m_SpringConstant;
 		CScalar m_RestLength;
+		CScalar m_DampeningConstant;
 	};
 
 	class CSpring
@@ -42,6 +43,7 @@ namespace Cinkes
 			m_SpringConstant = a_Data.m_SpringConstant;
 			m_RestLength = a_Data.m_RestLength;
 			m_Type = ESPRING_TYPE::TYPE_BASIC;
+			m_DampeningConstant = a_Data.m_DampeningConstant;
 		}
 		ESPRING_TYPE GetType() const { return m_Type; }
 
@@ -53,17 +55,21 @@ namespace Cinkes
 		CRigidBody* GetBody2() const { return m_Body[1]; }
 		bool SetBody2(CRigidBody* a_Body) { if (a_Body != m_Body[0]) { m_Body[1] = a_Body; return true; } return false; }
 
-		CVector3 GetLocalConnectionPoint1() { return m_Point[0]; }
-		CVector3 GetLocalConnectionPoint1() const { return m_Point[0]; }
-		void SetLocalConnectionPoint1(const CVector3& a_Point) { m_Point[0] = a_Point; }
+		CVector3 GetnPoint1() { return m_Point[0]; }
+		CVector3 GetPoint1() const { return m_Point[0]; }
+		void SetPoint1(const CVector3& a_Point) { m_Point[0] = a_Point; }
 
-		CVector3 GetLocalConnectionPoint2() { return m_Point[1]; }
-		CVector3 GetLocalConnectionPoint2() const { return m_Point[1]; }
-		void SetLocalConnectionPoint2(const CVector3& a_Point) { m_Point[1] = a_Point; }
+		CVector3 GetPoint2() { return m_Point[1]; }
+		CVector3 GetPoint2() const { return m_Point[1]; }
+		void SetPoint2(const CVector3& a_Point) { m_Point[1] = a_Point; }
 
 		CScalar GetSpringConstant() { return m_SpringConstant; }
 		CScalar GetSpringConstant() const { return m_SpringConstant; }
 		void SetSpringConstant(CScalar a_Constant) { m_SpringConstant = a_Constant; }
+
+		CScalar GetDampeningConstant() { return m_DampeningConstant; }
+		CScalar GetDampeningConstant() const { return m_DampeningConstant; }
+		void GetDampeningConstant(CScalar a_Constant) { m_DampeningConstant = a_Constant; }
 
 		CScalar GetRestLength() { return m_RestLength; }
 		CScalar GetRestLength() const { return m_RestLength; }
@@ -75,6 +81,7 @@ namespace Cinkes
 		CVector3 m_Point[2];
 		CScalar m_SpringConstant;
 		CScalar m_RestLength;
+		CScalar m_DampeningConstant;
 
 		ESPRING_TYPE m_Type;
 	};
