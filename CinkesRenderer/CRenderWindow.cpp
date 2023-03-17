@@ -83,7 +83,7 @@ bool Cinkes::CRenderWindow::InitializeWindow()
     glfwSetScrollCallback(m_Window, scroll_callback);
 
     // tell GLFW to capture our mouse
-    glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {

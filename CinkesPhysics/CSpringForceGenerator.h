@@ -48,13 +48,13 @@ namespace Cinkes
 		{
 			// spring force
 			CScalar dist = (m_Positions[0] - m_Positions[1]).Length();
-			CScalar scalar = 10.f * m_Current->GetSpringConstant() * (dist - m_Current->GetRestLength());
+			CScalar scalar = m_Current->GetBody1()->GetMass() * m_Current->GetSpringConstant() * (dist - m_Current->GetRestLength());
 			CVector3 dir = CVector3::Normalize(m_Positions[1] - m_Positions[0]);
 
 			// find speed of contraction/expansion for damping force
 			CScalar s1 = CVector3::Dot(m_Velocities[0], dir);
 			CScalar s2 = CVector3::Dot(m_Velocities[1], dir);
-			CScalar dampingScalar = -0.1f * (s1 + s2);
+			CScalar dampingScalar = -m_Current->GetDampeningConstant() * (s1 + s2);
 			CVector3 force;
 			if (1.f == m_Current->GetBody1()->GetMass()) {
 				force = dir * (scalar + dampingScalar);
@@ -68,15 +68,24 @@ namespace Cinkes
 		}
 		void CalculateSecond() const
 		{
-			CVector3 force = m_Positions[0] - m_Positions[1];
-			// Calculate the magnitude of the force.
-			CScalar length = force.Length();
-			length = CUtils::Abs(length - m_Current->GetRestLength());
-			length *= m_Current->GetSpringConstant();
-			// Calculate the final force and apply it.
-			force.Normalize();
-			force *= -length;
-			m_Current->GetBody2()->AddForceAtPoint(force, m_Positions[1]);
+			// spring force
+			CScalar dist = (m_Positions[0] - m_Positions[1]).Length();
+			CScalar scalar = m_Current->GetBody2()->GetMass() * m_Current->GetSpringConstant() * (dist - m_Current->GetRestLength());
+			CVector3 dir = CVector3::Normalize(m_Positions[1] - m_Positions[0]);
+
+			// find speed of contraction/expansion for damping force
+			CScalar s1 = CVector3::Dot(m_Velocities[0], dir);
+			CScalar s2 = CVector3::Dot(m_Velocities[1], dir);
+			CScalar dampingScalar = -m_Current->GetDampeningConstant() * (s1 + s2);
+			CVector3 force;
+			if (1.f == m_Current->GetBody2()->GetMass()) {
+				force = dir * (scalar + dampingScalar);
+			}
+			else {
+				force = dir * (-scalar + dampingScalar);
+			}
+			//std::cout << force.getY() << std::endl;
+			m_Current->GetBody2()->AddForceAtPoint(force, m_Positions[0]);
 		}
 
 		CSpring* m_Current = nullptr;

@@ -132,9 +132,8 @@ void Cinkes::CRigidBody::AddForceAtPoint(const CVector3& a_ForceToAdd, const CVe
 void Cinkes::CRigidBody::Integrate(CScalar a_T)
 {
     if (m_InverseMass < static_cast<CScalar>(0.001)) { return; }
-    m_Velocity += m_Force  * m_InverseMass;
+    m_Velocity += m_Force  * m_InverseMass * a_T;
 	m_AngularVelocity += m_InverseIntertiaTensorWorld * m_Torque * a_T;
-
 	m_Velocity *= m_LinearDamping;
 	m_AngularVelocity *= m_AngularDamping;
     SetInverseInertiaTensorWorld();

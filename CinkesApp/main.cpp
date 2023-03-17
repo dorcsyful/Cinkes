@@ -19,14 +19,14 @@ int main()
 	//std::shared_ptr<CCollisionObject> object2 = std::make_shared<CCollisionObject>(transform, shape1);
     std::unique_ptr<CPhysicsWorld> world = std::make_unique<CPhysicsWorld>();
 
-    std::shared_ptr<CRigidBody> rb1 = std::make_shared<CRigidBody>(CTransform(CVector3(0, 0, 10)),shape2);
+    std::shared_ptr<CRigidBody> rb1 = std::make_shared<CRigidBody>(CTransform(CVector3(0, 0, 10)),shape2,1);
     world->AddRigidBody(rb1);
     CSpringData data;
     data.m_Body[0] = rb1.get();
-    data.m_Points[1] = CVector3(0, 10, 10);
-    data.m_RestLength = 5;
+    data.m_Points[1] = CVector3(0, 5, 10);
+    data.m_RestLength = 4;
     data.m_SpringConstant = 2.5f;
-    data.m_DampeningConstant = 0.4f;
+    data.m_DampeningConstant = 0.25f;
     std::shared_ptr<CSpring> spring = std::make_shared<CSpring>(data);
     //world->RunCollision(1);
     world->AddSpring(spring);
