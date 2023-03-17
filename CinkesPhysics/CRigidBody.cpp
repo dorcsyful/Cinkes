@@ -126,7 +126,7 @@ void Cinkes::CRigidBody::AddForceAtPoint(const CVector3& a_ForceToAdd, const CVe
 {
 	m_Force += a_ForceToAdd;
 	CVector3 rel = (a_Point - GetTransform().getOrigin());
-	m_Torque += rel.Cross(a_ForceToAdd);
+	m_Torque += a_ForceToAdd.Cross(rel);
 }
 
 void Cinkes::CRigidBody::Integrate(CScalar a_T)
