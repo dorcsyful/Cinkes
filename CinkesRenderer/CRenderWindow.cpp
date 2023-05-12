@@ -83,7 +83,7 @@ bool Cinkes::CRenderWindow::InitializeWindow()
     glfwSetScrollCallback(m_Window, scroll_callback);
 
     // tell GLFW to capture our mouse
-    glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
@@ -183,7 +183,10 @@ bool Cinkes::CRenderWindow::RenderUpdate()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    //m_Imgui->ImguiUpdate(m_Window);
+    // render your GUI
+    ImGui::Begin("Demo window");
+    ImGui::Button("Hello!");
+    ImGui::End();
 
     ImGui::Render();
     

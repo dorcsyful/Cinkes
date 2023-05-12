@@ -35,18 +35,26 @@ void Cinkes::CRenderHandler::RegisterAll(const std::vector<std::shared_ptr<CColl
 glm::mat4x4 Cinkes::CRenderHandler::ConvertTransformToGLM(const Cinkes::CTransform& a_Transform)
 {
 
-		CVector3 collisionLocation = a_Transform.getOrigin();
-		CMat3x3 collisionRotation = a_Transform.getBasis();
-		glm::mat4 converted = glm::mat4(1.f);
-		glm::vec3 location = glm::vec3(collisionLocation[0], collisionLocation[1], collisionLocation[2]);
-		converted = glm::translate(converted, location);
+	CVector3 collisionLocation = a_Transform.getOrigin();
+	CMat3x3 collisionRotation = a_Transform.getBasis();
+	glm::mat4 converted = glm::mat4(1.f);
+	glm::vec3 location = glm::vec3(collisionLocation[0], collisionLocation[1], collisionLocation[2]);
+	converted = glm::translate(converted, location);
 
-		converted[0][0] = collisionRotation[0][0]; converted[0][1] = collisionRotation[1][0]; converted[0][2] = collisionRotation[2][0];
-		converted[1][0] = collisionRotation[0][1]; converted[1][1] = collisionRotation[1][1]; converted[1][2] = collisionRotation[2][1];
-		converted[2][0] = collisionRotation[0][2]; converted[2][1] = collisionRotation[1][2]; converted[2][2] = collisionRotation[2][2];
+	converted[0][0] = collisionRotation[0][0];
+	converted[1][0] = collisionRotation[0][1];
+	converted[2][0] = collisionRotation[0][2];
 
-		return converted;
-	}
+	converted[0][1] = collisionRotation[1][0];
+	converted[1][1] = collisionRotation[1][1];
+	converted[2][1] = collisionRotation[1][2];
+
+	converted[0][2] = collisionRotation[2][0];
+	converted[1][2] = collisionRotation[2][1];
+	converted[2][2] = collisionRotation[2][2];
+
+	return converted;
+}
 
 glm::vec3 Cinkes::CRenderHandler::ConvertVectorToGlm(const CVector3& a_Vector3)
 {

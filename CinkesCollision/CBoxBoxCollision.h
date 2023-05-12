@@ -4,14 +4,16 @@
 #include "CPlane.h"
 namespace Cinkes {
 
-	struct CFace {
-
+	struct CFace
+	{
 		bool isValid = false;
 		CVector3 normal;
 		std::vector<int> vertices;
 	};
 
-	class CBoxBoxCollision {
+
+	class CBoxBoxCollision
+	{
 	public:
 		CBoxBoxCollision();
 
@@ -19,7 +21,7 @@ namespace Cinkes {
 
 
 	private:
-
+		
 		void FindReference();
 		void FindIncident();
 		void FindRefSidePlanes();

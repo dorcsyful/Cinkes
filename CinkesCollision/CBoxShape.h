@@ -57,7 +57,7 @@ namespace Cinkes
 
 		CVector3 Support(const CVector3& a_V);
 		void CreateAABB(const CMat3x3& a_Rotation, CVector3& a_Min, CVector3& a_Max) override;
-		CMat3x3 CalculateInertiaTensor(CScalar a_Mass);
+		CMat3x3 CalculateInertiaTensor(CScalar a_Mass) override;
 	private:
 		CVector3 m_Dimensions;
 	};

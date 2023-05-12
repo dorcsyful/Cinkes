@@ -18,15 +18,19 @@ int main()
 	//std::shared_ptr<CCollisionObject> object1 = std::make_shared<CCollisionObject>(CVector3(5, 7, 0), shape2);
 	//std::shared_ptr<CCollisionObject> object2 = std::make_shared<CCollisionObject>(transform, shape1);
     std::unique_ptr<CPhysicsWorld> world = std::make_unique<CPhysicsWorld>();
-
-    std::shared_ptr<CRigidBody> rb1 = std::make_shared<CRigidBody>(CTransform(CVector3(0, 0, 10)),shape2,1);
+    CMat3x3 rolled = CMat3x3(0, 1, 0, 
+							 0, 0, -1, 
+							 -1, 0, 0);
+    std::shared_ptr<CRigidBody> rb1 = std::make_shared<CRigidBody>(CTransform(rolled, CVector3(5, 10, 10)), shape2, 1);
     world->AddRigidBody(rb1);
+    
     CSpringData data;
     data.m_Body[0] = rb1.get();
     data.m_Points[1] = CVector3(0, 5, 10);
+    data.m_Points[0] = CVector3(shape2->GetDimensions().getX(), shape2->GetDimensions().getY(),0);
     data.m_RestLength = 4;
-    data.m_SpringConstant = 2.5f;
-    data.m_DampeningConstant = 0.25f;
+    data.m_SpringConstant = 4.f;
+    data.m_DampeningConstant = 2.f;
     std::shared_ptr<CSpring> spring = std::make_shared<CSpring>(data);
     //world->RunCollision(1);
     world->AddSpring(spring);
@@ -41,12 +45,12 @@ int main()
         {
             last = now;
     		world->Update(elapsed);
-            std::cout << rb1->GetTransform().getOrigin().getY() << std::endl;
-	        
-        }
+            //std::cout << rb1->GetAngularVelocity().getX() << " " << rb1->GetAngularVelocity().getY() << " " << rb1->GetAngularVelocity().getZ() << std::endl;
         if (handler->m_Window->RenderUpdate()) { break; }
 
-        handler->UpdateObjects();
+        handler->UpdateObjects();	        
+        }
+
     }
     
     delete handler;

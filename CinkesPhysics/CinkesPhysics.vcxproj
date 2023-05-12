@@ -161,7 +161,6 @@
     <ClCompile Include="CinkesPhysics.cpp" />
     <ClCompile Include="CPhysicsWorld.cpp" />
     <ClCompile Include="CRigidBody.cpp" />
-    <ClCompile Include="CSpringForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBody.h" />

@@ -32,6 +32,8 @@ namespace Cinkes
 		CForceGeneratorRegistry* GetGeneratorRegistry() const { return m_FGenerators.get(); }
 
 	private:
+		CMat3x3 UpdateRotation(const CVector3& a_Velocity, const CMat3x3& a_Initial, CScalar a_T);
+
 		std::shared_ptr<CForceGeneratorRegistry> m_FGenerators;
 		std::vector<std::shared_ptr<CSpring>> m_Springs;
 		std::vector<std::shared_ptr<CRigidBody>> m_RigidBodies;

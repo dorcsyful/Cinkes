@@ -22,11 +22,54 @@ void Cinkes::CPhysicsWorld::Update(CScalar a_T)
 	}	
 	for (const auto& element : m_RigidBodies)
 	{
-		element->SetTransform(CTransform(CMat3x3(), element->GetTransform().getOrigin() + element->GetLinearVelocity() * a_T));
+		CTransform trans = CTransform(UpdateRotation(element->GetAngularVelocity(), element->GetTransform().getBasis(), a_T),
+			element->GetTransform().getOrigin() + element->GetLinearVelocity() * a_T);
+		element->SetTransform(trans);
 
 	}
 }
 
+Cinkes::CMat3x3 Cinkes::CPhysicsWorld::UpdateRotation(const CVector3& a_Velocity, const CMat3x3& a_Initial, CScalar a_T) {
+	// Calculate the rotation matrix based on the current angular velocity
+	CMat3x3 rotation_delta;
+	CScalar angle = CUtils::Sqrt(a_Velocity[0] * a_Velocity[0] +
+		a_Velocity[1] * a_Velocity[1] +
+		a_Velocity[2] * a_Velocity[2]);
+	if (angle > 0.0) {
+		CScalar axis_x = a_Velocity[0] / angle;
+		CScalar axis_y = a_Velocity[1] / angle;
+		CScalar axis_z = a_Velocity[2] / angle;
+		CScalar cos_angle = CUtils::Cos(angle * a_T);
+		CScalar sin_angle = CUtils::Sin(angle * a_T);
+		rotation_delta[0][0] = cos_angle + axis_x * axis_x * (1 - cos_angle);
+		rotation_delta[0][1] = axis_x * axis_y * (1 - cos_angle) - axis_z * sin_angle;
+		rotation_delta[0][2] = axis_x * axis_z * (1 - cos_angle) + axis_y * sin_angle;
+		rotation_delta[1][0] = axis_y * axis_x * (1 - cos_angle) + axis_z * sin_angle;
+		rotation_delta[1][1] = cos_angle + axis_y * axis_y * (1 - cos_angle);
+		rotation_delta[1][2] = axis_y * axis_z * (1 - cos_angle) - axis_x * sin_angle;
+		rotation_delta[2][0] = axis_z * axis_x * (1 - cos_angle) - axis_y * sin_angle;
+		rotation_delta[2][1] = axis_z * axis_y * (1 - cos_angle) + axis_x * sin_angle;
+		rotation_delta[2][2] = cos_angle + axis_z * axis_z * (1 - cos_angle);
+	}
+	else {
+		rotation_delta = { {1.0, 0.0, 0.0},
+						 {0.0, 1.0, 0.0},
+						 {0.0, 0.0, 1.0} };
+	}
+
+	// Apply the rotation delta to the rotation matrix
+	CMat3x3 new_rotation;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			CScalar sum = 0.0;
+			for (int k = 0; k < 3; k++) {
+				sum += rotation_delta[i][k] * a_Initial[k][j];
+			}
+			new_rotation[i][j] = sum;
+		}
+	}
+	return new_rotation;
+}
 bool Cinkes::CPhysicsWorld::RemoveSpringByIndex(int a_Index, bool a_Delete)
 {
 	if(static_cast<unsigned>(a_Index) < m_Springs.size())

@@ -83,7 +83,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)CinkesMath;$(SolutionDir)Dependencies\includes;$(SolutionDir)CinkesPhysics;$(SolutionDir)CinkesCollision;$(SolutionDir)CinkesRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)CinkesMath;$(SolutionDir)Dependencies\includes;$(SolutionDir)Dependencies\includes\imgui;$(SolutionDir)CinkesPhysics;$(SolutionDir)CinkesCollision;$(SolutionDir)CinkesRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -100,7 +100,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)CinkesMath;$(SolutionDir)Dependencies\includes;$(SolutionDir)CinkesPhysics;$(SolutionDir)CinkesCollision;$(SolutionDir)CinkesRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)CinkesMath;$(SolutionDir)Dependencies\includes;$(SolutionDir)Dependencies\includes\imgui;$(SolutionDir)CinkesPhysics;$(SolutionDir)CinkesCollision;$(SolutionDir)CinkesRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,7 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)CinkesMath;$(SolutionDir)Dependencies\includes;$(SolutionDir)CinkesPhysics;$(SolutionDir)CinkesCollision;$(SolutionDir)CinkesRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)CinkesMath;$(SolutionDir)Dependencies\includes;$(SolutionDir)Dependencies\includes\imgui;$(SolutionDir)CinkesPhysics;$(SolutionDir)CinkesCollision;$(SolutionDir)CinkesRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,7 +134,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)CinkesMath;$(SolutionDir)Dependencies\includes;$(SolutionDir)CinkesPhysics;$(SolutionDir)CinkesCollision;$(SolutionDir)CinkesRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)CinkesMath;$(SolutionDir)Dependencies\includes;$(SolutionDir)Dependencies\includes\imgui;$(SolutionDir)CinkesPhysics;$(SolutionDir)CinkesCollision;$(SolutionDir)CinkesRenderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

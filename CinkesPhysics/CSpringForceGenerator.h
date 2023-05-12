@@ -44,49 +44,61 @@ namespace Cinkes
 			if (m_Current->GetBody1() != nullptr) CalculateFirst();
 			if (m_Current->GetBody2() != nullptr) CalculateSecond();
 		}
-		void CalculateFirst() const
-		{
-			// spring force
-			CScalar dist = (m_Positions[0] - m_Positions[1]).Length();
-			CScalar scalar = m_Current->GetBody1()->GetMass() * m_Current->GetSpringConstant() * (dist - m_Current->GetRestLength());
-			CVector3 dir = CVector3::Normalize(m_Positions[1] - m_Positions[0]);
+        void CalculateFirst() const
+        {
+            // spring force
+            CScalar dist = (m_Positions[0] - m_Positions[1]).Length();
+            CScalar scalar = m_Current->GetBody1()->GetMass() * m_Current->GetSpringConstant() * (dist - m_Current->GetRestLength());
+            CVector3 dir = CVector3::Normalize(m_Positions[1] - m_Positions[0]);
 
-			// find speed of contraction/expansion for damping force
-			CScalar s1 = CVector3::Dot(m_Velocities[0], dir);
-			CScalar s2 = CVector3::Dot(m_Velocities[1], dir);
-			CScalar dampingScalar = -m_Current->GetDampeningConstant() * (s1 + s2);
-			CVector3 force;
-			if (1.f == m_Current->GetBody1()->GetMass()) {
-				force = dir * (scalar + dampingScalar);
-			}
-			else {
-				force = dir * (-scalar + dampingScalar);
-			}
-			//std::cout << force.getY() << std::endl;
-			m_Current->GetBody1()->AddForceAtPoint(force, m_Positions[0]);
-			
-		}
-		void CalculateSecond() const
-		{
-			// spring force
-			CScalar dist = (m_Positions[0] - m_Positions[1]).Length();
-			CScalar scalar = m_Current->GetBody2()->GetMass() * m_Current->GetSpringConstant() * (dist - m_Current->GetRestLength());
-			CVector3 dir = CVector3::Normalize(m_Positions[1] - m_Positions[0]);
+            // find relative velocity for damping force
+            CVector3 relVelocity = m_Velocities[0];
+            if (m_Current->GetBody2() != nullptr)
+            {
+                relVelocity -= m_Current->GetBody2()->GetLinearVelocity();
+            }
 
-			// find speed of contraction/expansion for damping force
-			CScalar s1 = CVector3::Dot(m_Velocities[0], dir);
-			CScalar s2 = CVector3::Dot(m_Velocities[1], dir);
-			CScalar dampingScalar = -m_Current->GetDampeningConstant() * (s1 + s2);
-			CVector3 force;
-			if (1.f == m_Current->GetBody2()->GetMass()) {
-				force = dir * (scalar + dampingScalar);
-			}
-			else {
-				force = dir * (-scalar + dampingScalar);
-			}
-			//std::cout << force.getY() << std::endl;
-			m_Current->GetBody2()->AddForceAtPoint(force, m_Positions[0]);
-		}
+            CScalar dampingScalar = -m_Current->GetDampeningConstant() * CVector3::Dot(relVelocity, dir);
+            CVector3 force;
+            if (1.f == m_Current->GetBody1()->GetMass())
+            {
+                force = dir * (scalar + dampingScalar);
+            }
+            else
+            {
+                force = dir * (-scalar + dampingScalar);
+            }
+
+            m_Current->GetBody1()->AddForceAtPoint(force, m_Positions[0]);
+        }
+
+        void CalculateSecond() const
+        {
+            // spring force
+            CScalar dist = (m_Positions[0] - m_Positions[1]).Length();
+            CScalar scalar = m_Current->GetBody2()->GetMass() * m_Current->GetSpringConstant() * (dist - m_Current->GetRestLength());
+            CVector3 dir = CVector3::Normalize(m_Positions[0] - m_Positions[1]);
+
+            // find relative velocity for damping force
+            CVector3 relVelocity = m_Velocities[1];
+            if (m_Current->GetBody1() != nullptr)
+            {
+                relVelocity -= m_Current->GetBody1()->GetLinearVelocity();
+            }
+
+            CScalar dampingScalar = -m_Current->GetDampeningConstant() * CVector3::Dot(relVelocity, dir);
+            CVector3 force;
+            if (1.f == m_Current->GetBody2()->GetMass())
+            {
+                force = dir * (scalar + dampingScalar);
+            }
+            else
+            {
+                force = dir * (-scalar + dampingScalar);
+            }
+
+            m_Current->GetBody2()->AddForceAtPoint(force, m_Positions[1]);
+        }
 
 		CSpring* m_Current = nullptr;
 		CVector3 m_Positions[2];

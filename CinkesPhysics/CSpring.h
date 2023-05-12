@@ -26,19 +26,18 @@ namespace Cinkes
 	public:
 		CSpring(const CSpringData& a_Data)
 		{
-			if(a_Data.m_Body[0] == nullptr) { m_Point[0] = a_Data.m_Points[0]; }
-			else if (a_Data.m_Body[0]->GetType() == EOBJECT_TYPE::TYPE_RIGID)
+			m_Point[0] = a_Data.m_Points[0];
+
+			if (a_Data.m_Body[0]->GetType() == EOBJECT_TYPE::TYPE_RIGID)
 			{
 				m_Body[0] = reinterpret_cast<CRigidBody*>(a_Data.m_Body[0]);
 			}
-			else{ m_Point[0] = a_Data.m_Body[0]->GetTransform().getOrigin(); }
 
-			if (a_Data.m_Body[1] == nullptr) { m_Point[1] = a_Data.m_Points[1]; }
-			else if (a_Data.m_Body[1]->GetType() == EOBJECT_TYPE::TYPE_RIGID)
+			m_Point[1] = a_Data.m_Points[1];
+			if (a_Data.m_Body[1] != nullptr && a_Data.m_Body[1]->GetType() == EOBJECT_TYPE::TYPE_RIGID)
 			{
 				m_Body[1] = reinterpret_cast<CRigidBody*>(a_Data.m_Body[1]);
 			}
-			else { m_Point[1] = a_Data.m_Body[1]->GetTransform().getOrigin(); }
 
 			m_SpringConstant = a_Data.m_SpringConstant;
 			m_RestLength = a_Data.m_RestLength;
@@ -49,13 +48,30 @@ namespace Cinkes
 
 		CRigidBody* GetBody1() { return m_Body[0]; }
 		CRigidBody* GetBody1() const { return m_Body[0]; }
-		bool SetBody1(CRigidBody* a_Body) { if (a_Body != m_Body[1]) { m_Body[0] = a_Body; return true; } return false; }
+		bool SetBody1(CRigidBody* a_Body, const CVector3& a_ConnectionPointLocal) {
+			if (a_Body != m_Body[0])
+			{
+				m_Point[1] = a_ConnectionPointLocal;
+				m_Body[1] = a_Body;
+				return true;
+			}
+			return false;
+		}
 
 		CRigidBody* GetBody2() { return m_Body[1]; }
 		CRigidBody* GetBody2() const { return m_Body[1]; }
-		bool SetBody2(CRigidBody* a_Body) { if (a_Body != m_Body[0]) { m_Body[1] = a_Body; return true; } return false; }
+		bool SetBody2(CRigidBody* a_Body, const CVector3& a_ConnectionPointLocal)
+		{
+			if (a_Body != m_Body[0])
+			{
+				m_Point[1] = a_ConnectionPointLocal;
+				m_Body[1] = a_Body;
+				return true;
+			}
+			return false;
+		}
 
-		CVector3 GetnPoint1() { return m_Point[0]; }
+		CVector3 GetPoint1() { return m_Point[0]; }
 		CVector3 GetPoint1() const { return m_Point[0]; }
 		void SetPoint1(const CVector3& a_Point) { m_Point[0] = a_Point; }
 
