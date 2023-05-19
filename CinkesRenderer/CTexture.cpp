@@ -1,7 +1,7 @@
 #include "CTexture.h"
 #include <iostream>
 #include "stbi.h"
-bool Cinkes::CTexture::CreateTexture(CShader* a_Shader, const std::string& a_Path)
+bool Cinkes::CTexture::CreateTexture(const std::string& a_Path)
 {
     glGenTextures(1, &m_Texture);
     glBindTexture(GL_TEXTURE_2D, m_Texture);
@@ -28,11 +28,6 @@ bool Cinkes::CTexture::CreateTexture(CShader* a_Shader, const std::string& a_Pat
         return false;
     }
     stbi_image_free(data);
-    a_Shader->Use(); // don't forget to activate/use the shader before setting uniforms!
-    // either set it manually like so:
-    glUniform1i(glGetUniformLocation(a_Shader->ID, "texture1"), 0);
-    //glUniform1i(glGetUniformLocation(a_Shader->ID, "texture1"), 1);
-
-
+    isValid = 1;
     return true;
 }

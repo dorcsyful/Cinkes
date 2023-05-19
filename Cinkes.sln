@@ -32,8 +32,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CinkesApp", "CinkesApp\Cink
 		{EB1704ED-E28A-46CD-9402-F0DA1D92989D} = {EB1704ED-E28A-46CD-9402-F0DA1D92989D}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PortfolioExamples", "PortfolioExamples\PortfolioExamples.vcxproj", "{24D1DF63-7FBC-4123-87E2-E646D9C294C1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -90,14 +88,6 @@ Global
 		{9194C907-E04B-4D0C-8F33-8106AF84B7B3}.Release|x64.Build.0 = Release|x64
 		{9194C907-E04B-4D0C-8F33-8106AF84B7B3}.Release|x86.ActiveCfg = Release|Win32
 		{9194C907-E04B-4D0C-8F33-8106AF84B7B3}.Release|x86.Build.0 = Release|Win32
-		{24D1DF63-7FBC-4123-87E2-E646D9C294C1}.Debug|x64.ActiveCfg = Debug|x64
-		{24D1DF63-7FBC-4123-87E2-E646D9C294C1}.Debug|x64.Build.0 = Debug|x64
-		{24D1DF63-7FBC-4123-87E2-E646D9C294C1}.Debug|x86.ActiveCfg = Debug|Win32
-		{24D1DF63-7FBC-4123-87E2-E646D9C294C1}.Debug|x86.Build.0 = Debug|Win32
-		{24D1DF63-7FBC-4123-87E2-E646D9C294C1}.Release|x64.ActiveCfg = Release|x64
-		{24D1DF63-7FBC-4123-87E2-E646D9C294C1}.Release|x64.Build.0 = Release|x64
-		{24D1DF63-7FBC-4123-87E2-E646D9C294C1}.Release|x86.ActiveCfg = Release|Win32
-		{24D1DF63-7FBC-4123-87E2-E646D9C294C1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,11 +6,11 @@ namespace Cinkes
 	class CTexture
 	{
 	public:
-		CTexture() = default;
+		CTexture() : isValid(0) {}
 		~CTexture() = default;
 
-		bool CreateTexture(CShader* a_Shader, const std::string& a_Path);
-
-		GLuint m_Texture;
+		bool CreateTexture(const std::string& a_Path);
+		glm::uint isValid;
+		GLuint m_Texture{};
 	};
 };

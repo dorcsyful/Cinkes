@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Imgui">
+      <UniqueIdentifier>{f9097cd1-410d-4032-8afb-abe16c50c184}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Other">
+      <UniqueIdentifier>{04afb317-ae87-4017-8f09-9c4b64936630}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{be636f57-9f6f-41d7-abd7-c58a1bc20968}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRenderShape.cpp">
@@ -27,29 +36,29 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Dependencies\includes\imgui\imgui.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\includes\imgui\imgui_demo.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\includes\imgui\imgui_draw.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\includes\imgui\imgui_impl_opengl3.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\includes\imgui\imgui_tables.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\includes\imgui\imgui_widgets.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Dependencies\includes\imgui\imgui_impl_glfw.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="CImguiHandler.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\includes\imgui\imgui.cpp">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\includes\imgui\imgui_demo.cpp">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\includes\imgui\imgui_draw.cpp">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\includes\imgui\imgui_impl_glfw.cpp">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\includes\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\includes\imgui\imgui_tables.cpp">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\includes\imgui\imgui_widgets.cpp">
+      <Filter>Resource Files\Imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,65 +86,68 @@
     <ClInclude Include="CRenderDefines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Dependencies\includes\imgui\imconfig.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Dependencies\includes\imgui\imgui.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Dependencies\includes\imgui\imgui_impl_opengl3.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Dependencies\includes\imgui\imgui_impl_opengl3_loader.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Dependencies\includes\imgui\imgui_internal.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Dependencies\includes\imgui\imstb_rectpack.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Dependencies\includes\imgui\imstb_textedit.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Dependencies\includes\imgui\imstb_truetype.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stbi.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Dependencies\includes\imgui\imgui_impl_glfw.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="CImguiHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\Dependencies\includes\imgui\LICENSE.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
+    <ClInclude Include="CMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\includes\imgui\imgui.h">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\includes\imgui\imgui_impl_glfw.h">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\includes\imgui\imgui_impl_opengl3.h">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\includes\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\includes\imgui\imgui_internal.h">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\includes\imgui\imstb_rectpack.h">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\includes\imgui\imstb_textedit.h">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\includes\imgui\imstb_truetype.h">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\includes\imgui\imconfig.h">
+      <Filter>Resource Files\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Resource Files\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="stbi.h">
+      <Filter>Resource Files\Other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\CLineShader.fss">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="resources\shaders\CLineShader.vs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="resources\shaders\CShader.fss">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="resources\shaders\CShader.vs">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="resources\shaders\CShader.fss">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="..\Dependencies\includes\imgui\LICENSE.txt">
+      <Filter>Resource Files\Imgui</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
     <Image Include="resources\images\testure.jpg">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Other</Filter>
     </Image>
   </ItemGroup>
 </Project>

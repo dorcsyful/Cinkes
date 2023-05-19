@@ -8,9 +8,6 @@
 #include "CTexture.h"
 #include "CRenderWindow.h"
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
@@ -54,9 +51,6 @@ void scroll_callback(GLFWwindow* a_Window, double, double a_Yoffset)
 }
 Cinkes::CRenderWindow::~CRenderWindow()
 {
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
 
     glfwDestroyWindow(m_Window);
     glfwTerminate();
@@ -91,27 +85,13 @@ bool Cinkes::CRenderWindow::InitializeWindow()
         return false;
     }
     glEnable(GL_DEPTH_TEST);
-    m_Shader.insert(std::pair<const char*, std::shared_ptr<CShader>>("Base", std::make_shared<CShader>()));
-    auto pair = std::pair<const char*, std::vector<std::shared_ptr<CRenderShape>>>("Base", std::vector<std::shared_ptr<CRenderShape>>());
-    m_Shapes.insert(pair);
-    m_Shader.insert(std::pair<const char*, std::shared_ptr<CShader>>("Line", std::make_shared<CShader>(LINE_VERTEX_SHADER, LINE_FRAGMENT_SHADER)));
+
+    m_Shaders.insert(std::pair<std::string, std::shared_ptr<CShader>>("Base", std::make_shared<CShader>("../CinkesRenderer/resources/shaders/CShader.vs", "../CinkesRenderer/resources/shaders/CShader.fss")));
+    m_Shaders.insert(std::pair<std::string, std::shared_ptr<CShader>>("Line", std::make_shared<CShader>("../CinkesRenderer/resources/shaders/CLineShader.vs", "../CinkesRenderer/resources/shaders/CLineShader.fss")));
 
     glfwSetWindowUserPointer(m_Window, m_Input.get());
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsLight();
-
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
-    ImGui_ImplOpenGL3_Init("#version 150");
-    return true;
+	return true;
 }
 
 void Cinkes::CRenderWindow::Update()
@@ -120,19 +100,7 @@ void Cinkes::CRenderWindow::Update()
 
 bool Cinkes::CRenderWindow::AddRenderShape(std::shared_ptr<CRenderShape>& a_Shape)
 {
-
-    bool exists = true;
-    for (const auto& current : m_Shapes)
-    {
-        if (current.first != a_Shape->GetShader()) { exists = false; }
-        else { exists = true; break; }
-    }
-    assert(exists);
-    m_Shapes[a_Shape->GetShader()].push_back(a_Shape);
-    if (a_Shape->GetTexture() == nullptr)
-    {
-        a_Shape->LoadTexture(BASE_TEXTURE, m_Shader["Base"].get());
-    }
+    m_Shapes.push_back(a_Shape);
     return true;
 
 }
@@ -161,34 +129,9 @@ bool Cinkes::CRenderWindow::RemoveRenderShapeByIndex(unsigned int a_Index)
 
     return false;
 }
-
-bool Cinkes::CRenderWindow::AddShader(const char* a_ShaderName, const char* a_VertexPath, const char* a_FragmentPath)
-{
-    bool add = true;
-    for (auto& current : m_Shader)
-    {
-        if (current.second->m_VertexPath == a_VertexPath) { add = false; }
-        if (current.second->m_FragmentPath == a_FragmentPath) { add = false; }
-    }
-    if (add) {
-        m_Shader.insert(std::make_pair<const char*, std::shared_ptr<CShader>>(static_cast<const char*>(a_ShaderName), std::make_shared<CShader>(a_VertexPath, a_FragmentPath)));
-    }
-    return false;
-}
-
 bool Cinkes::CRenderWindow::RenderUpdate()
 {
-    // Start the Dear ImGui frame
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
 
-    // render your GUI
-    ImGui::Begin("Demo window");
-    ImGui::Button("Hello!");
-    ImGui::End();
-
-    ImGui::Render();
     
     if (glfwWindowShouldClose(m_Window)) { return true; }
 
@@ -202,32 +145,35 @@ bool Cinkes::CRenderWindow::RenderUpdate()
     glm::mat4 projection = glm::perspective(glm::radians(m_Input->m_Camera->m_FOV), static_cast<float>(WIDTH / HEIGHT), 0.1f, 100.0f);
     glm::mat4 view = glm::lookAt(m_Input->m_Camera->m_Position, m_Input->m_Camera->m_Position + m_Input->m_Camera->m_Front, m_Input->m_Camera->m_Up);
 
+    m_Shaders["Base"]->Use();
+    m_Shaders["Base"]->setMat4("projection", projection);
+    m_Shaders["Base"]->setMat4("view", view);
+    m_Shaders["Base"]->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+    m_Shaders["Base"]->setVec3("lightPos", glm::vec3(0, 10, 5));
+    m_Shaders["Base"]->setVec3("viewPos", m_Input->m_Camera->m_Position);
     for (const auto& shape : m_Shapes)
     {
-        m_Shader[shape.first]->Use();
+        m_Shaders["Base"]->setInt("hasTexture", shape->GetMaterial()->m_BaseColorTexture.isValid);
 
-        m_Shader[shape.first]->setMat4("projection", projection);
-        m_Shader[shape.first]->setMat4("view", view);
+        //I am Dori and this is where I bind my material
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, shape->GetMaterial()->m_BaseColorTexture.m_Texture);
+        m_Shaders["Base"]->setVec3("baseColor", shape->GetMaterial()->m_Color);
 
-        // render boxes
-        for (auto& current : m_Shapes[shape.first])
-        {
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, current->GetTexture()->m_Texture);
-            glBindVertexArray(current->GetVAO());
 
-            m_Shader[shape.first]->setMat4("model", current->GetTransform());
-
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        //I am also Dori and this is where I bind my geometry
+    	glBindVertexArray(shape->GetVAO());
+        m_Shaders["Base"]->setMat4("model", shape->GetTransform());
+        
+        glDrawArrays(GL_TRIANGLES, 0, shape->m_Vertices.size());
     }
     
-    m_Shader["Line"]->Use();
+    m_Shaders["Line"]->Use();
 	glLineWidth(1);
 
     for (auto& line : m_Lines) {
-        m_Shader["Line"]->setMat4("MVP", projection * view);
-        m_Shader["Line"]->setVec3("color", line->m_Color);
+        m_Shaders["Line"]->setMat4("MVP", projection * view);
+        m_Shaders["Line"]->setVec3("color", line->m_Color);
 
         glBindVertexArray(line->m_VAO);
         glDrawArrays(GL_LINE_LOOP, 0, 2);
@@ -236,7 +182,6 @@ bool Cinkes::CRenderWindow::RenderUpdate()
 
     // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
     // -------------------------------------------------------------------------------
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glfwSwapBuffers(m_Window);
     glfwPollEvents();
     m_Input->ProcessInput(m_Window);
@@ -245,4 +190,8 @@ bool Cinkes::CRenderWindow::RenderUpdate()
 
 
     return false;
+}
+
+void Cinkes::CRenderWindow::CreateMaterial(const glm::vec3& a_BaseColor, const std::string& a_BaseTexturePath)
+{
 }

@@ -9,7 +9,7 @@ bool Cinkes::CRenderHandler::RegisterObject(const std::shared_ptr<CCollisionObje
 	if(a_Collision->GetCollisionShape()->GetType() == ESHAPE_TYPE::SHAPE_BOX)
 	{
 		glm::vec3 extent = ConvertVectorToGlm(static_cast<CBoxShape*>(a_Collision->GetCollisionShape().get())->GetDimensions());
-		std::shared_ptr<CCuboidRenderShape> shape1 = std::make_shared<CCuboidRenderShape>(ConvertTransformToGLM(a_Collision->GetTransform()), extent);
+		std::shared_ptr<CCubeRenderShape> shape1 = std::make_shared<CCubeRenderShape>(ConvertTransformToGLM(a_Collision->GetTransform()), extent);
 		temp = std::static_pointer_cast<CRenderShape>(shape1);
 		m_Window->AddRenderShape(temp);
 	}

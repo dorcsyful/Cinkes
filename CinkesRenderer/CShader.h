@@ -19,7 +19,7 @@ namespace Cinkes
         const char* m_FragmentPath;
         // constructor generates the shader on the fly
         // ------------------------------------------------------------------------
-        CShader(const char* a_Vertex = BASE_VERTEX_SHADER, const char* a_Fragment = BASE_FRAGMENT_SHADER)
+        CShader(const char* a_Vertex, const char* a_Fragment)
         {
             m_VertexPath = a_Vertex;
             m_FragmentPath = a_Fragment;

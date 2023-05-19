@@ -6,7 +6,6 @@ int Cinkes::CRenderShape::CreateVBO()
 {
     glGenVertexArrays(1, &m_VAO);
     glGenBuffers(1, &m_VBO);
-    glGenBuffers(1, &m_IBO);
     // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     glBindVertexArray(m_VAO);
 
@@ -19,22 +18,15 @@ int Cinkes::CRenderShape::CreateVBO()
     // texture coord attribute
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(CVertex), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-
+    //vertex normal attribute
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(CVertex), (void*)(5 * sizeof(float)));
     glEnableVertexAttribArray(2);
-
-
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     return m_VBO;
 }
 
-bool Cinkes::CRenderShape::LoadTexture(const std::string& a_Path, CShader* a_Shader)
-{
-    m_Texture = std::make_shared<CTexture>();
-    return m_Texture->CreateTexture(a_Shader, a_Path);
-}
 
 glm::mat4 Cinkes::CRenderShape::Convert()
 {

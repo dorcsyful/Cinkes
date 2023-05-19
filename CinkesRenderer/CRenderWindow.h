@@ -3,7 +3,6 @@
 #include <vector>
 #include <memory>
 
-#include "CImguiHandler.h"
 #include "CRenderDefines.h"
 #include "CInputHandler.h"
 #include "CRenderShape.h"
@@ -18,7 +17,6 @@ namespace Cinkes
 		CRenderWindow()
 		{
 			m_Input = std::make_shared<CInputHandler>();
-			m_Imgui = std::make_shared<CImguiHandler>();
 
 		}
 
@@ -33,15 +31,14 @@ namespace Cinkes
 		bool AddLine(const glm::vec3& a_Start, const glm::vec3& a_End, const glm::vec3& a_Color);
 		bool RemoveRenderShapeByObject(std::shared_ptr<CRenderShape>& a_Shape);
 		bool RemoveRenderShapeByIndex(unsigned int a_Index);
-		bool AddShader(const char* a_ShaderName, const char* a_VertexPath, const char* a_FragmentPath);
 		bool RenderUpdate();
+		void CreateMaterial(const glm::vec3& a_BaseColor, const std::string& a_BaseTexturePath = "");
 
-		std::map<const char*, std::vector< std::shared_ptr<CRenderShape> > > m_Shapes;
-		std::map<const char*, std::shared_ptr<CShader>> m_Shader;
+		std::vector<std::shared_ptr<CRenderShape>> m_Shapes;
 		std::vector<std::shared_ptr<CLineRendered>> m_Lines;
+		std::map<std::string, std::shared_ptr<CShader>> m_Shaders;
 		GLFWwindow* m_Window = nullptr;
 		std::shared_ptr<CInputHandler> m_Input;
-		std::shared_ptr<CImguiHandler> m_Imgui;
 
 	};
 };

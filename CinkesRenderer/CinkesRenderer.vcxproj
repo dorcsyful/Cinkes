@@ -166,6 +166,7 @@
     <ClInclude Include="CCameraSettings.h" />
     <ClInclude Include="CImguiHandler.h" />
     <ClInclude Include="CInputHandler.h" />
+    <ClInclude Include="CMaterial.h" />
     <ClInclude Include="CRenderDefines.h" />
     <ClInclude Include="CRenderShape.h" />
     <ClInclude Include="CRenderWindow.h" />
