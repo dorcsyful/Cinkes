@@ -147,6 +147,7 @@
     <ClCompile Include="..\Dependencies\includes\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\Dependencies\includes\imgui\imgui_widgets.cpp" />
     <ClCompile Include="CImguiHandler.cpp" />
+    <ClCompile Include="CLightShape.cpp" />
     <ClCompile Include="CRenderShape.cpp" />
     <ClCompile Include="CRenderWindow.cpp" />
     <ClCompile Include="CTexture.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="CCameraSettings.h" />
     <ClInclude Include="CImguiHandler.h" />
     <ClInclude Include="CInputHandler.h" />
+    <ClInclude Include="CLightShape.h" />
     <ClInclude Include="CMaterial.h" />
     <ClInclude Include="CRenderDefines.h" />
     <ClInclude Include="CRenderShape.h" />
@@ -179,6 +181,8 @@
     <Text Include="..\Dependencies\includes\imgui\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\shaders\CLightSourceShader.fss" />
+    <None Include="resources\shaders\CLightSourceShader.vs" />
     <None Include="resources\shaders\CLineShader.fss" />
     <None Include="resources\shaders\CLineShader.vs" />
     <None Include="resources\shaders\CShader.fss" />

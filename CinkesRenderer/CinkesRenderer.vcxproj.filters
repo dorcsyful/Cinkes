@@ -60,6 +60,9 @@
     <ClCompile Include="..\Dependencies\includes\imgui\imgui_widgets.cpp">
       <Filter>Resource Files\Imgui</Filter>
     </ClCompile>
+    <ClCompile Include="CLightShape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCamera.h">
@@ -125,6 +128,9 @@
     <ClInclude Include="stbi.h">
       <Filter>Resource Files\Other</Filter>
     </ClInclude>
+    <ClInclude Include="CLightShape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\CLineShader.fss">
@@ -137,6 +143,12 @@
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="resources\shaders\CShader.fss">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="resources\shaders\CLightSourceShader.fss">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="resources\shaders\CLightSourceShader.vs">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>

@@ -54,7 +54,7 @@ int main()
 
         if (handler->m_Window->RenderUpdate()) { break; }
 
-        handler->UpdateObjects();	        
+       // handler->UpdateObjects();	        
         }
 
     }

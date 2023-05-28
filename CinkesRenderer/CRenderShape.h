@@ -15,6 +15,10 @@ namespace Cinkes
 			m_UV = a_UV;
 			m_Normal = a_Normal;
 		}
+		CVertex(float a_PX, float a_PY, float a_PZ)
+		{
+			m_Position = glm::vec3(a_PX, a_PY, a_PZ);
+		}
 		CVertex(float a_PX, float a_PY, float a_PZ, float a_UVX, float a_UVY, float a_NX, float a_NY, float a_NZ) {
 			m_Position = glm::vec3(a_PX, a_PY, a_PZ);
 			m_UV = glm::vec2(a_UVX, a_UVY);
@@ -48,14 +52,14 @@ namespace Cinkes
 		void SetMaterial(std::shared_ptr<CMaterial> a_Material) { m_Material = std::move(a_Material); }
 		std::vector<CVertex> m_Vertices;
 		std::vector<unsigned> m_Indices;
-		bool m_Textured;
+		bool m_Textured{};
 
 
 	protected:
 		std::shared_ptr<CMaterial> m_Material;
-		glm::mat4 m_Transform;
-		GLuint m_VBO;
-		GLuint m_VAO;
+		glm::mat4 m_Transform{};
+		GLuint m_VBO{};
+		GLuint m_VAO{};
 
 	};
 
