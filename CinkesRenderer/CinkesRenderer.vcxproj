@@ -147,6 +147,7 @@
     <ClCompile Include="..\Dependencies\includes\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\Dependencies\includes\imgui\imgui_widgets.cpp" />
     <ClCompile Include="CImguiHandler.cpp" />
+    <ClCompile Include="CLightHandler.cpp" />
     <ClCompile Include="CLightShape.cpp" />
     <ClCompile Include="CRenderShape.cpp" />
     <ClCompile Include="CRenderWindow.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="CCameraSettings.h" />
     <ClInclude Include="CImguiHandler.h" />
     <ClInclude Include="CInputHandler.h" />
+    <ClInclude Include="CLightHandler.h" />
     <ClInclude Include="CLightShape.h" />
     <ClInclude Include="CMaterial.h" />
     <ClInclude Include="CRenderDefines.h" />

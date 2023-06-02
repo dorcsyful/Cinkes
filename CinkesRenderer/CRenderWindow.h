@@ -5,6 +5,7 @@
 
 #include "CRenderDefines.h"
 #include "CInputHandler.h"
+#include "CLightHandler.h"
 #include "CRenderShape.h"
 #include "CLightShape.h"
 struct GLFWwindow;
@@ -35,11 +36,11 @@ namespace Cinkes
 		void CreateMaterial(const glm::vec3& a_BaseColor, const std::string& a_BaseTexturePath = "");
 
 		std::vector<std::shared_ptr<CRenderShape>> m_Shapes;
-		std::vector < std::shared_ptr<CLightShape>> m_Lights;
 		std::vector<std::shared_ptr<CLineRendered>> m_Lines;
 		std::map<std::string, std::shared_ptr<CShader>> m_Shaders;
 		GLFWwindow* m_Window = nullptr;
 		std::shared_ptr<CInputHandler> m_Input;
+		std::shared_ptr<CLightHandler> m_LightHandler;
 
 	};
 };

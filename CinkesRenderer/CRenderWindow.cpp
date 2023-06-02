@@ -18,7 +18,6 @@ void framebuffer_size_callback(GLFWwindow* a_Window, int a_Width, int a_Height)
     glViewport(0, 0, a_Width, a_Height);
 }
 
-
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
 void mouse_callback(GLFWwindow* a_Window, double a_XposIn, double a_YposIn)
@@ -49,6 +48,7 @@ void scroll_callback(GLFWwindow* a_Window, double, double a_Yoffset)
     Cinkes::CInputHandler* input = static_cast<Cinkes::CInputHandler*>(glfwGetWindowUserPointer(a_Window));
     input->AddMouseScrollToQueue(static_cast<float>(a_Yoffset));
 }
+
 Cinkes::CRenderWindow::~CRenderWindow()
 {
 
@@ -59,6 +59,7 @@ Cinkes::CRenderWindow::~CRenderWindow()
 
 bool Cinkes::CRenderWindow::InitializeWindow()
 {
+    //glfw: setup
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VERSION_MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VERSION_MINOR);
@@ -86,13 +87,18 @@ bool Cinkes::CRenderWindow::InitializeWindow()
     }
     glEnable(GL_DEPTH_TEST);
 
+    //Load shaders
     m_Shaders.insert(std::pair<std::string, std::shared_ptr<CShader>>("Base", std::make_shared<CShader>("../CinkesRenderer/resources/shaders/CShader.vs", "../CinkesRenderer/resources/shaders/CShader.fss")));
     m_Shaders.insert(std::pair<std::string, std::shared_ptr<CShader>>("Line", std::make_shared<CShader>("../CinkesRenderer/resources/shaders/CLineShader.vs", "../CinkesRenderer/resources/shaders/CLineShader.fss")));
     m_Shaders.insert(std::pair<std::string, std::shared_ptr<CShader>>("Light", std::make_shared<CShader>("../CinkesRenderer/resources/shaders/CLightSourceShader.vs", "../CinkesRenderer/resources/shaders/CLightSourceShader.fss")));
+    m_LightHandler = std::make_shared<CLightHandler>();
 
-    glm::mat4 temp = glm::mat4(1);
-    temp = translate(temp, glm::vec3(5, 5, 15));
-	m_Lights.push_back(std::make_shared<CLightShape>(temp));
+
+	//Create two point lights
+    auto temp = std::make_shared<CPointLightShape>(glm::vec3(5, 5, 15));
+	m_LightHandler->AddPointLight(temp);
+	auto temp2 = std::make_shared<CPointLightShape>(glm::vec3(5, 10, 15));
+    m_LightHandler->AddPointLight(temp2);
     glfwSetWindowUserPointer(m_Window, m_Input.get());
 
 	return true;
@@ -149,27 +155,45 @@ bool Cinkes::CRenderWindow::RenderUpdate()
     glm::mat4 projection = glm::perspective(glm::radians(m_Input->m_Camera->m_FOV), static_cast<float>(WIDTH / HEIGHT), 0.1f, 100.0f);
     glm::mat4 view = glm::lookAt(m_Input->m_Camera->m_Position, m_Input->m_Camera->m_Position + m_Input->m_Camera->m_Front, m_Input->m_Camera->m_Up);
 
+    //Draw light shapes
     m_Shaders["Light"]->Use();
     m_Shaders["Light"]->setMat4("projection", projection);
     m_Shaders["Light"]->setMat4("view", view);
-    for(const auto& light : m_Lights)
+    for(int i = 0; i < std::max(m_LightHandler->m_PointLights.size(), m_LightHandler->m_DirectionalLights.size()); i++)
     {
-        glBindVertexArray(light->m_Shape->GetVAO());
+        if(i < m_LightHandler->m_PointLights.size())
+        {
+            if (m_LightHandler->m_PointLights[i]->m_DrawLightSource) {
+                glBindVertexArray(m_LightHandler->m_PointLights[i]->m_Shape->GetVAO());
 
-    	m_Shaders["Light"]->setVec3("color", light->m_Shape->GetMaterial()->m_Color);
-        m_Shaders["Light"]->setMat4("model", light->m_Shape->GetTransform());
+                m_Shaders["Light"]->setVec3("color", m_LightHandler->m_PointLights[i]->m_Shape->GetMaterial()->m_Color);
+                m_Shaders["Light"]->setMat4("model", m_LightHandler->m_PointLights[i]->m_Shape->GetTransform());
 
-        glDrawArrays(GL_TRIANGLES, 0, light->m_Shape->m_Vertices.size());
+                glDrawArrays(GL_TRIANGLES, 0, m_LightHandler->m_PointLights[i]->m_Shape->m_Vertices.size());
+            }
+        }
+        if (i < m_LightHandler->m_DirectionalLights.size())
+        {
+            if (m_LightHandler->m_DirectionalLights[i]->m_DrawLightSource) {
+                glBindVertexArray(m_LightHandler->m_DirectionalLights[i]->m_Shape->GetVAO());
+
+                m_Shaders["Light"]->setVec3("color", m_LightHandler->m_DirectionalLights[i]->m_Shape->GetMaterial()->m_Color);
+                m_Shaders["Light"]->setMat4("model", m_LightHandler->m_DirectionalLights[i]->m_Shape->GetTransform());
+
+                glDrawArrays(GL_TRIANGLES, 0, m_LightHandler->m_DirectionalLights[i]->m_Shape->m_Vertices.size());
+            }
+        }
     }
 
+    //Draw actual shapes with lighting
     m_Shaders["Base"]->Use();
     m_Shaders["Base"]->setMat4("projection", projection);
     m_Shaders["Base"]->setMat4("view", view);
-    m_Shaders["Base"]->setVec3("lightColor", m_Lights[0]->m_Shape->GetMaterial()->m_Color);
-    m_Shaders["Base"]->setVec3("lightPos", m_Lights[0]->m_Shape->GetTransform()[3]);
     m_Shaders["Base"]->setVec3("viewPos", m_Input->m_Camera->m_Position);
+    m_LightHandler->AssignPointLightData(m_Shaders["Base"]);
+    m_LightHandler->AssignDirectionalLightData(m_Shaders["Base"]);
 
-    for (const auto& shape : m_Shapes)
+	for (const auto& shape : m_Shapes)
     {
         m_Shaders["Base"]->setInt("hasTexture", shape->GetMaterial()->m_BaseColorTexture.isValid);
 
@@ -185,7 +209,8 @@ bool Cinkes::CRenderWindow::RenderUpdate()
         
         glDrawArrays(GL_TRIANGLES, 0, shape->m_Vertices.size());
     }
-    
+
+    //Special code for lines
     m_Shaders["Line"]->Use();
 	glLineWidth(1);
 

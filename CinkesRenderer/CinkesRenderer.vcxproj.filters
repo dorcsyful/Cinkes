@@ -63,6 +63,9 @@
     <ClCompile Include="CLightShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CLightHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCamera.h">
@@ -129,6 +132,9 @@
       <Filter>Resource Files\Other</Filter>
     </ClInclude>
     <ClInclude Include="CLightShape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CLightHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
