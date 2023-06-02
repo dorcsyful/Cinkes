@@ -151,6 +151,7 @@
     <ClCompile Include="CLightShape.cpp" />
     <ClCompile Include="CRenderShape.cpp" />
     <ClCompile Include="CRenderWindow.cpp" />
+    <ClCompile Include="CSkyBox.cpp" />
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="glad.c" />
   </ItemGroup>
@@ -175,6 +176,7 @@
     <ClInclude Include="CRenderShape.h" />
     <ClInclude Include="CRenderWindow.h" />
     <ClInclude Include="CShader.h" />
+    <ClInclude Include="CSkyBox.h" />
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="stbi.h" />
     <ClInclude Include="stb_image.h" />
@@ -189,9 +191,17 @@
     <None Include="resources\shaders\CLineShader.vs" />
     <None Include="resources\shaders\CShader.fss" />
     <None Include="resources\shaders\CShader.vs" />
+    <None Include="resources\shaders\CSkyBoxShader.fss" />
+    <None Include="resources\shaders\CSkyBoxShader.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\images\testure.jpg" />
+    <Image Include="resources\skybox\SkyBox_Back.jpg" />
+    <Image Include="resources\skybox\SkyBox_Bottom.jpg" />
+    <Image Include="resources\skybox\SkyBox_Front.jpg" />
+    <Image Include="resources\skybox\SkyBox_Left.jpg" />
+    <Image Include="resources\skybox\SkyBox_Right.jpg" />
+    <Image Include="resources\skybox\Skybox_Top.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

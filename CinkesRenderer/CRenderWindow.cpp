@@ -91,6 +91,7 @@ bool Cinkes::CRenderWindow::InitializeWindow()
     m_Shaders.insert(std::pair<std::string, std::shared_ptr<CShader>>("Base", std::make_shared<CShader>("../CinkesRenderer/resources/shaders/CShader.vs", "../CinkesRenderer/resources/shaders/CShader.fss")));
     m_Shaders.insert(std::pair<std::string, std::shared_ptr<CShader>>("Line", std::make_shared<CShader>("../CinkesRenderer/resources/shaders/CLineShader.vs", "../CinkesRenderer/resources/shaders/CLineShader.fss")));
     m_Shaders.insert(std::pair<std::string, std::shared_ptr<CShader>>("Light", std::make_shared<CShader>("../CinkesRenderer/resources/shaders/CLightSourceShader.vs", "../CinkesRenderer/resources/shaders/CLightSourceShader.fss")));
+    m_Shaders.insert(std::pair<std::string, std::shared_ptr<CShader>>("SkyBox", std::make_shared<CShader>("../CinkesRenderer/resources/shaders/CSkyBoxShader.vs", "../CinkesRenderer/resources/shaders/CSkyBoxShader.fss")));
     m_LightHandler = std::make_shared<CLightHandler>();
 
 
@@ -100,7 +101,7 @@ bool Cinkes::CRenderWindow::InitializeWindow()
 	auto temp2 = std::make_shared<CPointLightShape>(glm::vec3(5, 10, 15));
     m_LightHandler->AddPointLight(temp2);
     glfwSetWindowUserPointer(m_Window, m_Input.get());
-
+    m_SkyBox = std::make_shared<CSkyBox>();
 	return true;
 }
 
@@ -223,7 +224,23 @@ bool Cinkes::CRenderWindow::RenderUpdate()
         glBindVertexArray(0);
     }
 
-    // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+
+    // draw skybox as last
+    glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+    m_Shaders["SkyBox"]->Use();
+    view = glm::mat4(glm::mat3(m_Input->m_Camera->GetViewMatrix())); // remove translation from the view matrix
+    m_Shaders["SkyBox"]->setMat4("view", view);
+    m_Shaders["SkyBox"]->setMat4("projection", projection);
+    // skybox cube
+    glBindVertexArray(m_SkyBox->m_VAO);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, m_SkyBox->m_TextureID);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
+    glDepthFunc(GL_LESS); // set depth function back to default
+
+
+	// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
     // -------------------------------------------------------------------------------
     glfwSwapBuffers(m_Window);
     glfwPollEvents();

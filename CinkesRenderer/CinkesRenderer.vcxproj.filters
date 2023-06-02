@@ -66,6 +66,9 @@
     <ClCompile Include="CLightHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CSkyBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCamera.h">
@@ -137,6 +140,9 @@
     <ClInclude Include="CLightHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CSkyBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\CLineShader.fss">
@@ -157,6 +163,12 @@
     <None Include="resources\shaders\CLightSourceShader.vs">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="resources\shaders\CSkyBoxShader.fss">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="resources\shaders\CSkyBoxShader.vs">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Dependencies\includes\imgui\LICENSE.txt">
@@ -165,6 +177,24 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\images\testure.jpg">
+      <Filter>Resource Files\Other</Filter>
+    </Image>
+    <Image Include="resources\skybox\SkyBox_Back.jpg">
+      <Filter>Resource Files\Other</Filter>
+    </Image>
+    <Image Include="resources\skybox\SkyBox_Bottom.jpg">
+      <Filter>Resource Files\Other</Filter>
+    </Image>
+    <Image Include="resources\skybox\SkyBox_Front.jpg">
+      <Filter>Resource Files\Other</Filter>
+    </Image>
+    <Image Include="resources\skybox\SkyBox_Left.jpg">
+      <Filter>Resource Files\Other</Filter>
+    </Image>
+    <Image Include="resources\skybox\SkyBox_Right.jpg">
+      <Filter>Resource Files\Other</Filter>
+    </Image>
+    <Image Include="resources\skybox\Skybox_Top.jpg">
       <Filter>Resource Files\Other</Filter>
     </Image>
   </ItemGroup>
