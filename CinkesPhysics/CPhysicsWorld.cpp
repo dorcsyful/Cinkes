@@ -9,7 +9,7 @@
 void Cinkes::CPhysicsWorld::Update(CScalar a_T)
 {
 
-	RunCollision(a_T);
+	//RunCollision(a_T);
 	if (!m_Contacts.empty()) {
 	}
 	m_FGenerators->UpdateGenerators();
@@ -18,15 +18,10 @@ void Cinkes::CPhysicsWorld::Update(CScalar a_T)
 	for (const auto& element : m_RigidBodies)
 	{
 		element->Integrate(a_T);
-		
-	}	
-	for (const auto& element : m_RigidBodies)
-	{
-		CTransform trans = CTransform(UpdateRotation(element->GetAngularVelocity(), element->GetTransform().getBasis(), a_T),
+/*		CTransform trans = CTransform(UpdateRotation(element->GetAngularVelocity(), element->GetTransform().getBasis(), a_T),
 			element->GetTransform().getOrigin() + element->GetLinearVelocity() * a_T);
-		element->SetTransform(trans);
-
-	}
+		element->SetTransform(trans);	*/	
+	}	
 }
 
 Cinkes::CMat3x3 Cinkes::CPhysicsWorld::UpdateRotation(const CVector3& a_Velocity, const CMat3x3& a_Initial, CScalar a_T) {

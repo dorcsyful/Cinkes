@@ -92,14 +92,13 @@ namespace Cinkes
 		CMat3x3 m_InertiaTensorLocal;
 		CMat3x3 m_InverseIntertiaTensorLocal; //how much force is needed to rotate the object on each axis
 		CMat3x3 m_InverseIntertiaTensorWorld; //a tensor is a generalized version of a matrix
-
+		CVector3 m_LastFrameAcceleration;
 		CVector3 m_Velocity;
 		CVector3 m_AngularVelocity;
 
-		CScalar m_AngularDamping = 1.f;
-		CScalar m_LinearDamping = 1.f;
+		CScalar m_AngularDamping = 0.9f;
+		CScalar m_LinearDamping = 0.9f;
 
-		CVector3 m_LastFrameAcceleration;
 		CVector3 m_Acceleration;
 		CVector3 m_AngularAcceleration;
 

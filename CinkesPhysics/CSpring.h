@@ -91,6 +91,10 @@ namespace Cinkes
 		CScalar GetRestLength() const { return m_RestLength; }
 		void SetRestLength(CScalar a_Length) { m_RestLength = a_Length; }
 
+		CScalar GetCubicStiffness() { return m_CubicStiffness; }
+		CScalar GetCubicStiffness() const { return m_CubicStiffness; }
+		void SetCubicStiffness(CScalar a_Constant) { m_CubicStiffness = a_Constant; }
+
 	protected:
 
 		CRigidBody* m_Body[2]{};
@@ -98,7 +102,7 @@ namespace Cinkes
 		CScalar m_SpringConstant;
 		CScalar m_RestLength;
 		CScalar m_DampeningConstant;
-
+		CScalar m_CubicStiffness;
 		ESPRING_TYPE m_Type;
 	};
 }

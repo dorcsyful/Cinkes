@@ -50,7 +50,7 @@ namespace Cinkes
 		CVector3 getColumn(unsigned a_Column) const;
 		void setColumn(unsigned a_Num, const CVector3& a_Column);
 		void setFromColumns(const CVector3& a_0, const CVector3& a_1, const CVector3& a_2);
-		void setSkewSymmetric(const CVector3& a_Vector);
+		static CMat3x3 setSkewSymmetric(const CVector3& a_Vector);
 		/*
 		 MemberDescription:
 		 Makes columns into rows and vice versa

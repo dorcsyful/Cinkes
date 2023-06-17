@@ -144,12 +144,47 @@ void Cinkes::CRigidBody::AddForceAtPoint(const CVector3& a_ForceToAdd, const CVe
 
 void Cinkes::CRigidBody::Integrate(CScalar a_T)
 {
-    if (m_InverseMass < static_cast<CScalar>(0.001)) { return; }
-	assert(!isnan(m_InverseMass));
-    m_Velocity += m_Force  * m_InverseMass * a_T;
-	m_AngularVelocity += m_InverseIntertiaTensorWorld * m_Torque * a_T;
-    SetInverseInertiaTensorWorld();
+	if (m_InverseMass < 0.001f)
+		return;
+
+	// Calculate linear acceleration from force inputs.
+	m_LastFrameAcceleration = CVector3();
+	m_LastFrameAcceleration += m_Force * m_InverseMass;
+
+	// Calculate angular acceleration from torque inputs.
+	CVector3 angularAcceleration =
+		m_InverseIntertiaTensorWorld * (m_Torque);
+
+	// Adjust velocities
+	// Update linear velocity from both acceleration and impulse.
+	m_Velocity += m_LastFrameAcceleration * a_T;
+
+	// Update angular velocity from both acceleration and impulse.
+	m_AngularVelocity += angularAcceleration * a_T;
+
+	// Impose drag.
+	m_Velocity *= CUtils::Pow(m_LinearDamping, a_T);
+	m_AngularVelocity *= CUtils::Pow(m_AngularDamping, a_T);
+
+	// Adjust positions
+	// Update linear position.
+	m_Transform.setOrigin(m_Transform.getOrigin() + m_Velocity * a_T);
+
+	// Update angular position.
+	CQuaternion q = m_Transform.getQuaternion();
+	CVector3 temp = m_AngularVelocity * a_T;
+	CQuaternion o = CQuaternion(temp[0], temp[1], temp[2], 0);
+	o *= 0.5;
+	q += o;
+	m_Transform.setBasis(CMat3x3(q));
+
+	// Normalise the orientation, and update the matrices with the new
+	// position and orientation
+	SetInverseInertiaTensorWorld();
+
+	// Clear accumulators.
 	ClearForces();
+
 }
 
 void Cinkes::CRigidBody::IntegratePosition(CScalar a_T)

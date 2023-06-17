@@ -269,15 +269,17 @@ void Cinkes::CMat3x3::setFromColumns(const CVector3& a_0, const CVector3& a_1, c
 	setColumn(2, a_2);
 }
 
-void Cinkes::CMat3x3::setSkewSymmetric(const CVector3& a_Vector)
+CMat3x3 Cinkes::CMat3x3::setSkewSymmetric(const CVector3& a_Vector)
 {
-	m_Rows[0][0] = m_Rows[1][1] = m_Rows[2][2] = 0;
-	m_Rows[1][0] = -a_Vector.getZ();
-	m_Rows[2][0] = a_Vector.getY();
-	m_Rows[0][1] = a_Vector.getZ();
-	m_Rows[2][1] = -a_Vector.getX();
-	m_Rows[0][2] = -a_Vector.getY();
-	m_Rows[1][2] = a_Vector.getZ();
+	CMat3x3 temp;
+	temp[0][0] = temp[1][1] = temp[2][2] = 0;
+	temp[1][0] = -a_Vector.getZ();
+	temp[2][0] = a_Vector.getY();
+	temp[0][1] = a_Vector.getZ();
+	temp[2][1] = -a_Vector.getX();
+	temp[0][2] = -a_Vector.getY();
+	temp[1][2] = a_Vector.getZ();
+	return temp;
 }
 
 CMat3x3 CMat3x3::Transpose()
